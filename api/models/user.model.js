@@ -18,9 +18,9 @@ const userSchema = new mongoose.Schema(
       required: true,
     },
   },
-  {timestamps: true} //quiero que cuando se crea o modifique quede guardado
+  { timestamps: true } //quiero que cuando se crea o modifique quede guardado
 );
 
-const User = mongoose.model('User', userSchema)
+const User = mongoose.model("User", userSchema);
 
-export default User
+export default User;
