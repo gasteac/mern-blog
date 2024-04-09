@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-export const userSchema = new mongoose.Schema(
+const userSchema = new mongoose.Schema(
   { timestamps: true }, //quiero que cuando se crea o modifique quede guardado
   {
     username: {
@@ -21,3 +21,5 @@ export const userSchema = new mongoose.Schema(
 );
 
 const User = mongoose.model('User', userSchema)
+
+export default User
