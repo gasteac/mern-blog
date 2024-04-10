@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, Label, TextInput } from "flowbite-react";
+import { Button, Label, Spinner, TextInput } from "flowbite-react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { useFormik } from "formik";
@@ -8,7 +8,7 @@ import * as Yup from "yup";
 export const SignUp = () => {
   const [usernameErrorMsg, setUsernameErrorMsg] = useState(null);
   const [emailErrorMsg, setEmailErrorMsg] = useState(null);
-  const [loading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const formik = useFormik({
     initialValues: {
       username: "",
@@ -24,15 +24,17 @@ export const SignUp = () => {
     }),
     onSubmit: async ({ username, email, password }) => {
       try {
+        setIsLoading(true);
+        setEmailErrorMsg(null);
+        setUsernameErrorMsg(null);
         const res = await axios.post("/api/auth/signup", {
           username: username.trim(),
           email: email.trim(),
           password: password.trim(),
         });
         formik.resetForm();
+        setIsLoading(false);
       } catch (error) {
-        setEmailErrorMsg(null);
-        setUsernameErrorMsg(null);
         const { message } = error.response.data;
         if (message.includes("duplicate") && message.includes("email")) {
           setEmailErrorMsg("Email already in use");
@@ -40,6 +42,7 @@ export const SignUp = () => {
         if (message.includes("duplicate") && message.includes("username")) {
           setUsernameErrorMsg("Username already in use");
         }
+        setIsLoading(false);
       }
     },
   });
@@ -57,7 +60,6 @@ export const SignUp = () => {
           <p className="text-sm mt-5">Stay quiet, manada is coming.</p>
         </div>
         {/* right side */}
-
         <div className="flex-1">
           <form className="flex flex-col gap-4" onSubmit={formik.handleSubmit}>
             <div className="group">
@@ -70,7 +72,10 @@ export const SignUp = () => {
                 placeholder="username"
                 id="username"
                 name="username"
-                onChange={formik.handleChange}
+                onChange={(e) => {
+                  formik.handleChange(e);
+                  setUsernameErrorMsg(null);
+                }}
                 value={formik.values.username}
               />
               {formik.touched.username && formik.errors.username ? (
@@ -94,7 +99,9 @@ export const SignUp = () => {
                 placeholder="name@company.com"
                 id="email"
                 name="email"
-                onChange={formik.handleChange}
+                onChange={(e) => {
+                  formik.handleChange(e), setEmailErrorMsg(null);
+                }}
                 value={formik.values.email}
               />
               {formik.touched.email && formik.errors.email ? (
@@ -130,8 +137,16 @@ export const SignUp = () => {
             <Button
               className="bg-gradient-to-r from-emerald-500 via-emerald-800 to-teal-800"
               type="submit"
+              disabled={isLoading}
             >
-              Sign Up
+              {isLoading ? (
+                <>
+                  <Spinner size="sm" />
+                  <span className="ml-3">Loading..</span>
+                </>
+              ) : (
+                <span>Sign Up</span>
+              )}
             </Button>
           </form>
           <div className="flex gap-2 justify-end px-1 text-sm mt-3">
