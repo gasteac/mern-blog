@@ -1,6 +1,10 @@
 import React from "react";
 import {
+  Avatar,
   Button,
+  Dropdown,
+  DropdownHeader,
+  DropdownItem,
   Navbar,
   NavbarLink,
   NavbarToggle,
@@ -20,7 +24,7 @@ export const Header = () => {
         className="hidden lowEndPhone:inline text-sm sm:text-xl font-semibold  dark:text-white uppercase"
       >
         <span className="px-2 py-1 bg-gradient-to-r from-emerald-500 via-emerald-800 to-teal-800 rounded-lg text-white">
-          {currentUser ? currentUser.username : 'MANADA'}
+          {currentUser ? currentUser.username : "MANADA"}
         </span>
       </Link>
       <form>
@@ -38,11 +42,33 @@ export const Header = () => {
         <Button className="w-12 h-10 hidden sm:inline" color="gray" pill>
           <FaMoon />
         </Button>
-        <Link to="sign-in">
-          <Button gradientDuoTone="purpleToBlue" outline>
-            Sign In
-          </Button>
-        </Link>
+        {currentUser ? (
+          <Dropdown
+            arrowIcon={false}
+            inline
+            label={<Avatar alt="avatar" img={currentUser.profilePic} rounded />}
+          >
+            <Dropdown.Header>
+              <span className="block text-sm">@{currentUser.username}</span>
+              <span className="block text-sm font-medium truncate">
+                {currentUser.email}
+              </span>
+            </Dropdown.Header>
+
+            <Link to={"/dashboard?tab=profile"}>
+              <Dropdown.Item>Dashboard</Dropdown.Item>
+            </Link>
+            <Dropdown.Divider />
+            <Dropdown.Item>Sign Out</Dropdown.Item>
+          </Dropdown>
+        ) : (
+          <Link to="sign-in">
+            <Button gradientDuoTone="purpleToBlue" outline>
+              Sign In
+            </Button>
+          </Link>
+        )}
+
         <NavbarToggle></NavbarToggle>
       </div>
       <Navbar.Collapse>
