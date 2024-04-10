@@ -1,16 +1,22 @@
 import React from "react";
-import { Button, Navbar, NavbarLink, NavbarToggle, TextInput } from "flowbite-react";
+import {
+  Button,
+  Navbar,
+  NavbarLink,
+  NavbarToggle,
+  TextInput,
+} from "flowbite-react";
 import { Link, useLocation } from "react-router-dom";
 import { AiOutlineSearch } from "react-icons/ai";
 import { FaMoon } from "react-icons/fa";
 
 export const Header = () => {
-  const path = useLocation().pathname
+  const path = useLocation().pathname;
   return (
     <Navbar className="border-b-4">
       <Link
         to="/"
-        className="text-sm sm:text-xl font-semibold  dark:text-white  uppercase"
+        className="hidden lowEndPhone:inline text-sm sm:text-xl font-semibold  dark:text-white uppercase"
       >
         <span className="px-2 py-1 bg-gradient-to-r from-emerald-500 via-emerald-800 to-teal-800 rounded-lg text-white">
           MaNaDa
@@ -32,18 +38,20 @@ export const Header = () => {
           <FaMoon />
         </Button>
         <Link to="sign-in">
-          <Button gradientDuoTone="purpleToBlue" outline>Sign In</Button>
+          <Button gradientDuoTone="purpleToBlue" outline>
+            Sign In
+          </Button>
         </Link>
         <NavbarToggle></NavbarToggle>
       </div>
       <Navbar.Collapse>
-        <NavbarLink active={path === "/"} as={'div'}>
+        <NavbarLink active={path === "/"} as={"div"}>
           <Link to="/">Home</Link>
         </NavbarLink>
-        <NavbarLink active={path === "/about"} as={'div'}>
+        <NavbarLink active={path === "/about"} as={"div"}>
           <Link to="/about">About</Link>
         </NavbarLink>
-        <NavbarLink active={path === "/projects"} as={'div'}>
+        <NavbarLink active={path === "/projects"} as={"div"}>
           <Link to="/projects">Projects</Link>
         </NavbarLink>
       </Navbar.Collapse>

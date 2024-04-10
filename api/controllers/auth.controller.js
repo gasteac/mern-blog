@@ -54,11 +54,11 @@ export const signin = async (req, res, next) => {
     //utiliza el modelo en este caso User para entregarle ese email e ir a buscar a la bdd a ver si existe
     const validUser = await User.findOne({ email });
     if (!validUser) {
-      return next(errorHandler(404, "Invalid user or email"));
+      return next(errorHandler(404, "Invalid Email or Password"));
     }
     const validPassword = bcryptjs.compareSync(password, validUser.password);
     if (!validPassword) {
-      return next(errorHandler(400, "Invalid user or email"));
+      return next(errorHandler(400, "Invalid Email or Password"));
     }
     //aca ya verificamos que el usuario ingreso correctamente
     //utilizamos jwt para dejar su sesión iniciada
