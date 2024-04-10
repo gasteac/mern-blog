@@ -9,8 +9,9 @@ import {
 import { Link, useLocation } from "react-router-dom";
 import { AiOutlineSearch } from "react-icons/ai";
 import { FaMoon } from "react-icons/fa";
-
+import { useSelector } from "react-redux";
 export const Header = () => {
+  const { currentUser } = useSelector((state) => state.user);
   const path = useLocation().pathname;
   return (
     <Navbar className="border-b-4">
@@ -19,7 +20,7 @@ export const Header = () => {
         className="hidden lowEndPhone:inline text-sm sm:text-xl font-semibold  dark:text-white uppercase"
       >
         <span className="px-2 py-1 bg-gradient-to-r from-emerald-500 via-emerald-800 to-teal-800 rounded-lg text-white">
-          MaNaDa
+          {currentUser ? currentUser.username : 'MANADA'}
         </span>
       </Link>
       <form>

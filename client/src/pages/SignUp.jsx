@@ -36,7 +36,7 @@ export const SignUp = () => {
         if (res.statusText === 'Created'){
         formik.resetForm();
         setIsLoading(false);
-        navigate('/sign-in')
+        navigate('/')
         }
       } catch (error) {
         const { message } = error.response.data;

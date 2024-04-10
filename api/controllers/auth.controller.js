@@ -82,6 +82,7 @@ export const signin = async (req, res, next) => {
       //devolvemos un json con el objeto del usuario creado
       .json({ rest });
   } catch (error) {
+    console.log('error')
     //el next busca el siguiente middleware en la cola de middlewares, y como le mandamos un error
     //busca el middleware q esta en index.js nomas y lo trata ahi
     next(error);

@@ -1,13 +1,22 @@
-import React, { useState } from "react";
+import React from "react";
 import { Alert, Button, Label, Spinner, TextInput } from "flowbite-react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import {
+  signInFailure,
+  signInInProcess,
+  signInStart,
+  signInSuccess,
+} from "../redux/user/userSlice";
+import { useDispatch, useSelector } from "react-redux";
 
 export const SignIn = () => {
-  const [credentialErrorMsg, setCredentialsErrorMsg] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const dispatch = useDispatch();
+  const { error: credentialErrorMsg, isLoading } = useSelector(
+    (state) => state.user
+  );
   const navigate = useNavigate();
   const formik = useFormik({
     initialValues: {
@@ -22,23 +31,25 @@ export const SignIn = () => {
     }),
     onSubmit: async ({ email, password }) => {
       try {
-        setIsLoading(true);
-        setCredentialsErrorMsg(null);
+        dispatch(signInStart());
         const res = await axios.post("/api/auth/signin", {
           email: email.trim(),
           password: password.trim(),
         });
+        const { data } = res;
         if (res.statusText === "OK") {
           // formik.resetForm();
-          setIsLoading(false);
           navigate("/");
+          dispatch(signInSuccess(data.rest));
+          // setIsLoading(false);
         }
       } catch (error) {
-        const { message } = error.response.data;
+        const message = error.response.data.message;
         if (message.includes("Email") || message.includes("Password")) {
-          setCredentialsErrorMsg(message);
+          // setCredentialsErrorMsg(message);
+          dispatch(signInFailure(message));
         }
-        setIsLoading(false);
+        // setIsLoading(false);
       }
     },
   });
@@ -74,7 +85,7 @@ export const SignIn = () => {
                 id="email"
                 name="email"
                 onChange={(e) => {
-                  formik.handleChange(e), setCredentialsErrorMsg(null);
+                  formik.handleChange(e), dispatch(signInInProcess());
                 }}
                 value={formik.values.email}
               />
@@ -95,7 +106,7 @@ export const SignIn = () => {
                 id="password"
                 name="password"
                 onChange={(e) => {
-                  formik.handleChange(e), setCredentialsErrorMsg(null);
+                  formik.handleChange(e), dispatch(signInInProcess());
                 }}
                 value={formik.values.password}
               />
