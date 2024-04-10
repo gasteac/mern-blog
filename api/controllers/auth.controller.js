@@ -26,9 +26,22 @@ export const signup = async (req, res, next) => {
   });
   try {
     await newUser.save();
-    res.status(201).json({
-      newUser,
-    });
+    //utilizamos jwt para dejar su sesión iniciada
+    const token = jwt.sign(
+      //_id es el id que le da mongoDB y es único obvio
+      { id: newUser._id },
+      //le entregamos la clave secreta o semilla para que mezcle, y le decimos q expira en 2 horas
+      process.env.JWT_SECRET,
+      { expiresIn: "2h" }
+    );
+    res
+      .status(201)
+      .cookie("access_token", token, {
+        //para las cookies necesitamos agregar httpOlny true para que sea mas seguro
+        //si la api y el cliente estan en el mismo server podemos agregar despues de httpOnly: true, " sameSite:'strict' "
+        httpOnly: true,
+      })
+      .json({ newUser });
   } catch (error) {
     //que maneje los errores en el middleware que esta en index.js
     //no utilizo mi manejador de errores porque no se que error mandarle como msj
