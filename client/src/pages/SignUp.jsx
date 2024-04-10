@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Button, Label, Spinner, TextInput } from "flowbite-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -9,6 +9,7 @@ export const SignUp = () => {
   const [usernameErrorMsg, setUsernameErrorMsg] = useState(null);
   const [emailErrorMsg, setEmailErrorMsg] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
   const formik = useFormik({
     initialValues: {
       username: "",
@@ -32,8 +33,11 @@ export const SignUp = () => {
           email: email.trim(),
           password: password.trim(),
         });
+        if (res.statusText === 'Created'){
         formik.resetForm();
         setIsLoading(false);
+        navigate('/sign-in')
+        }
       } catch (error) {
         const { message } = error.response.data;
         if (message.includes("duplicate") && message.includes("email")) {
