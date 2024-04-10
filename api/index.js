@@ -16,13 +16,14 @@ const app = express();
 app.use(express.json());
 
 //aca le paso las rutas para user como "USE" porque los get push delete y eso ya están en userRoute
+//se pone api para que se pueda redireccionar a la url de la api mediante un proxy en la conf del server
 app.use("/api/user", userRoute);
 
 //aca le paso las rutas para user como "USE" porque los get push delete y eso ya están en userRoute
 app.use("/api/auth", authRoute);
 
-//Middleware que maneja errores, dsp de que se realiza algo en user o auth, viene aca con los next, porque al usar
-//use toma a auth y a user también como middlewares
+//Middleware que maneja errores, dsp de que se realiza algo en user o auth y falla (solo si), viene aca con los next, 
+//porque al usar use toma a auth y a user también como middlewares
 app.use((err, req, res, next) => {
   const statusCode = err.statusCode || 500;
   const message = err.message || "Internal server error";

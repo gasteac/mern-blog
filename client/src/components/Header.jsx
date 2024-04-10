@@ -7,19 +7,19 @@ import { FaMoon } from "react-icons/fa";
 export const Header = () => {
   const path = useLocation().pathname
   return (
-    <Navbar className="border-b-2">
+    <Navbar className="border-b-4">
       <Link
         to="/"
-        className="self-center whitespace-nowrap text-sm sm:text-xl font-semibold  dark:text-white"
+        className="text-sm sm:text-xl font-semibold  dark:text-white  uppercase"
       >
-        <span className="px-2 py-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-lg text-white">
-          MERN Blog
+        <span className="px-2 py-1 bg-gradient-to-r from-emerald-500 via-emerald-800 to-teal-800 rounded-lg text-white">
+          MaNaDa
         </span>
       </Link>
       <form>
         <TextInput
           type="text"
-          placeholder="search"
+          placeholder="Search"
           rightIcon={AiOutlineSearch}
           className="hidden lg:inline"
         />
