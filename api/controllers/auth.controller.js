@@ -1,7 +1,7 @@
 import User from "../models/user.model.js";
 import bcryptjs from "bcryptjs";
 import { errorHandler } from "../utils/error.js";
-import jwt from "jsonwebtoken";
+import { jwtCookie } from "../helpers/jwtCookie.js";
 
 ///los next son para manejar los errores dsp
 export const signup = async (req, res, next) => {
@@ -27,15 +27,10 @@ export const signup = async (req, res, next) => {
   try {
     await newUser.save();
     //utilizamos jwt para dejar su sesión iniciada
-    const token = jwt.sign(
-      //_id es el id que le da mongoDB y es único obvio
-      { id: newUser._id },
-      //le entregamos la clave secreta o semilla para que mezcle, y le decimos q expira en 2 horas
-      process.env.JWT_SECRET,
-      { expiresIn: "2h" }
-    );
+    const token = jwtCookie(newUser);
     res
       .status(201)
+      //y agregamos la cookie al navegador
       .cookie("access_token", token, {
         //para las cookies necesitamos agregar httpOlny true para que sea mas seguro
         //si la api y el cliente estan en el mismo server podemos agregar despues de httpOnly: true, " sameSite:'strict' "
@@ -67,13 +62,7 @@ export const signin = async (req, res, next) => {
     }
     //aca ya verificamos que el usuario ingreso correctamente
     //utilizamos jwt para dejar su sesión iniciada
-    const token = jwt.sign(
-      //_id es el id que le da mongoDB y es único obvio
-      { id: validUser._id },
-      //le entregamos la clave secreta o semilla para que mezcle, y le decimos q expira en 2 horas
-      process.env.JWT_SECRET,
-      { expiresIn: "2h" }
-    );
+    const token = jwtCookie(validUser);
 
     //no quiero que la res me devuelva la contraseña tambien
     //separo la contraseña del resto, guardo solo el resto
