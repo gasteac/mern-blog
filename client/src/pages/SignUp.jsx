@@ -6,7 +6,8 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 
 export const SignUp = () => {
-  const [errorMsg, setErrorMsg] = useState(null);
+  const [usernameErrorMsg, setUsernameErrorMsg] = useState(null);
+  const [emailErrorMsg, setEmailErrorMsg] = useState(null);
   const [loading, setLoading] = useState(false);
   const formik = useFormik({
     initialValues: {
@@ -30,8 +31,14 @@ export const SignUp = () => {
         });
         formik.resetForm();
       } catch (error) {
-        if (error.response.data.message.includes("duplicate")) {
-          setErrorMsg("Email already in use");
+        setEmailErrorMsg(null);
+        setUsernameErrorMsg(null);
+        const { message } = error.response.data;
+        if (message.includes("duplicate") && message.includes("email")) {
+          setEmailErrorMsg("Email already in use");
+        }
+        if (message.includes("duplicate") && message.includes("username")) {
+          setUsernameErrorMsg("Username already in use");
         }
       }
     },
@@ -71,6 +78,11 @@ export const SignUp = () => {
                   {formik.errors.username}
                 </h6>
               ) : null}
+              {usernameErrorMsg ? (
+                <h6 className="ml-2 text-red-300 text-[0.8rem]  phone:text-[1rem] tablet:text-[1.2rem]">
+                  {usernameErrorMsg}
+                </h6>
+              ) : null}
             </div>
             <div className="group">
               <Label
@@ -88,6 +100,11 @@ export const SignUp = () => {
               {formik.touched.email && formik.errors.email ? (
                 <h6 className="ml-2 text-red-300 text-[0.8rem]  phone:text-[1rem] tablet:text-[1.2rem]">
                   {formik.errors.email}
+                </h6>
+              ) : null}
+              {emailErrorMsg ? (
+                <h6 className="ml-2 text-red-300 text-[0.8rem]  phone:text-[1rem] tablet:text-[1.2rem]">
+                  {emailErrorMsg}
                 </h6>
               ) : null}
             </div>
