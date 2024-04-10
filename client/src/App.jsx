@@ -1,4 +1,3 @@
-import React from "react";
 import {BrowserRouter, Routes, Route, Navigate} from 'react-router-dom'
 import { About, Dashboard, Home, Projects, SignIn, SignUp } from "./pages";
 import { Header } from "./components/Header";

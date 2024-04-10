@@ -82,9 +82,50 @@ export const signin = async (req, res, next) => {
       //devolvemos un json con el objeto del usuario creado
       .json({ rest });
   } catch (error) {
-    console.log('error')
+    console.log("error");
     //el next busca el siguiente middleware en la cola de middlewares, y como le mandamos un error
     //busca el middleware q esta en index.js nomas y lo trata ahi
+    next(error);
+  }
+};
+
+export const google = async (req, res, next) => {
+  const { email, name, googlePhotoUrl } = req.body;
+  try {
+    const user = await User.findOne({ email });
+    {
+      if (user) {
+        const token = jwtCookie(user);
+        const { password, ...rest } = user._doc;
+        res
+          .status(200)
+          .cookie("access_token", token, {
+            httpOnly: true,
+          })
+          .json({ rest });
+      } else {
+        const generatedPassword = Math.random().toString(36).slice(-8);
+        const hashedPass = bcryptjs.hashSync(generatedPassword, 10);
+        const newUser = new User({
+          username:
+            name.split(" ")[0].toLowerCase() +
+            Math.random().toString(9).slice(-3),
+          email,
+          password: hashedPass,
+          profilePic: googlePhotoUrl,
+        });
+        await newUser.save();
+        const token = jwtCookie(newUser);
+        const { password, ...rest } = newUser._doc;
+        res
+          .status(200)
+          .cookie("access_token", token, {
+            httpOnly: true,
+          })
+          .json({ rest });
+      }
+    }
+  } catch (error) {
     next(error);
   }
 };

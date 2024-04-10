@@ -1,4 +1,4 @@
-import React from "react";
+
 import { Alert, Button, Label, Spinner, TextInput } from "flowbite-react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -11,6 +11,7 @@ import {
   signInSuccess,
 } from "../redux/user/userSlice";
 import { useDispatch, useSelector } from "react-redux";
+import { OAuth } from "../components/OAuth";
 
 export const SignIn = () => {
   const dispatch = useDispatch();
@@ -38,18 +39,14 @@ export const SignIn = () => {
         });
         const { data } = res;
         if (res.statusText === "OK") {
-          // formik.resetForm();
           navigate("/");
           dispatch(signInSuccess(data.rest));
-          // setIsLoading(false);
         }
       } catch (error) {
         const message = error.response.data.message;
         if (message.includes("Email") || message.includes("Password")) {
-          // setCredentialsErrorMsg(message);
           dispatch(signInFailure(message));
         }
-        // setIsLoading(false);
       }
     },
   });
@@ -130,6 +127,7 @@ export const SignIn = () => {
                 <span>Sign In</span>
               )}
             </Button>
+            <OAuth></OAuth>
           </form>
           <div className="flex gap-2 justify-end px-1 text-sm mt-3">
             <span>Don't have an account?</span>

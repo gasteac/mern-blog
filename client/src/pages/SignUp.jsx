@@ -1,11 +1,12 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Button, Label, Spinner, TextInput } from "flowbite-react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { SignUpFailure, SignUpInProcess, SignUpStart, SignUpSuccess } from "../redux/user/userSlice";
+import { SignUpFailure, SignUpStart, SignUpSuccess } from "../redux/user/userSlice";
 import { useDispatch, useSelector } from "react-redux";
+import { OAuth } from "../components/OAuth";
 export const SignUp = () => {
     const dispatch = useDispatch();
     const { isLoading } = useSelector(
@@ -156,6 +157,7 @@ export const SignUp = () => {
                 <span>Sign Up</span>
               )}
             </Button>
+            <OAuth></OAuth>
           </form>
           <div className="flex gap-2 justify-end px-1 text-sm mt-3">
             <span>Have an account?</span>
