@@ -1,7 +1,7 @@
 import User from "../models/user.model.js";
 import bcryptjs from "bcryptjs";
 import { errorHandler } from "../utils/error.js";
-import { jwtCookie } from "../helpers/jwtCookie.js";
+import { jwtCookie } from "../utils/jwtCookie.js";
 
 ///los next son para manejar los errores dsp
 export const signup = async (req, res, next) => {
@@ -56,15 +56,15 @@ export const signin = async (req, res, next) => {
     if (!validUser) {
       return next(errorHandler(404, "Invalid Email or Password"));
     }
+    //verificamos si la contraseña es correcta
     const validPassword = bcryptjs.compareSync(password, validUser.password);
     if (!validPassword) {
-      return next(errorHandler(400, "Invalid Email or Password"));
+      return next(errorHandler(404, "Invalid Email or Password"));
     }
     //aca ya verificamos que el usuario ingreso correctamente
     //utilizamos jwt para dejar su sesión iniciada
     const token = jwtCookie(validUser);
-
-    //no quiero que la res me devuelva la contraseña tambien
+    //no quiero que la res me devuelva la contraseña también
     //separo la contraseña del resto, guardo solo el resto
     //_doc es el formato original en que esta guardado en mongoDB, es un documento de mongo
     const { password: pass, ...rest } = validUser._doc;
@@ -72,7 +72,6 @@ export const signin = async (req, res, next) => {
     // console.log(validUser._doc);
     // console.log(validUser)
     //guardamos en la cookies como access_token a "token" definido previamente
-    //httpOnly
     res
       .status(200)
       .cookie("access_token", token, {
@@ -80,8 +79,11 @@ export const signin = async (req, res, next) => {
         //si la api y el cliente estan en el mismo server podemos agregar despues de httpOnly: true, " sameSite:'strict' "
         httpOnly: true,
       })
+      //devolvemos un json con el objeto del usuario creado
       .json({ rest });
   } catch (error) {
+    //el next busca el siguiente middleware en la cola de middlewares, y como le mandamos un error
+    //busca el middleware q esta en index.js nomas y lo trata ahi
     next(error);
   }
 };
