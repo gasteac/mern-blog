@@ -4,11 +4,16 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-
+import { SignUpFailure, SignUpInProcess, SignUpStart, SignUpSuccess } from "../redux/user/userSlice";
+import { useDispatch, useSelector } from "react-redux";
 export const SignUp = () => {
+    const dispatch = useDispatch();
+    const { isLoading } = useSelector(
+      (state) => state.user
+    );
   const [usernameErrorMsg, setUsernameErrorMsg] = useState(null);
   const [emailErrorMsg, setEmailErrorMsg] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
+
   const navigate = useNavigate();
   const formik = useFormik({
     initialValues: {
@@ -25,9 +30,7 @@ export const SignUp = () => {
     }),
     onSubmit: async ({ username, email, password }) => {
       try {
-        setIsLoading(true);
-        setEmailErrorMsg(null);
-        setUsernameErrorMsg(null);
+        dispatch(SignUpStart());
         const res = await axios.post("/api/auth/signup", {
           username: username.trim(),
           email: email.trim(),
@@ -35,7 +38,8 @@ export const SignUp = () => {
         });
         if (res.statusText === 'Created'){
         formik.resetForm();
-        setIsLoading(false);
+        console.log(res.data.newUser)
+        dispatch(SignUpSuccess(res.data.newUser));
         navigate('/')
         }
       } catch (error) {
@@ -46,7 +50,7 @@ export const SignUp = () => {
         if (message.includes("duplicate") && message.includes("username")) {
           setUsernameErrorMsg("Username already in use");
         }
-        setIsLoading(false);
+        dispatch(SignUpFailure());
       }
     },
   });
