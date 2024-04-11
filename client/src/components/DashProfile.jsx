@@ -7,7 +7,7 @@ export const DashProfile = () => {
   return (
     <div className="max-w-lg mx-auto w-full p-3">
       <h1 className="my-7 text-center font-semibold text-3xl">
-        {currentUser.username}
+        <span className="text-emerald-500">Hi </span>{currentUser.username}
       </h1>
       <form className="flex flex-col gap-4">
         <div className="w-32 h-32 self-center cursor-pointer shadow-lg overflow-hidden rounded-full">
