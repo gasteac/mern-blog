@@ -1,9 +1,10 @@
+import React from "react";
+import { Sidebar } from "flowbite-react";
+import { HiUser, HiArrowSmRight } from "react-icons/hi";
 import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
-import { DashProfile } from "../components/DashProfile";
-import { DashSideBar } from "../components/DashSideBar";
+import { Link, useLocation } from "react-router-dom";
 
-export const Dashboard = () => {
+export const DashSideBar = () => {
   //location nos devuelve un objeto con información de la URL actual y los parametros
   const location = useLocation();
   const [tab, setTab] = useState("");
@@ -17,11 +18,21 @@ export const Dashboard = () => {
     setTab(tabFromUrl);
   }, [location.search]);
   return (
-    <div className="min-h-screen flex flex-col md:flex-row">
-      <div className="md:w-56">
-        <DashSideBar />
-      </div>
-      {tab === "profile" ? <DashProfile /> : null}
-    </div>
+    <Sidebar className="w-full md:w-56">
+      <Sidebar.Items>
+        <Sidebar.ItemGroup>
+          <Sidebar.Item
+            active={tab === "profile"}
+            icon={HiUser}
+            label={"User"}
+            labelColor="dark">
+            <Link to="/dashboard?tab=profile">Profile</Link>
+          </Sidebar.Item>
+          <Sidebar.Item icon={HiArrowSmRight} className="cursor-pointer">
+            Sign Out
+          </Sidebar.Item>
+        </Sidebar.ItemGroup>
+      </Sidebar.Items>
+    </Sidebar>
   );
 };
