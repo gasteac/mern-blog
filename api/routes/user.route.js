@@ -3,10 +3,14 @@ import { test, updateUser } from "../controllers/user.controller.js";
 import { verifyToken } from "../utils/verifyUser.js";
 
 const router = express.Router();
-
+//test solo para probar el funcionamiento de la api al inicio del proyecto.
 router.get("/test", test);
-//ruta para actualizar el usuario, se pasa el id del usuario a actualizar y el token de verificación y se llama a la función updateUser
+//ruta para actualizar el usuario, se pasa el id del usuario a actualizar, luego con el 
+//middleware verifyToken se verifica que el usuario esta autorizado a editar esos datos 
+//y se llama a la función updateUser
+
+//aclaración: este userId es el que se compara con el id de usuario que devuelve el token en verifyToken
+//lo vas a ver en el controlador updateUser al principio de la función
 router.put("/update/:userId", verifyToken, updateUser);
-//lo exporto como router pero en el index donde lo llamo le doy el nombre que quiero
-//en este caso userRoute
+//lo exporto como "router" pero en el index.js donde lo llamo le doy el nombre que quiero, en estos casos userRoute o authRoute
 export default router;
