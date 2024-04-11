@@ -33,9 +33,7 @@ export const OAuth = () => {
         navigate("/");
         dispatch(signInSuccess(data.rest));
       }
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
   return (
     <Button

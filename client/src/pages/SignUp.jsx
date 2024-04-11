@@ -39,7 +39,6 @@ export const SignUp = () => {
         });
         if (res.statusText === 'Created'){
         formik.resetForm();
-        console.log(res.data.newUser)
         dispatch(SignUpSuccess(res.data.newUser));
         navigate('/')
         }
