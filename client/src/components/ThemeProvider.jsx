@@ -10,7 +10,7 @@ export const ThemeProvider = ({ children }) => {
     //Agregamos la clase del tema actual al div que contiene a la app
     <div className={theme}>
       {/* Aca le pasamos las clases dependiendo si es dark o light */}
-      <div className="min-h-screen bg-[rgb(234,234,234)] text-gray-800 dark:text-gray-200 dark:bg-[rgb(16,23,42)]">
+      <div className="h-screen flex flex-col bg-[rgb(234,234,234)] text-gray-800 dark:text-gray-200 dark:bg-[rgb(16,23,42)]">
         {children} {/* esta vendría siendo la app en si */}
       </div>
     </div>

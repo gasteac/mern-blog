@@ -28,8 +28,8 @@ export const Header = () => {
         className="hidden lowEndPhone:inline text-sm sm:text-xl font-semibold  dark:text-white uppercase"
       >
         <span className="px-2 py-1 bg-gradient-to-r from-emerald-500 via-emerald-800 to-teal-800 rounded-lg text-white">
-          {/* Si el usuario no esta logueado mostramos MANADA, si esta logueado mostramos su username */}
-          {currentUser ? currentUser.username : "MANADA"}
+        
+          MANADA
         </span>
       </Link>
       <form>
@@ -61,7 +61,6 @@ export const Header = () => {
             label={<Avatar alt="avatar" img={currentUser.profilePic} rounded />}
           >
             <Dropdown.Header>
-              <span className="block text-sm">@{currentUser.username}</span>
               <span className="block text-sm font-medium truncate">
                 {currentUser.email}
               </span>

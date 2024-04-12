@@ -16,8 +16,8 @@ import * as Yup from "yup";
 import {
   modifyUserStart,
   modifyUserSuccess,
-  modifyUserFailure} from "../redux/user/userSlice";
-  
+  modifyUserFailure,
+} from "../redux/user/userSlice";
 
 //Aclaración, no confundir ref de firebase con ref de useRef de react
 
@@ -26,18 +26,21 @@ export const DashProfile = () => {
   // usernameErrorMsg y emailErrorMsg son estados locales que nos permiten mostrar mensajes de error personalizados.
   const [usernameErrorMsg, setUsernameErrorMsg] = useState(null);
   const [emailErrorMsg, setEmailErrorMsg] = useState(null);
-  const [globalErrorMsg, setGlobalErrorMsg] = useState(null);
   // isLoading es una propiedad del estado global que nos dice si la petición de registro/login está en curso.
   const { isLoading } = useSelector((state) => state.user);
+  // currentUser es una propiedad del estado global que nos da acceso a los datos del usuario autenticado.
   const { currentUser } = useSelector((state) => state.user);
+  // Estado para almacenar si se está subiendo una imagen
+  const [imageFileUploading, setImageFileUploading] = useState(false);
   // Estado para almacenar el archivo de imagen seleccionado
   const [imageFile, setImageFile] = useState(null);
   // Estado para almacenar la URL de la imagen seleccionada
   const [imageFileUrl, setImageFileUrl] = useState(null);
   // Estado para almacenar el progreso de la carga de la imagen
   const [imageFileUploadProgress, setImageFileUploadProgress] = useState(null);
-  // Estado para almacenar los errores de carga de la imagen
-  const [imageFileUploadError, setImageFileUploadError] = useState(null);
+  // Estado para almacenar los errores en la actualizacion de usuario
+  const [updateUserError, setUpdateUserError] = useState(null);
+  const [updateUserSuccess, setUpdateUserSuccess] = useState(null);
   // Referencia al selector de archivos de entrada en el DOM (se usa para que al hacer clic en la imagen, en realidad se haga clic en el input de tipo file)
   const filePickerRef = useRef();
   // Función para manejar el cambio de imagen seleccionada
@@ -55,6 +58,7 @@ export const DashProfile = () => {
     if (imageFileUploadProgress == 100) {
       setTimeout(() => {
         setImageFileUploadProgress(null);
+        setImageFileUploading(false);
       }, 1500);
     }
   }, [imageFileUploadProgress]);
@@ -68,8 +72,12 @@ export const DashProfile = () => {
 
   // Función asíncrona para cargar la imagen en el almacenamiento storage de firebase
   const uploadImage = async () => {
-    //Hago reset al error por si antes el usuario tuvo un error al subir la imagen
-    setImageFileUploadError(null);
+    //Reseteo el estado de éxito de la actualización del usuario
+    setUpdateUserSuccess(null);
+    //Hago reset al error por si antes el usuario tuvo un error 
+    setUpdateUserError(null);
+    //Seteo el estado de subida de la imagen a true para que el usuario no pueda hacer nada mientras se sube
+    setImageFileUploading(true);
     //Obtengo el storage de firebase, le paso la conf mediante app que exporte en el archivo firebase.js
     const storage = getStorage(app);
     //Creo un nombre para la imagen que se va a subir, en este caso la fecha en milisegundos y el nombre de la imagen
@@ -94,14 +102,17 @@ export const DashProfile = () => {
       (error) => {
         //Si hay un error al subir la imagen, lo guardo en el estado para mostrarlo en el componente
         setImageFileUploadProgress(null);
+        //Reseteo el estado de subida de la imagen
+        setImageFileUploading(false);
         //Reseteo el archivo de imagen y la URL de la imagen
         setImageFile(null);
         //Reseteo la URL de la imagen
         setImageFileUrl(null);
         //Guardo el error en el estado para mostrarlo en el componente
-        setImageFileUploadError(
+        setUpdateUserError(
           "Image must be less than 2mb and have a valid format like .jpg"
         );
+        setUpdateUserSuccess(null);
       },
       () => {
         //Cuando la imagen se sube correctamente, obtengo la URL de descarga de la imagen de firebase
@@ -111,6 +122,8 @@ export const DashProfile = () => {
           (downloadURL) => {
             //Luego la guardo y la muestro en la imagen de perfil del usuario con imageFileUrl
             setImageFileUrl(downloadURL);
+            //Reseteo el estado de subida de la imagen
+            setImageFileUploading(false);
           }
         );
       }
@@ -126,20 +139,27 @@ export const DashProfile = () => {
     validationSchema: Yup.object({
       username: Yup.string()
         .required("Required!")
-        .min(4, "Must be 4 characters or more").max(14, "Must be 14 characters or less"),
+        .min(4, "Must be 4 characters or more")
+        .max(14, "Must be 14 characters or less"),
       email: Yup.string().required("Required!"),
       password: Yup.string().min(6, "Must be 6 characters or more"),
     }),
     onSubmit: async ({ username, email, password }) => {
+      //Si se está subiendo una imagen, no dejo que el usuario envíe el formulario
+      if (imageFileUploading) {
+        setUpdateUserError("Please wait for image to upload");
+        return;
+      }
       if (
         username === currentUser.username &&
         email === currentUser.email &&
         !imageFileUrl
       ) {
-        setGlobalErrorMsg("No changes detected");
+        setUpdateUserError("No changes detected :)");
         return;
       }
-      setGlobalErrorMsg(null);
+      setUpdateUserError(null);
+      setUpdateUserSuccess(false);
       try {
         // Cuando el usuario envía el formulario, se dispara la acción SignUpStart, que cambia el estado isLoading a true.
         dispatch(modifyUserStart());
@@ -156,9 +176,11 @@ export const DashProfile = () => {
           //obtengo el usuario de la respuesta, que esta en data
           // Si la petición es exitosa, se dispara la acción SignUpSuccess, que guarda el usuario en el estado global y redirige al usuario a la página principal.
           dispatch(modifyUserSuccess(res.data));
+          setUpdateUserSuccess('User updated successfully!');
           //redirijo al usuario a la página principal
         }
       } catch (error) {
+        setUpdateUserSuccess(false);
         console.log(error);
         // Si el mensaje de error incluye "duplicate" y "email", mostramos un mensaje de error personalizado.
         // if (message.includes("duplicate") && message.includes("email")) {
@@ -224,16 +246,15 @@ export const DashProfile = () => {
             className="rounded-full w-full h-full border-8 object-cover border-[lightgray]"
           />
         </div>
-        {imageFileUploadError && (
-          <Alert color="failure" className="font-semibold">
-            {imageFileUploadError}
-          </Alert>
-        )}
-        {globalErrorMsg && (
-          <Alert color="failure" className="font-semibold">
-            {globalErrorMsg}
-          </Alert>
-        )}
+
+        {(updateUserError || updateUserSuccess) && (
+            <Alert
+              color={updateUserError ? "failure" : "success"}
+              className="font-semibold"
+            >
+              {updateUserError ? updateUserError : updateUserSuccess}
+            </Alert>
+          )}
         <div className="group">
           <Label
             value="Username"
@@ -310,7 +331,7 @@ export const DashProfile = () => {
           type="submit"
           gradientDuoTone="purpleToBlue"
           outline
-          disabled={isLoading}
+          disabled={isLoading || imageFileUploading}
         >
           {isLoading ? (
             <>
