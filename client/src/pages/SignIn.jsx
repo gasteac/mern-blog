@@ -45,11 +45,11 @@ export const SignIn = () => {
         if (res.status === 200) {
           //en data estan los datos del usuario
           dispatch(signInSuccess(res.data));
-          //redirijo al usuario a la página principal
-          navigate("/dashboard?tab=profile");
+
         }
       } catch (error) {
-        console.log(error)
+        console.log(error.response.data.message)
+        dispatch(signInFailure(error.response.data.message));
         // Si hay un error en la petición, se dispara la acción SignInFailure, que guarda el mensaje de error en el estado global.
         const message = error.response.data.message;
         if (message.includes("Email") || message.includes("Password")) {

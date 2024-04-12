@@ -39,7 +39,7 @@ export const DashSideBar = () => {
     }
   };
   return (
-    <Sidebar className="w-full md:w-56">
+    <Sidebar className="w-full h-full md:w-56">
       <Sidebar.Items>
         <Sidebar.ItemGroup>
           {/* Si tab es igual a profile mostramos el item con el icono de HiUser y el label User */}

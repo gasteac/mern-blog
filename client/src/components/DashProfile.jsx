@@ -228,7 +228,7 @@ export const DashProfile = () => {
   }
 
   return (
-    <div className="max-w-lg mx-auto w-full p-3">
+    <div className="max-w-lg mx-auto h-full w-full p-3">
       <h1 className="my-7 text-center font-semibold text-3xl">
         <span className="text-emerald-500">Hi </span>
         {currentUser.username}
@@ -375,10 +375,15 @@ export const DashProfile = () => {
         </Button>
       </form>
       <div className="text-red-500 justify-between flex mt-5">
-        <span className="cursor-pointer" onClick={() => setShowModal(true)}>
+        <span
+          className="cursor-pointer font-semibold"
+          onClick={() => setShowModal(true)}
+        >
           Delete Account
         </span>
-        <span onClick={handleSignOut} className="cursor-pointer">Sign Out</span>
+        <span onClick={handleSignOut} className="cursor-pointer font-semibold">
+          Sign Out
+        </span>
       </div>
       <Modal
         show={showModal}
@@ -395,10 +400,11 @@ export const DashProfile = () => {
           <div className="flex justify-between gap-5">
             <Button
               onClick={() => setShowModal(false)}
-              gradientDuoTone="greenToBlue">
+              gradientDuoTone="greenToBlue"
+            >
               cancel!
             </Button>
-            <Button onClick={deleteUser} color='failure'>
+            <Button onClick={deleteUser} color="failure">
               yes, delete it
             </Button>
           </div>
