@@ -10,7 +10,7 @@ const firebaseConfig = {
   projectId: "facerook-gasteac",
   storageBucket: "facerook-gasteac.appspot.com",
   messagingSenderId: "333118237893",
-  appId: "1:333118237893:web:0f525b3b38e656cf88d4ac",
+  appId: "1:333118237893:web:7db225a40215088b88d4ac",
 };
 
 // Initialize Firebase
