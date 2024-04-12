@@ -79,7 +79,7 @@ export const SignUp = () => {
         {/* left side */}
         <div className="flex-1 self-center md:self-start md:mt-16">
           <Link to="/" className="font-bold dark:text-white text-4xl">
-            <span className="px-2 py-1 bg-gradient-to-r from-emerald-500 via-emerald-800 to-teal-800 rounded-lg text-white">
+            <span className="px-2 py-1 bg-gradient-to-r bg-gradient-to-r from-emerald-400 via-emerald-500 to-teal-400 rounded-xl hover:from-emerald-500 hover:via-emerald-600 hover:to-teal-500 text-white">
               FaceRook
             </span>
           </Link>
@@ -108,12 +108,12 @@ export const SignUp = () => {
                 value={formik.values.username}
               />
               {formik.touched.username && formik.errors.username ? (
-                <h6 className="ml-2 text-red-300 text-[0.8rem]  phone:text-[1rem] tablet:text-[1.2rem]">
+                <h6 className="ml-2 text-red-500 text-[0.8rem]  phone:text-[1rem] tablet:text-[1.2rem]">
                   {formik.errors.username}
                 </h6>
               ) : null}
               {usernameErrorMsg ? (
-                <h6 className="ml-2 text-red-300 text-[0.8rem]  phone:text-[1rem] tablet:text-[1.2rem]">
+                <h6 className="ml-2 text-red-500 text-[0.8rem]  phone:text-[1rem] tablet:text-[1.2rem]">
                   {usernameErrorMsg}
                 </h6>
               ) : null}
@@ -134,12 +134,12 @@ export const SignUp = () => {
                 value={formik.values.email}
               />
               {formik.touched.email && formik.errors.email ? (
-                <h6 className="ml-2 text-red-300 text-[0.8rem]  phone:text-[1rem] tablet:text-[1.2rem]">
+                <h6 className="ml-2 text-red-500 text-[0.8rem]  phone:text-[1rem] tablet:text-[1.2rem]">
                   {formik.errors.email}
                 </h6>
               ) : null}
               {emailErrorMsg ? (
-                <h6 className="ml-2 text-red-300 text-[0.8rem]  phone:text-[1rem] tablet:text-[1.2rem]">
+                <h6 className="ml-2 text-red-500 text-[0.8rem]  phone:text-[1rem] tablet:text-[1.2rem]">
                   {emailErrorMsg}
                 </h6>
               ) : null}
@@ -158,13 +158,13 @@ export const SignUp = () => {
                 value={formik.values.password}
               />
               {formik.touched.password && formik.errors.password ? (
-                <h6 className="ml-2 text-red-300 text-[0.8rem]  phone:text-[1rem] tablet:text-[1.2rem]">
+                <h6 className="ml-2 text-red-500 text-[0.8rem]  phone:text-[1rem] tablet:text-[1.2rem]">
                   {formik.errors.password}
                 </h6>
               ) : null}
             </div>
             <Button
-              className="bg-gradient-to-r from-emerald-500 via-emerald-800 to-teal-800"
+              className="bg-gradient-to-r from-emerald-400 via-emerald-500 to-teal-400 rounded-xl hover:from-emerald-500 hover:via-emerald-600 hover:to-teal-500"
               type="submit"
               disabled={isLoading}
             >

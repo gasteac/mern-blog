@@ -36,9 +36,9 @@ export const Header = () => {
     <Navbar className="border-b-4 w-full sticky top-0 z-50">
       <Link
         to="/"
-        className="hidden lowEndPhone:inline text-sm sm:text-xl font-semibold  dark:text-white uppercase"
+        className="hidden lowEndPhone:inline text-sm sm:text-xl font-semibold  dark:text-white"
       >
-        <span className="px-2 py-1 bg-gradient-to-r from-emerald-500 via-emerald-800 to-teal-800 rounded-lg text-white">
+        <span className="px-2 py-1 bg-gradient-to-r from-emerald-400 via-emerald-500 to-teal-400 rounded-xl hover:from-emerald-500 hover:via-emerald-600 hover:to-teal-500  text-white">
           FaceRook
         </span>
       </Link>

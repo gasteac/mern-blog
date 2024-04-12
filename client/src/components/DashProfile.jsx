@@ -164,7 +164,8 @@ export const DashProfile = () => {
       if (
         username === currentUser.username &&
         email === currentUser.email &&
-        !imageFileUrl && password === ""
+        !imageFileUrl &&
+        password === ""
       ) {
         setUpdateUserError("No changes detected :)");
         return;
@@ -182,7 +183,7 @@ export const DashProfile = () => {
           password: password,
           profilePic: imageFileUrl ? imageFileUrl : currentUser.profilePic,
         });
-        console.log(res);
+        setImageFileUrl(null);
         if (res.status === 200) {
           //obtengo el usuario de la respuesta, que esta en data
           // Si la petición es exitosa, se dispara la acción SignUpSuccess, que guarda el usuario en el estado global y redirige al usuario a la página principal.
@@ -219,14 +220,14 @@ export const DashProfile = () => {
     }
   };
 
-  const handleSignOut = () =>{
+  const handleSignOut = () => {
     try {
-      axios.post('/api/user/logout')
+      axios.post("/api/user/logout");
       dispatch(logoutSuccess());
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
-  }
+  };
 
   return (
     <div className="mx-auto h-full w-full p-2">
@@ -235,8 +236,8 @@ export const DashProfile = () => {
         onSubmit={formik.handleSubmit}
       >
         <div className="flex flex-col items-center justify-center sm:self-start h-full md:w-1/3">
-          <h1 className="my-7 text-center font-semibold text-3xl text-nowrap">
-            <span className="text-emerald-500">Hi </span>
+          <h1 className="my-7 text-center font-semibold text-3xl text-nowrap capitalize">
+            <span className="text-emerald-500 ">Hi </span>
             {currentUser.username}
           </h1>
           <input
@@ -284,15 +285,15 @@ export const DashProfile = () => {
           </div>
         </div>
 
-        <div className="flex flex-col gap-2 p-5 w-full h-full sm:w-2/3">
-        {(updateUserError || updateUserSuccess) && (
-          <Alert
-            color={updateUserError ? "failure" : "success"}
-            className="font-semibold"
-          >
-            {updateUserError ? updateUserError : updateUserSuccess}
-          </Alert>
-        )}
+        <div className="flex flex-col gap-2 px-5 w-full h-full sm:w-2/3">
+          {(updateUserError || updateUserSuccess) && (
+            <Alert
+              color={updateUserError ? "failure" : "success"}
+              className="font-semibold"
+            >
+              {updateUserError ? updateUserError : updateUserSuccess}
+            </Alert>
+          )}
           <div className="group">
             <Label
               value="Username"
@@ -368,6 +369,7 @@ export const DashProfile = () => {
             ) : null}
           </div>
           <Button
+            className="mt-3"
             type="submit"
             gradientDuoTone="purpleToBlue"
             outline
@@ -382,16 +384,16 @@ export const DashProfile = () => {
               <span>Modify</span>
             )}
           </Button>
-          <div className="text-red-500 justify-between flex flex-col items-center gap-4 mt-5">
+          <div className="justify-between flex flex-col items-center gap-4 mt-5">
             <span
-              className="cursor-pointer font-semibold"
+              className="cursor-pointer font-semibold text-red-500  hover:text-red-600"
               onClick={() => setShowModal(true)}
             >
               Delete Account
             </span>
             <span
               onClick={handleSignOut}
-              className="cursor-pointer font-semibold"
+              className="cursor-pointer font-semibold hover:text-gray-400"
             >
               Sign Out
             </span>
