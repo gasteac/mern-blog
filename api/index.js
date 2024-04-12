@@ -4,7 +4,7 @@ import dotenv from "dotenv";
 import userRoute from "./routes/user.route.js";
 import authRoute from "./routes/auth.route.js";
 import cookieParser from "cookie-parser";
-
+import path from "path";
 dotenv.config(); //esto va a setear las variables del .env en process.env osea en el entorno
 
 //nos conectamos a la bdd de mongodb mediante mongoose pasándole la url de la bdd que esta en .env
@@ -13,6 +13,9 @@ mongoose
   .then(console.log("Connected to MongoDB"))
   .catch((err) => console.log(err));
 
+//esto es para que __dirname funcione en los módulos de ES6 (porque __dirname no existe en ES6)
+const __dirname = path.resolve(); 
+
 //Creamos una instancia de express que va a ser nuestro server y la guardamos con el nombre app
 const app = express();
 
@@ -20,6 +23,15 @@ const app = express();
 app.use(express.json());
 //middleware que permite parsear cookies
 app.use(cookieParser());
+
+//middleware que permite servir archivos estáticos (como los html, css, js, imágenes, etc) de la carpeta client/dist
+app.use(express.static(path.join(__dirname, "/client/dist")));
+
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'client', 'dist', 'index.html'));
+});
+
 
 ///////////RUTAS///////////
 
