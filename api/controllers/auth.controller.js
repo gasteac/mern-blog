@@ -129,6 +129,7 @@ export const google = async (req, res, next) => {
         process.env.JWT_SECRET
       );
       const { password, ...rest } = user._doc;
+    
       //le devuelvo al frontend el usuario que encontré en la bdd sin la contraseña, y el token
       res
         .status(200)
@@ -147,13 +148,13 @@ export const google = async (req, res, next) => {
 
       const newUser = new User({
         username:
-        //le saco los espacios al nombre y lo paso a minúsculas, le agrego un número random al final
-          name.toLowerCase().split(" ").join("") +
-          Math.random().toString(9).slice(-4),
+          //le saco los espacios al nombre y lo paso a minúsculas, le agrego un número random al final
+          name.toLowerCase().split(" ")[0] +
+          Math.random().toString(9).slice(-2) + "manada",
         email,
         password: hashedPassword,
         //le paso la foto de google que viene de la request
-        profilePicture: googlePhotoUrl,
+        profilePic: googlePhotoUrl,
       });
       //intento guardar el usuario en la bdd y genero un token
       await newUser.save();
