@@ -77,7 +77,7 @@ export const SignUp = () => {
     <div className="min-h-screen mt-20">
       <div className="flex p-3 max-w-3xl mx-auto flex-col md:flex-row md:items-center gap-5">
         {/* left side */}
-        <div className="flex-1">
+        <div className="flex-1 self-center md:self-start md:mt-16">
           <Link to="/" className="font-bold dark:text-white text-4xl">
             <span className="px-2 py-1 bg-gradient-to-r from-emerald-500 via-emerald-800 to-teal-800 rounded-lg text-white">
               FaceRook
