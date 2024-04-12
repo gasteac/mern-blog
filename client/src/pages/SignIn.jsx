@@ -66,10 +66,10 @@ export const SignIn = () => {
         <div className="flex-1 self-center md:self-start md:mt-16">
           <Link to="/" className="font-bold dark:text-white text-4xl">
             <span className="px-2 py-1 bg-gradient-to-r from-emerald-500 via-emerald-800 to-teal-800 rounded-lg text-white">
-              MANADA
+              FaceRook
             </span>
           </Link>
-          <p className="text-sm mt-5">Stay quiet, manada is coming.</p>
+          <p className="text-lg text-c mt-5">Welcome to <span className="font-bold text-emerald-700">FaceRook</span></p>
         </div>
         {/* right side */}
         <div className="flex-1">

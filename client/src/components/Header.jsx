@@ -39,7 +39,7 @@ export const Header = () => {
         className="hidden lowEndPhone:inline text-sm sm:text-xl font-semibold  dark:text-white uppercase"
       >
         <span className="px-2 py-1 bg-gradient-to-r from-emerald-500 via-emerald-800 to-teal-800 rounded-lg text-white">
-          MANADA
+          FaceRook
         </span>
       </Link>
       <form>
@@ -94,15 +94,32 @@ export const Header = () => {
       </div>
       <Navbar.Collapse>
         {/* path lo obtenemos de useLocation, es el path actual, lo que esta en la url */}
-        <NavbarLink active={path === "/"} as={"div"}>
-          <Link to="/">Home</Link>
-        </NavbarLink>
-        <NavbarLink active={path === "/about"} as={"div"}>
-          <Link to="/about">About</Link>
-        </NavbarLink>
-        <NavbarLink active={path === "/projects"} as={"div"}>
-          <Link to="/projects">Projects</Link>
-        </NavbarLink>
+
+        {!currentUser ? (
+          <>
+            <NavbarLink active={path === "/"} as={"div"}>
+              <Link to="/">Home</Link>
+            </NavbarLink>
+            <NavbarLink active={path === "/sign-in"} as={"div"}>
+              <Link to="/sign-in">Sign In</Link>
+            </NavbarLink>
+            <NavbarLink active={path === "/sign-up"} as={"div"}>
+              <Link to="/sign-up">Sign Up</Link>
+            </NavbarLink>
+          </>
+        ) : (
+          <>
+            <NavbarLink active={path === "/dashboard"} as={"div"}>
+              <Link to="/dashboard?tab=profile">Dashboard</Link>
+            </NavbarLink>
+            <NavbarLink active={path === "/about"} as={"div"}>
+              <Link to="/about">About</Link>
+            </NavbarLink>
+            <NavbarLink active={path === "/projects"} as={"div"}>
+              <Link to="/projects">Projects</Link>
+            </NavbarLink>
+          </>
+        )}
       </Navbar.Collapse>
     </Navbar>
   );

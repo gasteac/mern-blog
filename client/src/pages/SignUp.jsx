@@ -78,7 +78,7 @@ export const SignUp = () => {
         <div className="flex-1">
           <Link to="/" className="font-bold dark:text-white text-4xl">
             <span className="px-2 py-1 bg-gradient-to-r from-emerald-500 via-emerald-800 to-teal-800 rounded-lg text-white">
-              MANADA
+              FaceRook
             </span>
           </Link>
           <p className="text-sm mt-5">Stay quiet, manada is coming.</p>
