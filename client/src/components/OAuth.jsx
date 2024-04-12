@@ -25,7 +25,7 @@ export const OAuth = () => {
       //Abrimos un popup para que el usuario pueda loguearse con Google
       //Le pasamos el objeto de autenticación de firebase y el objeto de autenticación de Google definidos previamente
       const resultFromGoogle = await signInWithPopup(auth, provider);
-      console.log(resultFromGoogle);
+
       //Le avisamos a la store que comenzó el proceso de autenticación
       dispatch(signInStart());
       //Hacemos un post a la ruta de autenticación con Google que creamos en el backend

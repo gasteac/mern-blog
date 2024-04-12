@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Button, Label, Spinner, TextInput, Alert } from "flowbite-react";
+import { useSelector } from "react-redux";
+import { Alert, Button, TextInput } from "flowbite-react";
 import {
   getDownloadURL,
   getStorage,
@@ -13,22 +13,11 @@ import "react-circular-progressbar/dist/styles.css";
 import axios from "axios";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import {
-  modifyUserStart,
-  modifyUserSuccess,
-  modifyUserFailure} from "../redux/user/userSlice";
-  
+import { modifyUserStart } from "../redux/user/userSlice";
 
 //Aclaración, no confundir ref de firebase con ref de useRef de react
 
 export const DashProfile = () => {
-  const dispatch = useDispatch();
-  // usernameErrorMsg y emailErrorMsg son estados locales que nos permiten mostrar mensajes de error personalizados.
-  const [usernameErrorMsg, setUsernameErrorMsg] = useState(null);
-  const [emailErrorMsg, setEmailErrorMsg] = useState(null);
-  const [globalErrorMsg, setGlobalErrorMsg] = useState(null);
-  // isLoading es una propiedad del estado global que nos dice si la petición de registro/login está en curso.
-  const { isLoading } = useSelector((state) => state.user);
   const { currentUser } = useSelector((state) => state.user);
   // Estado para almacenar el archivo de imagen seleccionado
   const [imageFile, setImageFile] = useState(null);
@@ -116,63 +105,53 @@ export const DashProfile = () => {
       }
     );
   };
-  const formik = useFormik({
-    initialValues: {
-      username: currentUser.username,
-      email: currentUser.email,
-      password: "",
-      profilePic: currentUser.profilePic,
-    },
-    validationSchema: Yup.object({
-      username: Yup.string()
-        .required("Required!")
-        .min(4, "Must be 4 characters or more").max(14, "Must be 14 characters or less"),
-      email: Yup.string().required("Required!"),
-      password: Yup.string().min(6, "Must be 6 characters or more"),
-    }),
-    onSubmit: async ({ username, email, password }) => {
-      if (
-        username === currentUser.username &&
-        email === currentUser.email &&
-        !imageFileUrl
-      ) {
-        setGlobalErrorMsg("No changes detected");
-        return;
+
+const formik = useFormik({
+  initialValues: {
+    username: currentUser.username,
+    email: currentUser.email,
+    password: "******",
+  },
+  validationSchema: Yup.object({
+    username: Yup.string(),
+    email: Yup.string(),
+    password: Yup.string().min(6, "Must be 6 characters or more"),
+  }),
+  onSubmit: async ({ username, email, password }) => {
+    try {
+      // Cuando el usuario envía el formulario, se dispara la acción SignUpStart, que cambia el estado isLoading a true.
+      dispatch(modifyUserStart());
+      // Hacemos una petición POST a la ruta /api/auth/signup con los datos del formulario. (trim saca los espacios en blanco al principio y al final de un string)
+      const res = await axios.post("/api/auth/update/:userId", {
+        username: username.trim(),
+        email: email.trim(),
+        password: password.trim(),
+      });
+      if (res.status === 201) {
+        //obtengo el usuario de la respuesta, que esta en data
+        // Si la petición es exitosa, se dispara la acción SignUpSuccess, que guarda el usuario en el estado global y redirige al usuario a la página principal.
+        dispatch(signUpSuccess(res.data));
+
       }
-      setGlobalErrorMsg(null);
-      try {
-        // Cuando el usuario envía el formulario, se dispara la acción SignUpStart, que cambia el estado isLoading a true.
-        dispatch(modifyUserStart());
-        // Hacemos una petición POST a la ruta /api/auth/signup con los datos del formulario. (trim saca los espacios en blanco al principio y al final de un string)
-        const res = await axios.put(`/api/user/update/${currentUser._id}`, {
-          ...currentUser,
-          username: username,
-          email: email,
-          password: password,
-          profilePic: imageFileUrl ? imageFileUrl : currentUser.profilePic,
-        });
-        console.log(res);
-        if (res.status === 200) {
-          //obtengo el usuario de la respuesta, que esta en data
-          // Si la petición es exitosa, se dispara la acción SignUpSuccess, que guarda el usuario en el estado global y redirige al usuario a la página principal.
-          dispatch(modifyUserSuccess(res.data));
-          //redirijo al usuario a la página principal
-        }
-      } catch (error) {
-        console.log(error);
-        // Si el mensaje de error incluye "duplicate" y "email", mostramos un mensaje de error personalizado.
-        // if (message.includes("duplicate") && message.includes("email")) {
-        //   setEmailErrorMsg("Email already in use");
-        // }
-        // // Si el mensaje de error incluye "duplicate" y "username", mostramos un mensaje de error personalizado.
-        // if (message.includes("duplicate") && message.includes("username")) {
-        //   setUsernameErrorMsg("Username already in use, is this your username?");
-        // }
-        // // Si la petición falla, se dispara la acción SignUpFailure, que cambia el estado isLoading a false y muestra un mensaje de error al usuario.
-        // dispatch(modifyUserFailure());
+    } catch (error) {
+      const { message } = error.response.data;
+      // Si el mensaje de error incluye "duplicate" y "email", mostramos un mensaje de error personalizado.
+      if (message.includes("duplicate") && message.includes("email")) {
+        setEmailErrorMsg("Email already in use");
       }
-    },
-  });
+      // Si el mensaje de error incluye "duplicate" y "username", mostramos un mensaje de error personalizado.
+      if (message.includes("duplicate") && message.includes("username")) {
+        setUsernameErrorMsg("Username already in use");
+      }
+      // Si la petición falla, se dispara la acción SignUpFailure, que cambia el estado isLoading a false y muestra un mensaje de error al usuario.
+      dispatch(signUpFailure());
+    }
+  },
+});
+
+
+
+
 
   return (
     <div className="max-w-lg mx-auto w-full p-3">
@@ -180,7 +159,7 @@ export const DashProfile = () => {
         <span className="text-emerald-500">Hi </span>
         {currentUser.username}
       </h1>
-      <form className="flex flex-col gap-4" onSubmit={formik.handleSubmit}>
+      <form className="flex flex-col gap-4">
         <input
           hidden
           type="file"
@@ -229,97 +208,28 @@ export const DashProfile = () => {
             {imageFileUploadError}
           </Alert>
         )}
-        {globalErrorMsg && (
-          <Alert color="failure" className="font-semibold">
-            {globalErrorMsg}
-          </Alert>
-        )}
-        <div className="group">
-          <Label
-            value="Username"
-            className="group-focus-within:text-green-700"
-          ></Label>
-          <TextInput
-            type="text"
-            placeholder="username"
-            id="username"
-            name="username"
-            onChange={(e) => {
-              formik.handleChange(e);
-              setUsernameErrorMsg(null);
-            }}
-            value={formik.values.username}
-          />
-          {formik.touched.username && formik.errors.username ? (
-            <h6 className="ml-2 text-red-300 text-[0.8rem]  phone:text-[1rem] tablet:text-[1.2rem]">
-              {formik.errors.username}
-            </h6>
-          ) : null}
-          {usernameErrorMsg ? (
-            <h6 className="ml-2 text-red-300 text-[0.8rem]  phone:text-[1rem] tablet:text-[1.2rem]">
-              {usernameErrorMsg}
-            </h6>
-          ) : null}
-        </div>
-        <div className="group">
-          <Label
-            value="Email"
-            className="group-focus-within:text-green-700"
-          ></Label>
-          <TextInput
-            type="email"
-            placeholder="name@company.com"
-            id="email"
-            name="email"
-            onChange={(e) => {
-              formik.handleChange(e), setEmailErrorMsg(null);
-            }}
-            value={formik.values.email}
-          />
-          {formik.touched.email && formik.errors.email ? (
-            <h6 className="ml-2 text-red-300 text-[0.8rem]  phone:text-[1rem] tablet:text-[1.2rem]">
-              {formik.errors.email}
-            </h6>
-          ) : null}
-          {emailErrorMsg ? (
-            <h6 className="ml-2 text-red-300 text-[0.8rem]  phone:text-[1rem] tablet:text-[1.2rem]">
-              {emailErrorMsg}
-            </h6>
-          ) : null}
-        </div>
-        <div className="group">
-          <Label
-            value="Password"
-            className="group-focus-within:text-green-700"
-          ></Label>
-          <TextInput
-            type="password"
-            placeholder="password"
-            id="password"
-            name="password"
-            onChange={formik.handleChange}
-            value={formik.values.password}
-          />
-          {formik.touched.password && formik.errors.password ? (
-            <h6 className="ml-2 text-red-300 text-[0.8rem]  phone:text-[1rem] tablet:text-[1.2rem]">
-              {formik.errors.password}
-            </h6>
-          ) : null}
-        </div>
-        <Button
-          type="submit"
-          gradientDuoTone="purpleToBlue"
-          outline
-          disabled={isLoading}
-        >
-          {isLoading ? (
-            <>
-              <Spinner size="sm" />
-              <span className="ml-3">Loading..</span>
-            </>
-          ) : (
-            <span>Modify</span>
-          )}
+        <TextInput
+          type="text"
+          label="Username"
+          id="username"
+          placeholder="username"
+          defaultValue={currentUser.username}
+        />
+        <TextInput
+          type="email"
+          label="Email"
+          id="email"
+          placeholder="email@company.com"
+          defaultValue={currentUser.email}
+        />{" "}
+        <TextInput
+          type="password"
+          label="Password"
+          id="password"
+          placeholder="********"
+        />
+        <Button type="submit" gradientDuoTone="purpleToBlue" outline>
+          <span>Update</span>
         </Button>
       </form>
       <div className="text-red-500 justify-between flex mt-5">

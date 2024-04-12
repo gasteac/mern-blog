@@ -11,7 +11,6 @@ const initialState = {
 // aca NO se realizan tareas asincrónicas, solo se maneja el estado
 // Si queremos realizar algo sincrono se debe usar un thunk
 export const userSlice = createSlice({
-  
   name: "user",
   initialState,
   reducers: {
@@ -42,6 +41,17 @@ export const userSlice = createSlice({
     signUpInProcess: (state) => {
       state.error = null;
     },
+    modifyUserStart: (state) => {
+      (state.isLoading = true), (state.error = false);
+    },
+    modifyUserSuccess: (state, action) => {
+      state.currentUser = action.payload;
+      state.isLoading = false;
+      state.error = null;
+    },
+    modifyUserFailure: (state, action) => {
+      (state.isLoading = false), (state.error = action.payload);
+    },
   },
 });
 export const {
@@ -53,4 +63,7 @@ export const {
   signUpSuccess,
   signUpFailure,
   signUpInProcess,
+  modifyUserStart,
+  modifyUserSuccess,
+  modifyUserFailure,
 } = userSlice.actions;

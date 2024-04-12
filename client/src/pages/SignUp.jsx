@@ -30,7 +30,9 @@ export const SignUp = () => {
       password: "",
     },
     validationSchema: Yup.object({
-      username: Yup.string().required("Required!"),
+      username: Yup.string()
+        .required("Required!")
+        .min(4, "Must be 4 characters or more"),
       email: Yup.string().required("Required!"),
       password: Yup.string()
         .required("Required!")
