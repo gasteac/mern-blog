@@ -22,6 +22,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import {
   deleteUserSuccess,
+  logoutSuccess,
   modifyUserStart,
   modifyUserSuccess,
 } from "../redux/user/userSlice";
@@ -217,6 +218,15 @@ export const DashProfile = () => {
     }
   };
 
+  const handleSignOut = () =>{
+    try {
+      axios.post('/api/user/logout')
+      dispatch(logoutSuccess());
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   return (
     <div className="max-w-lg mx-auto w-full p-3">
       <h1 className="my-7 text-center font-semibold text-3xl">
@@ -368,7 +378,7 @@ export const DashProfile = () => {
         <span className="cursor-pointer" onClick={() => setShowModal(true)}>
           Delete Account
         </span>
-        <span className="cursor-pointer">Sign Out</span>
+        <span onClick={handleSignOut} className="cursor-pointer">Sign Out</span>
       </div>
       <Modal
         show={showModal}

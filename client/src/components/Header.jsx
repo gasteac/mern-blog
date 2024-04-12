@@ -13,6 +13,9 @@ import { Link, useLocation } from "react-router-dom";
 import { AiOutlineSearch } from "react-icons/ai";
 import { FaMoon, FaSun } from "react-icons/fa";
 import { useSelector, useDispatch } from "react-redux";
+import { logoutSuccess } from "../redux/user/userSlice";
+import axios from "axios";
+
 export const Header = () => {
   const { currentUser } = useSelector((state) => state.user);
   const { theme } = useSelector((state) => state.theme);
@@ -21,6 +24,14 @@ export const Header = () => {
   //useLocation nos da un objeto con información sobre la ruta actual (URL)
   //Específicamente pathname devuelve lo que viene después del dominio (google.com/loquesea -> /loquesea)
   const path = useLocation().pathname;
+  const handleSignOut = () => {
+    try {
+      axios.post("/api/user/logout");
+      dispatch(logoutSuccess());
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <Navbar className="border-b-4">
       <Link
@@ -28,7 +39,6 @@ export const Header = () => {
         className="hidden lowEndPhone:inline text-sm sm:text-xl font-semibold  dark:text-white uppercase"
       >
         <span className="px-2 py-1 bg-gradient-to-r from-emerald-500 via-emerald-800 to-teal-800 rounded-lg text-white">
-        
           MANADA
         </span>
       </Link>
@@ -69,7 +79,7 @@ export const Header = () => {
               <Dropdown.Item>Dashboard</Dropdown.Item>
             </Link>
             <Dropdown.Divider />
-            <Dropdown.Item>Sign Out</Dropdown.Item>
+            <Dropdown.Item onClick={handleSignOut}>Sign Out</Dropdown.Item>
           </Dropdown>
         ) : (
           // Si no esta logueado mostramos el boton para ingresar

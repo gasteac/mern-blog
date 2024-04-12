@@ -3,8 +3,12 @@ import { Sidebar } from "flowbite-react";
 import { HiUser, HiArrowSmRight } from "react-icons/hi";
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
+import axios from "axios";
+import { logoutSuccess } from "../redux/user/userSlice";
+import { useDispatch } from "react-redux";
 
 export const DashSideBar = () => {
+  const dispatch = useDispatch();
   //Obtenemos el path actual mediante useLocation de react-router-dom
   //useLocation nos da un objeto con información sobre la ruta actual (URL)
   //Específicamente pathname devuelve lo que viene después del dominio (google.com/loquesea -> /loquesea)
@@ -26,7 +30,14 @@ export const DashSideBar = () => {
     setTab(tabFromUrl);
     //y esto se va a hacer cada vez que cambie el search, osea el valor de ?tab=valor
   }, [location.search]);
-
+  const handleSignOut = () => {
+    try {
+      axios.post("/api/user/logout");
+      dispatch(logoutSuccess());
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <Sidebar className="w-full md:w-56">
       <Sidebar.Items>
@@ -41,7 +52,11 @@ export const DashSideBar = () => {
           >
             <Link to="/dashboard?tab=profile">Profile</Link>
           </Sidebar.Item>
-          <Sidebar.Item icon={HiArrowSmRight} className="cursor-pointer">
+          <Sidebar.Item
+            icon={HiArrowSmRight}
+            className="cursor-pointer"
+            onClick={handleSignOut}
+          >
             Sign Out
           </Sidebar.Item>
         </Sidebar.ItemGroup>

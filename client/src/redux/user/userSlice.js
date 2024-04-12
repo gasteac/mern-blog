@@ -58,6 +58,11 @@ export const userSlice = createSlice({
       state.isLoading = false;
       state.error = null;
     },
+    logoutSuccess: (state) => {
+      state.currentUser = null;
+      state.isLoading = false;
+      state.error = null;
+    },
   },
 });
 export const {
@@ -73,4 +78,5 @@ export const {
   modifyUserSuccess,
   modifyUserFailure,
   deleteUserSuccess,
+  logoutSuccess,
 } = userSlice.actions;
