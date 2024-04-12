@@ -21,7 +21,7 @@ const userSchema = new mongoose.Schema(
     profilePic: {
       type: String,
       default:
-        "https://firebasestorage.googleapis.com/v0/b/mern-blog-cd6ab.appspot.com/o/1712914011331userImage.png?alt=media&token=3b018c64-d4c7-4e79-9f4d-626867c77429",
+        "https://firebasestorage.googleapis.com/v0/b/facerook-gasteac.appspot.com/o/userImage.png?alt=media&token=7d0d43bb-c429-4de2-8aaf-c57a56b957c0",
     },
   },
   { timestamps: true } //quiero que cuando se crea o modifique quede guardado la fecha y hora

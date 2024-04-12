@@ -2,7 +2,6 @@ import { Button } from "flowbite-react";
 import { AiFillGoogleCircle } from "react-icons/ai";
 import { GoogleAuthProvider, signInWithPopup, getAuth } from "firebase/auth";
 import { app } from "../firebase";
-import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import { signInStart, signInSuccess } from "../redux/user/userSlice";
@@ -10,7 +9,6 @@ import { signInStart, signInSuccess } from "../redux/user/userSlice";
 //OAuth es un componente que se encarga de manejar la autenticación con Google
 export const OAuth = () => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   //Obtenemos el objeto auth de firebase pasándole la app importada de firebase (ahi esta la configuración de firebase de este proyecto)
   //Basicamente le decimos que vamos a usar la autenticación de firebase
   const auth = getAuth(app);
