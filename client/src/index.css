@@ -2,6 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-::-webkit-scrollbar{
-    display: none;
+/* no quiero que se muestre la barra de scroll de la derecha ni de abajo */
+::-webkit-scrollbar {
+  display: none;
 }

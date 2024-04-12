@@ -4,18 +4,25 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { SignUpFailure, SignUpStart, SignUpSuccess } from "../redux/user/userSlice";
+import {
+  SignUpFailure,
+  SignUpStart,
+  SignUpSuccess,
+} from "../redux/user/userSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { OAuth } from "../components/OAuth";
+import { OAuth } from "../components";
+
 export const SignUp = () => {
-    const dispatch = useDispatch();
-    const { isLoading } = useSelector(
-      (state) => state.user
-    );
+  // useDispatch es un hook que nos permite disparar acciones al store de Redux.
+  const dispatch = useDispatch();
+  // isLoading es una propiedad del estado global que nos dice si la petición de registro/login está en curso.
+  const { isLoading } = useSelector((state) => state.user);
+  // usernameErrorMsg y emailErrorMsg son estados locales que nos permiten mostrar mensajes de error personalizados.
   const [usernameErrorMsg, setUsernameErrorMsg] = useState(null);
   const [emailErrorMsg, setEmailErrorMsg] = useState(null);
-
+  // navigate es una función que nos permite redirigir al usuario a otra ruta.
   const navigate = useNavigate();
+  // useFormik es un hook que nos permite manejar formularios de una manera más sencilla. Utilizamos yup para validar los campos del formulario.
   const formik = useFormik({
     initialValues: {
       username: "",
@@ -31,25 +38,32 @@ export const SignUp = () => {
     }),
     onSubmit: async ({ username, email, password }) => {
       try {
+        // Cuando el usuario envía el formulario, se dispara la acción SignUpStart, que cambia el estado isLoading a true.
         dispatch(SignUpStart());
+        // Hacemos una petición POST a la ruta /api/auth/signup con los datos del formulario. (trim saca los espacios en blanco al principio y al final de un string)
         const res = await axios.post("/api/auth/signup", {
           username: username.trim(),
           email: email.trim(),
           password: password.trim(),
         });
-        if (res.statusText === 'Created'){
-        formik.resetForm();
-        dispatch(SignUpSuccess(res.data.newUser));
-        navigate('/')
+        if (res.statusText === "Created") {
+          // Si la petición es exitosa, se dispara la acción SignUpSuccess, que guarda el usuario en el estado global y redirige al usuario a la página principal.
+          // formik.resetForm();
+          //newUser es como definimos al nuevo usuario en el backend
+          dispatch(SignUpSuccess(res.data.newUser));
+          navigate("/");
         }
       } catch (error) {
         const { message } = error.response.data;
+        // Si el mensaje de error incluye "duplicate" y "email", mostramos un mensaje de error personalizado.
         if (message.includes("duplicate") && message.includes("email")) {
           setEmailErrorMsg("Email already in use");
         }
+        // Si el mensaje de error incluye "duplicate" y "username", mostramos un mensaje de error personalizado.
         if (message.includes("duplicate") && message.includes("username")) {
           setUsernameErrorMsg("Username already in use");
         }
+        // Si la petición falla, se dispara la acción SignUpFailure, que cambia el estado isLoading a false y muestra un mensaje de error al usuario.
         dispatch(SignUpFailure());
       }
     },

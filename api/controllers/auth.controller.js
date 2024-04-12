@@ -94,6 +94,7 @@ export const signin = async (req, res, next) => {
         httpOnly: true,
       })
       //le devuelvo al frontend el usuario que encontré en la bdd sin la contraseña y el token (recién ahi el cliente puede tener el token)
+      //este rest es un objeto con los datos del usuario
       .json(rest);
   } catch (error) {
     next(error);
@@ -123,6 +124,7 @@ export const google = async (req, res, next) => {
         .cookie("access_token", token, {
           httpOnly: true,
         })
+        //este rest es un objeto con los datos del usuario
         .json(rest);
     } else {
       //si no existe el usuario, genero uno, genero una password y un nombre de usuario

@@ -1,3 +1,5 @@
+//No tenes porque saber esto, es todo traido de firebase
+
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 // TODO: Add SDKs for Firebase products that you want to use
@@ -5,7 +7,9 @@ import { initializeApp } from "firebase/app";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_APPI_KEY,
+  //aca le pones la API KEY DE FIREBASE, como es privada la ponemos en .env
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  //todo esto se deja igual como vino de fabrica
   authDomain: "mern-blog-cd6ab.firebaseapp.com",
   projectId: "mern-blog-cd6ab",
   storageBucket: "mern-blog-cd6ab.appspot.com",

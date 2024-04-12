@@ -1,13 +1,14 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice } from "@reduxjs/toolkit";
+// Esto se encarga de manejar el estado global del tema de la aplicación.
 export const themeSlice = createSlice({
-    name: 'theme',
-    initialState: {
-        theme: 'light'
+  name: "theme",
+  initialState: {
+    theme: "light",
+  },
+  reducers: {
+    toggleTheme: (state) => {
+      state.theme = state.theme === "light" ? "dark" : "light";
     },
-    reducers: {
-        toggleTheme: (state) => {
-            state.theme = state.theme === 'light' ? 'dark' : 'light';
-        },
-    }
+  },
 });
 export const { toggleTheme } = themeSlice.actions;

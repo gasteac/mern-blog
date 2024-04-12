@@ -17,6 +17,9 @@ export const Header = () => {
   const { currentUser } = useSelector((state) => state.user);
   const { theme } = useSelector((state) => state.theme);
   const dispatch = useDispatch();
+  //Obtenemos el path actual mediante useLocation de react-router-dom
+  //useLocation nos da un objeto con información sobre la ruta actual (URL)
+  //Específicamente pathname devuelve lo que viene después del dominio (google.com/loquesea -> /loquesea)
   const path = useLocation().pathname;
   return (
     <Navbar className="border-b-4">
@@ -25,6 +28,7 @@ export const Header = () => {
         className="hidden lowEndPhone:inline text-sm sm:text-xl font-semibold  dark:text-white uppercase"
       >
         <span className="px-2 py-1 bg-gradient-to-r from-emerald-500 via-emerald-800 to-teal-800 rounded-lg text-white">
+          {/* Si el usuario no esta logueado mostramos MANADA, si esta logueado mostramos su username */}
           {currentUser ? currentUser.username : "MANADA"}
         </span>
       </Link>
@@ -40,10 +44,16 @@ export const Header = () => {
         <AiOutlineSearch />
       </Button>
       <div className="flex gap-2 md:order-2">
-        <Button className="w-12 h-10 hidden sm:inline" color="gray" pill onClick={()=>dispatch(toggleTheme())}>
-          
+        <Button
+          className="w-12 h-10 hidden sm:inline"
+          color="gray"
+          pill
+          onClick={() => dispatch(toggleTheme())}
+        >
+          {/* Si el tema es dark mostramos la luna, si no mostramos el sol */}
           {theme === "dark" ? <FaMoon /> : <FaSun />}
         </Button>
+        {/* Si el usuario esta logueado mostramos un dropdown con su avatar, si no mostramos un botón para loguearse */}
         {currentUser ? (
           <Dropdown
             arrowIcon={false}
@@ -56,7 +66,6 @@ export const Header = () => {
                 {currentUser.email}
               </span>
             </Dropdown.Header>
-
             <Link to={"/dashboard?tab=profile"}>
               <Dropdown.Item>Dashboard</Dropdown.Item>
             </Link>
@@ -64,6 +73,7 @@ export const Header = () => {
             <Dropdown.Item>Sign Out</Dropdown.Item>
           </Dropdown>
         ) : (
+          // Si no esta logueado mostramos el boton para ingresar
           <Link to="sign-in">
             <Button gradientDuoTone="purpleToBlue" outline>
               Sign In
@@ -74,6 +84,7 @@ export const Header = () => {
         <NavbarToggle></NavbarToggle>
       </div>
       <Navbar.Collapse>
+        {/* path lo obtenemos de useLocation, es el path actual, lo que esta en la url */}
         <NavbarLink active={path === "/"} as={"div"}>
           <Link to="/">Home</Link>
         </NavbarLink>

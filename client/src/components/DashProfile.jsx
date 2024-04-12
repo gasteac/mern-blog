@@ -11,6 +11,8 @@ import { app } from "../firebase";
 import { CircularProgressbar } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 
+//Aclaración, no confundir ref de firebase con ref de useRef de react
+
 export const DashProfile = () => {
   const { currentUser } = useSelector((state) => state.user);
   // Estado para almacenar el archivo de imagen seleccionado
@@ -32,6 +34,16 @@ export const DashProfile = () => {
       // setImageFileUrl(URL.createObjectURL(file)); lo hacia de forma local
     }
   };
+
+  // Efecto para limpiar el estado `imageFileUploadProgress` cuando la carga de la imagen llega al 100%
+  useEffect(() => {
+    if (imageFileUploadProgress == 100) {
+      setTimeout(() => {
+        setImageFileUploadProgress(null);
+      }, 1500);
+    }
+  }, [imageFileUploadProgress]);
+
   // Efecto para iniciar la carga de la imagen cuando el estado `imageFile` cambia
   useEffect(() => {
     if (imageFile) {
@@ -39,31 +51,25 @@ export const DashProfile = () => {
     }
   }, [imageFile]);
 
-useEffect(() => {
-  if (imageFileUploadProgress == 100) {
-    setTimeout(() => {
-      setImageFileUploadProgress(null);
-    }, 1500);
-  }
-}, [imageFileUploadProgress]);
-
   // Función asíncrona para cargar la imagen en el almacenamiento storage de firebase
   const uploadImage = async () => {
     //Hago reset al error por si antes el usuario tuvo un error al subir la imagen
     setImageFileUploadError(null);
-    //Obtengo el storage de la app que exporte en el archivo firebase.js, osea de toda mi conf del proyecto en firestone, de ahi obtengo el storage, que previamente lo active en firebase
+    //Obtengo el storage de firebase, le paso la conf mediante app que exporte en el archivo firebase.js
     const storage = getStorage(app);
     //Creo un nombre para la imagen que se va a subir, en este caso la fecha en milisegundos y el nombre de la imagen
     const fileName = new Date().getTime() + imageFile.name;
     //Creo una referencia al storage de firebase con el nombre de la imagen, para poder acceder a ella, es como un indice.
     const storageRef = ref(storage, fileName);
     //Subo la imagen al storage de firebase, con la referencia y el archivo de imagen
+    //uploadBytesResumable es una promesa que me devuelve un objeto con información constante de la carga de la imagen
     const uploadTask = uploadBytesResumable(storageRef, imageFile);
-    //Agrego un listener para saber el progreso de la carga de la imagen
-    //Para luego mostrar la progressBar de la imagen
+    //Agrego un listener
+    //uploadTask es un objeto que tiene un evento llamado state_changed que se dispara cada vez que cambia el estado de la carga de la imagen
     uploadTask.on(
       //Este evento se dispara cada vez que cambia el estado de la carga de la imagen
       "state_changed",
+      //snapshot es un objeto que tiene información de la carga de la imagen
       (snapshot) => {
         const progress =
           (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
@@ -85,11 +91,10 @@ useEffect(() => {
       () => {
         //Cuando la imagen se sube correctamente, obtengo la URL de descarga de la imagen de firebase
         //Le paso la referencia de la imagen que se subió
-        //Es una promesa que me devuelve la URL de descarga de la imagen
+        //Es una promesa que me devuelve la URL de la imagen en firebase
         const downloadURL = getDownloadURL(uploadTask.snapshot.ref).then(
           (downloadURL) => {
-            //Guardo la URL de descarga de la imagen
-            //Para luego mostrarla en la imagen de perfil del usuario con imageFileUrl
+            //Luego la guardo y la muestro en la imagen de perfil del usuario con imageFileUrl
             setImageFileUrl(downloadURL);
           }
         );
@@ -106,11 +111,14 @@ useEffect(() => {
         <input
           hidden
           type="file"
+          //Le asigno la referencia del input file a filePickerRef
+          //Para luego hacer click en el input file cuando se haga click en la imagen
           ref={filePickerRef}
           accept="image/*"
           onChange={handleImageChange}
         />
         <div
+          //Cuando se hace click en la imagen, se hace click en el input file mediante filePickerRef.current.click()
           onClick={() => filePickerRef.current.click()}
           className="relative w-32 h-32 self-center cursor-pointer shadow-lg overflow-hidden rounded-full"
         >
@@ -137,6 +145,7 @@ useEffect(() => {
             />
           )}
           <img
+            //Si el usuario subió una imagen la muestro, sino muestro la imagen de perfil del usuario
             src={imageFileUrl ? imageFileUrl : currentUser.profilePic}
             alt="user"
             className="rounded-full w-full h-full border-8 object-cover border-[lightgray]"

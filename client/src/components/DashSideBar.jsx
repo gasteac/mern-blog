@@ -5,22 +5,33 @@ import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 
 export const DashSideBar = () => {
-  //location nos devuelve un objeto con información de la URL actual y los parametros
+  //Obtenemos el path actual mediante useLocation de react-router-dom
+  //useLocation nos da un objeto con información sobre la ruta actual (URL)
+  //Específicamente pathname devuelve lo que viene después del dominio (google.com/loquesea -> /loquesea)
   const location = useLocation();
+  //En tab guardamos el valor del parámetro search de la URL, osea "?tab=valor" seria = 'valor'
   const [tab, setTab] = useState("");
   //este useEffect se va a ejecutar siempre que cambie el search osea el ?tab=valor de la url
   //se va a utilizar para mostrar diferentes componentes dentro del mismo componente
+  //Cualquier componente que se muestre aca es valido dependiendo si esta era una ruta publica o privada
   useEffect(() => {
+    //URLSearchParams nos devuelve un objeto con todos los parámetros de la URL
+    //En este caso nos devuelve un objeto con el parámetro tab y su valor
+    //search porque es el nombre del parámetro que queremos obtener
+    //search = ?tab=valor
     const urlParams = new URLSearchParams(location.search);
-    //urlParams nos devuelve un objeto con los parámetros de la URL q coincidan con en este caso search que es ?tab=valor
+    // urlParams.get("tab") nos devuelve el valor del parámetro tab, osea 'valor'
     const tabFromUrl = urlParams.get("tab");
-    // tabFromUrl nos devuelve el valor del parámetro tab, puede ser en nuestro caso profile por ejemplo
+    //seteamos el valor de tab con el valor del parámetro tab de la URL
     setTab(tabFromUrl);
+    //y esto se va a hacer cada vez que cambie el search, osea el valor de ?tab=valor
   }, [location.search]);
+
   return (
     <Sidebar className="w-full md:w-56">
       <Sidebar.Items>
         <Sidebar.ItemGroup>
+          {/* Si tab es igual a profile mostramos el item con el icono de HiUser y el label User */}
           <Sidebar.Item
             active={tab === "profile"}
             icon={HiUser}

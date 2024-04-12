@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import { DashProfile } from "../components/DashProfile";
-import { DashSideBar } from "../components/DashSideBar";
+import { DashProfile, DashSideBar } from "../components";
 
 export const Dashboard = () => {
   //location nos devuelve un objeto con información de la URL actual y los parametros

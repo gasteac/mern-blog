@@ -1,4 +1,3 @@
-
 import { Alert, Button, Label, Spinner, TextInput } from "flowbite-react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -11,13 +10,16 @@ import {
   signInSuccess,
 } from "../redux/user/userSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { OAuth } from "../components/OAuth";
+import { OAuth } from "../components";
 
 export const SignIn = () => {
+  // useDispatch es un hook que nos permite disparar acciones al store de Redux.
   const dispatch = useDispatch();
+  // Obtengo error e isLoading del estado global de user
   const { error: credentialErrorMsg, isLoading } = useSelector(
     (state) => state.user
   );
+  // navigate es una función que nos permite redirigir al usuario a otra ruta.
   const navigate = useNavigate();
   const formik = useFormik({
     initialValues: {
@@ -32,17 +34,22 @@ export const SignIn = () => {
     }),
     onSubmit: async ({ email, password }) => {
       try {
+        // Cuando el usuario envía el formulario, se dispara la acción SignInStart, que cambia el estado isLoading a true.
         dispatch(signInStart());
+        // Hacemos una petición POST a la ruta /api/auth/signin con los datos del formulario. (trim saca los espacios en blanco al principio y al final de un string)
         const res = await axios.post("/api/auth/signin", {
           email: email.trim(),
           password: password.trim(),
         });
         const { data } = res;
+        // Si la petición es exitosa, se dispara la acción SignInSuccess, que guarda el usuario en el estado global y redirige al usuario a la página principal.
         if (res.statusText === "OK") {
           navigate("/");
+          //rest es un objeto con los datos del usuario
           dispatch(signInSuccess(data.rest));
         }
       } catch (error) {
+        // Si hay un error en la petición, se dispara la acción SignInFailure, que guarda el mensaje de error en el estado global.
         const message = error.response.data.message;
         if (message.includes("Email") || message.includes("Password")) {
           dispatch(signInFailure(message));
