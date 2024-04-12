@@ -141,6 +141,8 @@ export const DashProfile = () => {
       }
     );
   };
+
+
   const formik = useFormik({
     initialValues: {
       username: currentUser.username,
@@ -190,8 +192,6 @@ export const DashProfile = () => {
           // Si la petición es exitosa, se dispara la acción SignUpSuccess, que guarda el usuario en el estado global y redirige al usuario a la página principal.
           dispatch(modifyUserSuccess(res.data));
           setUpdateUserSuccess("User updated successfully!");
-          formik.resetForm();
-          //redirijo al usuario a la página principal
         }
       } catch (error) {
         const { message } = error.response.data;
@@ -247,9 +247,9 @@ export const DashProfile = () => {
         className="flex flex-col sm:flex-row items-center justify-center gap-12 sm:p-6 "
         onSubmit={formik.handleSubmit}
       >
-        <div className="flex flex-col items-center justify-center sm:self-start h-full md:w-1/3">
+        <div className="flex flex-col items-center justify-center sm:self-start h-full">
           <h1 className="my-7 text-center font-semibold text-3xl text-nowrap capitalize">
-            <span className="text-emerald-500 ">Hi </span>
+            <span className="hiText">Hi </span>
             {currentUser.username}
           </h1>
           <input
@@ -297,7 +297,7 @@ export const DashProfile = () => {
           </div>
         </div>
 
-        <div className="flex flex-col gap-2 px-5 w-full h-full sm:w-2/3">
+        <div className="flex flex-col gap-2 px-5 w-full h-full sm:max-w-[30rem]">
           {(updateUserError || updateUserSuccess) && (
             <Alert
               color={updateUserError ? "failure" : "success"}
@@ -307,10 +307,7 @@ export const DashProfile = () => {
             </Alert>
           )}
           <div className="group">
-            <Label
-              value="Username"
-              className="group-focus-within:text-green-700"
-            ></Label>
+            <Label value="Username" className="groupLabel"></Label>
             <TextInput
               type="text"
               placeholder="username"
@@ -335,10 +332,7 @@ export const DashProfile = () => {
           </div>
 
           <div className="group">
-            <Label
-              value="Email"
-              className="group-focus-within:text-green-700"
-            ></Label>
+            <Label value="Email" className="groupLabel"></Label>
             <TextInput
               type="email"
               placeholder="name@company.com"
@@ -356,16 +350,13 @@ export const DashProfile = () => {
             ) : null}
             {emailErrorMsg ? (
               <h6 className="ml-2 text-red-300 text-[0.8rem]  phone:text-[1rem] tablet:text-[1.2rem]">
-                {emailErrorMsg} 
+                {emailErrorMsg}
               </h6>
             ) : null}
           </div>
 
           <div className="group">
-            <Label
-              value="Password"
-              className="group-focus-within:text-green-700"
-            ></Label>
+            <Label value="Password" className="groupLabel"></Label>
             <TextInput
               type="password"
               placeholder="password"
@@ -393,12 +384,12 @@ export const DashProfile = () => {
                 <span className="ml-3">Loading..</span>
               </>
             ) : (
-              <span>Modify</span>
+              <span>Save!</span>
             )}
           </Button>
           <div className="justify-between flex flex-col items-center gap-4 mt-5">
             <span
-              className="cursor-pointer font-semibold text-red-500  hover:text-red-600"
+              className="cursor-pointer font-semibold hiText"
               onClick={() => setShowModal(true)}
             >
               Delete Account

@@ -6,3 +6,19 @@
 ::-webkit-scrollbar {
   display: none;
 }
+
+.hiText {
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  background: linear-gradient(135deg, #9c77f3, #5d55f6);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+.group:focus-within .groupLabel {
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  background: linear-gradient(135deg, #9c77f3, #5d55f6);
+  -webkit-background-clip: text;
+  background-clip: text;
+}

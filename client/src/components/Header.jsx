@@ -36,9 +36,9 @@ export const Header = () => {
     <Navbar className="border-b-4 w-full sticky top-0 z-50">
       <Link
         to="/"
-        className="hidden lowEndPhone:inline text-sm sm:text-xl font-semibold  dark:text-white"
+        className="hidden lowEndPhone:inline text-sm font-semibold  dark:text-white"
       >
-        <span className="px-2 py-1 bg-gradient-to-r from-emerald-400 via-emerald-500 to-teal-400 rounded-xl hover:from-emerald-500 hover:via-emerald-600 hover:to-teal-500  text-white">
+        <span className="px-2 py-1 hiText font-bold text-2xl sm:text-3xl ">
           FaceRook
         </span>
       </Link>
@@ -97,26 +97,104 @@ export const Header = () => {
 
         {!currentUser ? (
           <>
-            <NavbarLink active={path === "/"} as={"div"}>
-              <Link to="/">Home</Link>
+            <NavbarLink
+              active={path === "/"}
+              as="div"
+              className={`
+    rounded-xl w-full
+    ${
+      path === "/"
+        ? "bg-gradient-to-br from-purple-500 to-blue-500 md:text-white font-semibold"
+        : "dark:text-white light:text-black"
+    }
+  `}
+            >
+              <Link to="/" className="w-full flex md:p-2 ">
+                Home
+              </Link>
             </NavbarLink>
-            <NavbarLink active={path === "/sign-in"} as={"div"}>
-              <Link to="/sign-in">Sign In</Link>
+            <NavbarLink
+              active={path === "/sign-in"}
+              as="div"
+              className={`
+    rounded-xl w-full
+    ${
+      path === "/sign-in"
+        ? "bg-gradient-to-br from-purple-500 to-blue-500 md:text-white font-semibold"
+        : "dark:text-white light:text-black"
+    }
+  `}
+            >
+              <Link to="/sign-in" className="w-full flex md:p-2">
+                Sign In
+              </Link>
             </NavbarLink>
-            <NavbarLink active={path === "/sign-up"} as={"div"}>
-              <Link to="/sign-up">Sign Up</Link>
+            <NavbarLink
+              active={path === "/sign-up"}
+              as="div"
+              className={`
+    rounded-xl w-full
+    ${
+      path === "/sign-up"
+        ? "bg-gradient-to-br from-purple-500 to-blue-500 md:text-white font-semibold"
+        : "dark:text-white light:text-black"
+    }
+  `}
+            >
+              <Link to="/sign-up" className="w-full flex md:p-2">
+                Sign Up
+              </Link>
             </NavbarLink>
           </>
         ) : (
           <>
-            <NavbarLink active={path === "/dashboard"} as={"div"}>
-              <Link to="/dashboard?tab=profile">Dashboard</Link>
+            <NavbarLink
+              active={path === "/dashboard"}
+              as="div"
+              className={`
+    rounded-xl w-full 
+    ${
+      path === "/dashboard"
+        ? "bg-gradient-to-br from-purple-500 to-blue-500 md:text-white font-semibold"
+        : "dark:text-white light:text-black"
+    }
+  `}
+            >
+              <Link to="/dashboard?tab=profile" className="w-full flex md:p-2">
+                Dashboard
+              </Link>
             </NavbarLink>
-            <NavbarLink active={path === "/about"} as={"div"}>
-              <Link to="/about">About</Link>
+            <NavbarLink
+              active={path === "/about"}
+              as="div"
+              className={`
+    rounded-xl w-full
+    ${
+      path === "/about"
+        ? "bg-gradient-to-br from-purple-500 to-blue-500 md:text-white font-semibold"
+        : "dark:text-white light:text-black"
+    }
+  `}
+            >
+              <Link to="/about" className="w-full flex md:p-2">
+                About
+              </Link>
             </NavbarLink>
-            <NavbarLink active={path === "/projects"} as={"div"}>
-              <Link to="/projects">Projects</Link>
+            <NavbarLink
+              active={path === "/projects"}
+              as="div"
+              className={`
+    rounded-xl w-full
+    ${
+      path === "/projects"
+        ? "bg-gradient-to-br from-purple-500 to-blue-500 md:text-white light:text-white font-semibold"
+        : "dark:text-white light:text-black"
+    }
+  `}
+            >
+              <Link to="/projects" className="w-full flex md:p-2">
+                Projects
+              </Link>
             </NavbarLink>
           </>
         )}

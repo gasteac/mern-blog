@@ -10,24 +10,24 @@ export const Home = () => {
       <h1 className="text-5xl mb-2">
         Hey, hello{" "}
         {currentUser ? (
-          <span className="text-emerald-700 capitalize">
+          <span className="hiText capitalize font-bold">
             {currentUser.username}!
           </span>
         ) : (
-          <span className="text-emerald-700">Visitor!</span>
+          <span className="hiText capitalize font-bold">Visitor!</span>
         )}
       </h1>
 
       {currentUser ? (
         <span
-          className="cursor-pointer text-2xl rounded-lg text-white px-2 py-2 bg-gradient-to-r from-emerald-400 via-emerald-500 to-teal-400 hover:from-emerald-500 hover:via-emerald-600 hover:to-teal-500"
+          className="cursor-pointer text-2xl rounded-lg hiText font-semibold"
           onClick={() => navigate("/dashboard?tab=profile")}
         >
           Go to profile
         </span>
       ) : (
         <span
-          className="cursor-pointer text-2xl rounded-lg text-white px-2 py-2 bg-gradient-to-r from-emerald-400 via-emerald-500 to-teal-400  hover:from-emerald-500 hover:via-emerald-600 hover:to-teal-500"
+          className="cursor-pointer text-2xl rounded-lg hiText font-semibold"
           onClick={() => navigate("/sign-up")}
         >
           {" "}

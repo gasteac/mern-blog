@@ -67,13 +67,12 @@ export const SignIn = () => {
         {/* left side */}
         <div className="flex-1 self-center md:self-start md:mt-16">
           <Link to="/" className="font-bold dark:text-white text-4xl">
-            <span className="px-2 py-1 bg-gradient-to-r from-emerald-400 via-emerald-500 to-teal-400 rounded-xl hover:from-emerald-500 hover:via-emerald-600 hover:to-teal-500  text-white">
+            <span className="px-2 py-1 rounded-2xl bg-[linear-gradient(135deg,_#9c77f3,_#5d55f6)] text-white">
               FaceRook
             </span>
           </Link>
           <p className="text-lg text-c mt-5">
-            Welcome to{" "}
-            <span className="font-bold text-emerald-700">FaceRook</span>
+            Welcome to <span className="font-bold hiText">FaceRook</span>
           </p>
         </div>
         {/* right side */}
@@ -127,7 +126,7 @@ export const SignIn = () => {
               ) : null}
             </div>
             <Button
-              className="bg-gradient-to-r from-emerald-400 via-emerald-500 to-teal-400 rounded-xl hover:from-emerald-500 hover:via-emerald-600 hover:to-teal-500"
+              className="bg-[linear-gradient(135deg,_#9c77f3,_#5d55f6)] text-white"
               type="submit"
               disabled={isLoading}
             >
@@ -144,7 +143,7 @@ export const SignIn = () => {
           </form>
           <div className="flex gap-2 justify-end px-1 text-sm mt-3">
             <span>Don't have an account?</span>
-            <Link to="/sign-up" className="text-blue-500">
+            <Link to="/sign-up" className="hiText font-bold">
               Sign Up
             </Link>
           </div>
