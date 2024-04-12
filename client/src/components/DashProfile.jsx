@@ -164,7 +164,7 @@ export const DashProfile = () => {
       if (
         username === currentUser.username &&
         email === currentUser.email &&
-        !imageFileUrl
+        !imageFileUrl && password === ""
       ) {
         setUpdateUserError("No changes detected :)");
         return;
@@ -188,6 +188,7 @@ export const DashProfile = () => {
           // Si la petición es exitosa, se dispara la acción SignUpSuccess, que guarda el usuario en el estado global y redirige al usuario a la página principal.
           dispatch(modifyUserSuccess(res.data));
           setUpdateUserSuccess("User updated successfully!");
+          formik.resetForm();
           //redirijo al usuario a la página principal
         }
       } catch (error) {
