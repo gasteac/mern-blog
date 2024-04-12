@@ -38,7 +38,7 @@ export const SignUp = () => {
       email: Yup.string().required("Required!"),
       password: Yup.string()
         .required("Required!")
-        .min(6, "Must be 6 characters or more"),
+        .min(5, "Must be 5 characters or more"),
     }),
     onSubmit: async ({ username, email, password }) => {
       try {
