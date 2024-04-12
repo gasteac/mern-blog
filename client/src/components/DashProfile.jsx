@@ -23,6 +23,7 @@ import * as Yup from "yup";
 import {
   deleteUserSuccess,
   logoutSuccess,
+  modifyUserFailure,
   modifyUserStart,
   modifyUserSuccess,
 } from "../redux/user/userSlice";
@@ -193,8 +194,19 @@ export const DashProfile = () => {
           //redirijo al usuario a la página principal
         }
       } catch (error) {
+        const { message } = error.response.data;
+        // Si el mensaje de error incluye "duplicate" y "email", mostramos un mensaje de error personalizado.
+        if (message.includes("duplicate") && message.includes("email")) {
+          setEmailErrorMsg("Email already in use");
+        }
+        // Si el mensaje de error incluye "duplicate" y "username", mostramos un mensaje de error personalizado.
+        if (message.includes("duplicate") && message.includes("username")) {
+          setUsernameErrorMsg("Username already in use");
+        }
+        // Si la petición falla, se dispara la acción SignUpFailure, que cambia el estado isLoading a false y muestra un mensaje de error al usuario.
+        dispatch(modifyUserFailure());
         setUpdateUserSuccess(false);
-        console.log(error);
+       
         // Si el mensaje de error incluye "duplicate" y "email", mostramos un mensaje de error personalizado.
         // if (message.includes("duplicate") && message.includes("email")) {
         //   setEmailErrorMsg("Email already in use");
@@ -344,7 +356,7 @@ export const DashProfile = () => {
             ) : null}
             {emailErrorMsg ? (
               <h6 className="ml-2 text-red-300 text-[0.8rem]  phone:text-[1rem] tablet:text-[1.2rem]">
-                {emailErrorMsg}
+                {emailErrorMsg} 
               </h6>
             ) : null}
           </div>
