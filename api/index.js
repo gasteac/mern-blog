@@ -30,6 +30,7 @@ app.use("/api/user", userRoute);
 //aca le paso las rutas para user como "USE" porque los get push delete y eso ya están en userRoute
 app.use("/api/auth", authRoute);
 
+
 //Le decimos al server que escuche en el puerto 3000
 app.listen(3000, () => {
   console.log("Server is running on port 3000");

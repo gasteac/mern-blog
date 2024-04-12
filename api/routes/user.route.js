@@ -1,5 +1,9 @@
 import express from "express";
-import { test, updateUser } from "../controllers/user.controller.js";
+import {
+  test,
+  updateUser,
+  deleteUser,
+} from "../controllers/user.controller.js";
 import { verifyToken } from "../utils/verifyUser.js";
 
 const router = express.Router();
@@ -12,5 +16,9 @@ router.get("/test", test);
 //aclaración: este userId es el que se compara con el id de usuario que devuelve el token en verifyToken
 //lo vas a ver en el controlador updateUser al principio de la función
 router.put("/update/:userId", verifyToken, updateUser);
+
+router.delete("/delete/:userId", verifyToken, deleteUser);
+
+
 //lo exporto como "router" pero en el index.js donde lo llamo le doy el nombre que quiero, en estos casos userRoute o authRoute
 export default router;

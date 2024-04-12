@@ -1,6 +1,13 @@
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Button, Label, Spinner, TextInput, Alert } from "flowbite-react";
+import {
+  Button,
+  Label,
+  Spinner,
+  TextInput,
+  Alert,
+  Modal,
+} from "flowbite-react";
 import {
   getDownloadURL,
   getStorage,
@@ -14,15 +21,18 @@ import axios from "axios";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import {
+  deleteUserSuccess,
   modifyUserStart,
   modifyUserSuccess,
-  modifyUserFailure,
 } from "../redux/user/userSlice";
+import { HiOutlineExclamationCircle } from "react-icons/hi";
 
 //Aclaración, no confundir ref de firebase con ref de useRef de react
 
 export const DashProfile = () => {
   const dispatch = useDispatch();
+  // showModal es un estado local que nos permite mostrar un modal al usuario
+  const [showModal, setShowModal] = useState(false);
   // usernameErrorMsg y emailErrorMsg son estados locales que nos permiten mostrar mensajes de error personalizados.
   const [usernameErrorMsg, setUsernameErrorMsg] = useState(null);
   const [emailErrorMsg, setEmailErrorMsg] = useState(null);
@@ -74,7 +84,7 @@ export const DashProfile = () => {
   const uploadImage = async () => {
     //Reseteo el estado de éxito de la actualización del usuario
     setUpdateUserSuccess(null);
-    //Hago reset al error por si antes el usuario tuvo un error 
+    //Hago reset al error por si antes el usuario tuvo un error
     setUpdateUserError(null);
     //Seteo el estado de subida de la imagen a true para que el usuario no pueda hacer nada mientras se sube
     setImageFileUploading(true);
@@ -176,7 +186,7 @@ export const DashProfile = () => {
           //obtengo el usuario de la respuesta, que esta en data
           // Si la petición es exitosa, se dispara la acción SignUpSuccess, que guarda el usuario en el estado global y redirige al usuario a la página principal.
           dispatch(modifyUserSuccess(res.data));
-          setUpdateUserSuccess('User updated successfully!');
+          setUpdateUserSuccess("User updated successfully!");
           //redirijo al usuario a la página principal
         }
       } catch (error) {
@@ -195,6 +205,17 @@ export const DashProfile = () => {
       }
     },
   });
+
+  const deleteUser = async () => {
+    setShowModal(false);
+    try {
+      const res = await axios.delete(`/api/user/delete/${currentUser._id}`);
+      dispatch(deleteUserSuccess());
+      localStorage.removeItem("persist:root");
+    } catch (error) {
+      setUpdateUserError("Error deleting user");
+    }
+  };
 
   return (
     <div className="max-w-lg mx-auto w-full p-3">
@@ -248,13 +269,13 @@ export const DashProfile = () => {
         </div>
 
         {(updateUserError || updateUserSuccess) && (
-            <Alert
-              color={updateUserError ? "failure" : "success"}
-              className="font-semibold"
-            >
-              {updateUserError ? updateUserError : updateUserSuccess}
-            </Alert>
-          )}
+          <Alert
+            color={updateUserError ? "failure" : "success"}
+            className="font-semibold"
+          >
+            {updateUserError ? updateUserError : updateUserSuccess}
+          </Alert>
+        )}
         <div className="group">
           <Label
             value="Username"
@@ -344,9 +365,35 @@ export const DashProfile = () => {
         </Button>
       </form>
       <div className="text-red-500 justify-between flex mt-5">
-        <span className="cursor-pointer">Delete Account</span>
+        <span className="cursor-pointer" onClick={() => setShowModal(true)}>
+          Delete Account
+        </span>
         <span className="cursor-pointer">Sign Out</span>
       </div>
+      <Modal
+        show={showModal}
+        onClose={() => setShowModal(false)}
+        popup
+        size="md"
+      >
+        <Modal.Header />
+        <Modal.Body className="flex items-center justify-center flex-col gap-5">
+          <HiOutlineExclamationCircle className="text-red-500 text-6xl" />
+          <h1 className="text-center text-2xl font-semibold">
+            Are you sure? :(
+          </h1>
+          <div className="flex justify-between gap-5">
+            <Button
+              onClick={() => setShowModal(false)}
+              gradientDuoTone="greenToBlue">
+              cancel!
+            </Button>
+            <Button onClick={deleteUser} color='failure'>
+              yes, delete it
+            </Button>
+          </div>
+        </Modal.Body>
+      </Modal>
     </div>
   );
 };

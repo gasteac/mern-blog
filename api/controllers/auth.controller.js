@@ -172,7 +172,7 @@ export const google = async (req, res, next) => {
         username:
           //le saco los espacios al nombre y lo paso a minúsculas, le agrego un número random al final
           name.toLowerCase().split(" ")[0] +
-          Math.random().toString(9).slice(-2) + "manada",
+          Math.random().toString(9).slice(-4),
         email,
         password: hashedPassword,
         //le paso la foto de google que viene de la request

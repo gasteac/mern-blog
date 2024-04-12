@@ -1,3 +1,4 @@
+
 import User from "../models/user.model.js";
 import { errorHandler } from "../utils/error.js";
 import bcryptjs from "bcryptjs";
@@ -77,3 +78,16 @@ export const updateUser = async (req, res, next) => {
     next(error);
   }
 };
+
+
+export const deleteUser = async (req, res, next) => {
+  if (req.params.userId !== req.user.id) {
+    return next(errorHandler(401, "Unauthorized"));
+  }
+  try {
+    await User.findByIdAndDelete(req.params.userId);
+    res.status(200).clearCookie("access_token").json("User has been deleted");
+  } catch (error) {
+    next(error);
+  }
+}
