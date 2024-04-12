@@ -14,7 +14,7 @@ mongoose
   .catch((err) => console.log(err));
 
 //esto es para que __dirname funcione en los módulos de ES6 (porque __dirname no existe en ES6)
-const __dirname = path.resolve(); 
+const __dirname = path.resolve();
 
 //Creamos una instancia de express que va a ser nuestro server y la guardamos con el nombre app
 const app = express();
@@ -24,13 +24,6 @@ app.use(express.json());
 //middleware que permite parsear cookies
 app.use(cookieParser());
 
-//middleware que permite servir archivos estáticos (como los html, css, js, imágenes, etc) de la carpeta client/dist
-app.use(express.static(path.join(__dirname, "/client/dist")));
-
-
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'client', 'dist', 'index.html'));
-});
 
 
 ///////////RUTAS///////////
@@ -46,6 +39,13 @@ app.use("/api/auth", authRoute);
 //Le decimos al server que escuche en el puerto 3000
 app.listen(3000, () => {
   console.log("Server is running on port 3000");
+});
+
+//middleware que permite servir archivos estáticos (como los html, css, js, imágenes, etc) de la carpeta client/dist
+app.use(express.static(path.join(__dirname, "/client/dist")));
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "client", "dist", "index.html"));
 });
 
 //Este es el middleware de último recurso para manejar errores generales. (aca llegan todos los errores, ya sean de la bdd, de la api, de la app, de mi errorHandler, etc)
