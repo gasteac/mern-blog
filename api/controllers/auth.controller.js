@@ -34,11 +34,18 @@ export const signup = async (req, res, next) => {
     email,
     password: hashedPassword,
   });
-
   //intento guardar el usuario en la bdd
   try {
     await newUser.save();
-    res.json("Signup successful");
+    // res.json("Signup successful");
+    const token = jwt.sign(
+      {id: newUser._id},
+      process.env.JWT_SECRET
+    );
+    const { password, ...rest } = newUser._doc;
+    res.status(201).cookie("access_token", token, {
+      httpOnly: true,
+    }).json(rest);
   } catch (error) {
     //si hay error, se lo paso al siguiente middleware, en este caso no es el manejador de errores sino 
     //el ultimo middleware de mi proceso, osea el que esta en index.js al final (muestra los errores)
@@ -54,28 +61,31 @@ export const signin = async (req, res, next) => {
   //el fetch es el que se encarga de hacer las peticiones http
   //en este caso el fetch es un post a /api/auth/signin
   const { email, password } = req.body;
+
   //si alguno de los campos está vacío, devuelvo un error
-  if (!email || !password || email === "" || password === "") {
+  if (!email || !password) {
     //le digo, anda al siguiente middleware que es el manejador de errores y pasale un error con status 400 y mensaje "All fields are required" 
     next(errorHandler(400, "All fields are required"));
   }
 
   try {
-    //busco un usuario en la bdd que tenga el email que me pasaron
+
+    // busco un usuario en la bdd que tenga el email que me pasaron
     const validUser = await User.findOne({ email });
     //si no encuentro un usuario con ese email, devuelvo un error
     if (!validUser) {
       return next(errorHandler(404, "User not found"));
     }
-
     //si existe el usuario, osea si se registró previamente con ese email, comparo la contraseña que me pasaron con la que tengo en la bdd
     //con bcryptjs.compareSync comparo la contraseña que me pasaron con la que tengo en la bdd
     const validPassword = bcryptjs.compareSync(password, validUser.password);
+
     if (!validPassword) {
       return next(errorHandler(400, "Invalid password"));
     }
     //si la contraseña es correcta, genero un token con jwt.sign
     //jwt.sign es una función que recibe un objeto con los datos que quiero que tenga el token
+   
     const token = jwt.sign(
       //en este caso le paso el id del usuario que encontré en la bdd
       { id: validUser._id},
@@ -83,7 +93,8 @@ export const signin = async (req, res, next) => {
       process.env.JWT_SECRET
     );
     //desestructuro el usuario que encontré en la bdd y le saco la contraseña
-    const { password, ...rest } = validUser._doc;
+
+    const { password: pass, ...rest } = validUser._doc;
     //le devuelvo al frontend el usuario que encontré en la bdd sin la contraseña, y el token "access_token"
     res
       .status(200)

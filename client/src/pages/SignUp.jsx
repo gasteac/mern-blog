@@ -5,9 +5,9 @@ import axios from "axios";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import {
-  SignUpFailure,
-  SignUpStart,
-  SignUpSuccess,
+  signUpFailure,
+  signUpStart,
+  signUpSuccess,
 } from "../redux/user/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { OAuth } from "../components";
@@ -39,18 +39,18 @@ export const SignUp = () => {
     onSubmit: async ({ username, email, password }) => {
       try {
         // Cuando el usuario envía el formulario, se dispara la acción SignUpStart, que cambia el estado isLoading a true.
-        dispatch(SignUpStart());
+        dispatch(signUpStart());
         // Hacemos una petición POST a la ruta /api/auth/signup con los datos del formulario. (trim saca los espacios en blanco al principio y al final de un string)
         const res = await axios.post("/api/auth/signup", {
           username: username.trim(),
           email: email.trim(),
           password: password.trim(),
         });
-        if (res.statusText === "Created") {
+        if (res.status === 201) {
+          //obtengo el usuario de la respuesta, que esta en data
           // Si la petición es exitosa, se dispara la acción SignUpSuccess, que guarda el usuario en el estado global y redirige al usuario a la página principal.
-          // formik.resetForm();
-          //newUser es como definimos al nuevo usuario en el backend
-          dispatch(SignUpSuccess(res.data.newUser));
+          dispatch(signUpSuccess(res.data));
+          //redirijo al usuario a la página principal
           navigate("/");
         }
       } catch (error) {
@@ -64,7 +64,7 @@ export const SignUp = () => {
           setUsernameErrorMsg("Username already in use");
         }
         // Si la petición falla, se dispara la acción SignUpFailure, que cambia el estado isLoading a false y muestra un mensaje de error al usuario.
-        dispatch(SignUpFailure());
+        dispatch(signUpFailure());
       }
     },
   });

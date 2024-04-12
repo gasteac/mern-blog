@@ -1,5 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-
 // Initial State de userSlice
 const initialState = {
   currentUser: null,
@@ -12,6 +11,7 @@ const initialState = {
 // aca NO se realizan tareas asincrónicas, solo se maneja el estado
 // Si queremos realizar algo sincrono se debe usar un thunk
 export const userSlice = createSlice({
+  
   name: "user",
   initialState,
   reducers: {
@@ -28,17 +28,18 @@ export const userSlice = createSlice({
     signInInProcess: (state) => {
       state.error = null;
     },
-    SignUpStart: (state) => {
+    signUpStart: (state) => {
       (state.isLoading = true), (state.error = false);
     },
-    SignUpSuccess: (state, action) => {
+    signUpSuccess: (state, action) => {
       state.currentUser = action.payload;
-      (state.isLoading = false), (state.error = null);
+      state.isLoading = false;
+      state.error = null;
     },
-    SignUpFailure: (state, action) => {
+    signUpFailure: (state, action) => {
       (state.isLoading = false), (state.error = action.payload);
     },
-    SignUpInProcess: (state) => {
+    signUpInProcess: (state) => {
       state.error = null;
     },
   },
@@ -48,8 +49,8 @@ export const {
   signInSuccess,
   signInFailure,
   signInInProcess,
-  SignUpStart,
-  SignUpSuccess,
-  SignUpFailure,
-  SignUpInProcess,
+  signUpStart,
+  signUpSuccess,
+  signUpFailure,
+  signUpInProcess,
 } = userSlice.actions;

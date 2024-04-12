@@ -38,7 +38,7 @@ export const OAuth = () => {
       const { data } = res;
       //Si todo salió bien, redirigimos al usuario a la home y le pasamos los datos del usuario a la store
       if (res.statusText === "OK") {
-        navigate("/");
+        navigate("/dashboard?tab=profile");
         //Le pasamos los datos del usuario a la store, rest = datos usuario sin la password
         dispatch(signInSuccess(data.rest));
       }

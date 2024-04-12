@@ -38,17 +38,18 @@ export const SignIn = () => {
         dispatch(signInStart());
         // Hacemos una petición POST a la ruta /api/auth/signin con los datos del formulario. (trim saca los espacios en blanco al principio y al final de un string)
         const res = await axios.post("/api/auth/signin", {
-          email: email.trim(),
-          password: password.trim(),
+          email,
+          password
         });
-        const { data } = res;
         // Si la petición es exitosa, se dispara la acción SignInSuccess, que guarda el usuario en el estado global y redirige al usuario a la página principal.
-        if (res.statusText === "OK") {
-          navigate("/");
-          //rest es un objeto con los datos del usuario
-          dispatch(signInSuccess(data.rest));
+        if (res.status === 200) {
+          //en data estan los datos del usuario
+          dispatch(signInSuccess(res.data));
+          //redirijo al usuario a la página principal
+          navigate("/dashboard?tab=profile");
         }
       } catch (error) {
+        console.log(error)
         // Si hay un error en la petición, se dispara la acción SignInFailure, que guarda el mensaje de error en el estado global.
         const message = error.response.data.message;
         if (message.includes("Email") || message.includes("Password")) {
