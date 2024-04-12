@@ -414,14 +414,14 @@ export const DashProfile = () => {
             Are you sure? :(
           </h1>
           <div className="flex justify-between gap-5">
+            <Button onClick={deleteUser} color="failure">
+              yes, delete it
+            </Button>
             <Button
               onClick={() => setShowModal(false)}
               gradientDuoTone="greenToBlue"
             >
               cancel!
-            </Button>
-            <Button onClick={deleteUser} color="failure">
-              yes, delete it
             </Button>
           </div>
         </Modal.Body>
