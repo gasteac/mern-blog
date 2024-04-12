@@ -15,6 +15,10 @@ export const userSlice = createSlice({
   initialState,
   reducers: {
     //TODOS ESTOS SON LOS REDUCERS RECORDAR XDXD
+    startFromZero: (state) => {
+      state.isLoading = false;
+      state.error = null;
+    },
     signInStart: (state) => {
       (state.isLoading = true), (state.error = false);
     },
@@ -79,4 +83,5 @@ export const {
   modifyUserFailure,
   deleteUserSuccess,
   logoutSuccess,
+  startFromZero,
 } = userSlice.actions;

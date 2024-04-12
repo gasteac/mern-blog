@@ -25,27 +25,27 @@ export const signup = async (req, res, next) => {
     next(errorHandler(400, "All fields are required"));
   }
 
-  if (password.length < 6) {
-    return next(errorHandler(400, "Password must be at least 6 characters"));
-  }
-  if (username.length < 7 || username.length > 20) {
-    return next(errorHandler(400, "Username must be between 7 and 20 characters"));
-  }
-  if (email.length < 7 || email.length > 50) {
-    return next(errorHandler(400, "Email must be between 7 and 50 characters"));
-  }
-  if (!email.includes("@") || !email.includes(".")) {
-    return next(errorHandler(400, "Invalid email"));
-  }
-  if (username.includes(" ")) {
-    return next(errorHandler(400, "Username cannot contain spaces"));
-  }
-  if (username !== username.toLowerCase()) {
-    return next(errorHandler(400, "Username must be lowercase"));
-  }
-  if (!username.match(/^[a-zA-Z0-9]+$/)) {
-    return next(errorHandler(400, "Username must contain only letters and numbers"));
-  }
+  // if (password.length < 7) {
+  //   return next(errorHandler(400, "Password must be at least 6 characters"));
+  // }
+  // if (username.length < 8 || username.length > 20) {
+  //   return next(errorHandler(400, "Username must be between 7 and 20 characters"));
+  // }
+  // if (email.length < 8 || email.length > 50) {
+  //   return next(errorHandler(400, "Email must be between 7 and 50 characters"));
+  // }
+  // if (!email.includes("@") || !email.includes(".")) {
+  //   return next(errorHandler(400, "Invalid email"));
+  // }
+  // if (username.includes(" ")) {
+  //   return next(errorHandler(400, "Username cannot contain spaces"));
+  // }
+  // if (username !== username.toLowerCase()) {
+  //   return next(errorHandler(400, "Username must be lowercase"));
+  // }
+  // if (!username.match(/^[a-zA-Z0-9]+$/)) {
+  //   return next(errorHandler(400, "Username must contain only letters and numbers"));
+  // }
   
   //hasheo la contraseña con bcryptjs, le digo cuantas veces quiero que se mezcle o algo asi (cuanto mas mejor)
   const hashedPassword = bcryptjs.hashSync(password, 10);
@@ -72,6 +72,7 @@ export const signup = async (req, res, next) => {
     //si hay error, se lo paso al siguiente middleware, en este caso no es el manejador de errores sino 
     //el ultimo middleware de mi proceso, osea el que esta en index.js al final (muestra los errores)
     next(error);
+    console.log(error)
   }
 };
 

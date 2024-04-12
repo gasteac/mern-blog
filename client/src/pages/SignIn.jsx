@@ -8,19 +8,21 @@ import {
   signInInProcess,
   signInStart,
   signInSuccess,
+  startFromZero,
 } from "../redux/user/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { OAuth } from "../components";
 
 export const SignIn = () => {
+  
   // useDispatch es un hook que nos permite disparar acciones al store de Redux.
   const dispatch = useDispatch();
+
   // Obtengo error e isLoading del estado global de user
   const { error: credentialErrorMsg, isLoading } = useSelector(
     (state) => state.user
   );
   // navigate es una función que nos permite redirigir al usuario a otra ruta.
-  const navigate = useNavigate();
   const formik = useFormik({
     initialValues: {
       email: "",

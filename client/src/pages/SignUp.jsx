@@ -8,6 +8,7 @@ import {
   signUpFailure,
   signUpStart,
   signUpSuccess,
+  startFromZero,
 } from "../redux/user/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { OAuth } from "../components";
@@ -15,6 +16,7 @@ import { OAuth } from "../components";
 export const SignUp = () => {
   // useDispatch es un hook que nos permite disparar acciones al store de Redux.
   const dispatch = useDispatch();
+
   // isLoading es una propiedad del estado global que nos dice si la petición de registro/login está en curso.
   const { isLoading } = useSelector((state) => state.user);
   // usernameErrorMsg y emailErrorMsg son estados locales que nos permiten mostrar mensajes de error personalizados.
@@ -44,9 +46,9 @@ export const SignUp = () => {
         dispatch(signUpStart());
         // Hacemos una petición POST a la ruta /api/auth/signup con los datos del formulario. (trim saca los espacios en blanco al principio y al final de un string)
         const res = await axios.post("/api/auth/signup", {
-          username: username.trim(),
-          email: email.trim(),
-          password: password.trim(),
+          username: username,
+          email: email,
+          password: password,
         });
         if (res.status === 201) {
           //obtengo el usuario de la respuesta, que esta en data
