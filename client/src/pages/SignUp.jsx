@@ -83,7 +83,10 @@ export const SignUp = () => {
               FaceRook
             </span>
           </Link>
-          <p className="text-sm mt-5">Stay quiet, manada is coming.</p>
+          <p className="text-lg text-c mt-5">
+            Welcome to{" "}
+            <span className="font-bold text-emerald-700">FaceRook</span>
+          </p>
         </div>
         {/* right side */}
         <div className="flex-1">

@@ -5,7 +5,7 @@ import { DashProfile, DashSideBar } from "../components";
 export const Dashboard = () => {
   //location nos devuelve un objeto con información de la URL actual y los parametros
   const location = useLocation();
-  const [tab, setTab] = useState("");
+  const [tab, setTab] = useState("profile");
   //este useEffect se va a ejecutar siempre que cambie el search osea el ?tab=valor de la url
   //se va a utilizar para mostrar diferentes componentes dentro del mismo componente
   useEffect(() => {
@@ -16,7 +16,7 @@ export const Dashboard = () => {
     setTab(tabFromUrl);
   }, [location.search]);
   return (
-    <div className="flex flex-col h-full md:flex-row">
+    <div className="flex flex-col h-screen md:overflow-hidden md:flex-row">
       <div className="md:w-56">
         <DashSideBar />
       </div>

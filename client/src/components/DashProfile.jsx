@@ -229,56 +229,62 @@ export const DashProfile = () => {
   }
 
   return (
-    <div className="max-w-lg mx-auto h-full w-full p-3">
-      <h1 className="my-7 text-center font-semibold text-3xl">
-        <span className="text-emerald-500">Hi </span>
-        {currentUser.username}
-      </h1>
-      <form className="flex flex-col gap-4" onSubmit={formik.handleSubmit}>
-        <input
-          hidden
-          type="file"
-          //Le asigno la referencia del input file a filePickerRef
-          //Para luego hacer click en el input file cuando se haga click en la imagen
-          ref={filePickerRef}
-          accept="image/*"
-          onChange={handleImageChange}
-        />
-        <div
-          //Cuando se hace click en la imagen, se hace click en el input file mediante filePickerRef.current.click()
-          onClick={() => filePickerRef.current.click()}
-          className="relative w-32 h-32 self-center cursor-pointer shadow-lg overflow-hidden rounded-full"
-        >
-          {imageFileUploadProgress && (
-            <CircularProgressbar
-              value={imageFileUploadProgress || 0}
-              text={`${imageFileUploadProgress || 0}%`}
-              strikeWidth={5}
-              styles={{
-                root: {
-                  position: "absolute",
-                },
-                text: {
-                  fill: "white",
-                  fontSize: "1.8rem",
-                  fontWeight: "bold",
-                },
-                path: {
-                  stroke: `rgba(62, 231, 153, ${
-                    imageFileUploadProgress / 100
-                  })`,
-                },
-              }}
-            />
-          )}
-          <img
-            //Si el usuario subió una imagen la muestro, sino muestro la imagen de perfil del usuario
-            src={imageFileUrl ? imageFileUrl : currentUser.profilePic}
-            alt="user"
-            className="rounded-full w-full h-full border-8 object-cover border-[lightgray]"
+    <div className="mx-auto h-full w-full p-2">
+      <form
+        className="flex flex-col sm:flex-row items-center justify-center gap-12 sm:p-6 "
+        onSubmit={formik.handleSubmit}
+      >
+        <div className="flex flex-col items-center justify-center sm:self-start h-full md:w-1/3">
+          <h1 className="my-7 text-center font-semibold text-3xl text-nowrap">
+            <span className="text-emerald-500">Hi </span>
+            {currentUser.username}
+          </h1>
+          <input
+            hidden
+            type="file"
+            //Le asigno la referencia del input file a filePickerRef
+            //Para luego hacer click en el input file cuando se haga click en la imagen
+            ref={filePickerRef}
+            accept="image/*"
+            onChange={handleImageChange}
           />
+          <div
+            //Cuando se hace click en la imagen, se hace click en el input file mediante filePickerRef.current.click()
+            onClick={() => filePickerRef.current.click()}
+            className="relative w-36 h-36 self-center cursor-pointer shadow-lg overflow-hidden rounded-full"
+          >
+            {imageFileUploadProgress && (
+              <CircularProgressbar
+                value={imageFileUploadProgress || 0}
+                text={`${imageFileUploadProgress || 0}%`}
+                strikeWidth={5}
+                styles={{
+                  root: {
+                    position: "absolute",
+                  },
+                  text: {
+                    fill: "white",
+                    fontSize: "1.8rem",
+                    fontWeight: "bold",
+                  },
+                  path: {
+                    stroke: `rgba(62, 231, 153, ${
+                      imageFileUploadProgress / 100
+                    })`,
+                  },
+                }}
+              />
+            )}
+            <img
+              //Si el usuario subió una imagen la muestro, sino muestro la imagen de perfil del usuario
+              src={imageFileUrl ? imageFileUrl : currentUser.profilePic}
+              alt="user"
+              className="rounded-full w-full h-full border-8 object-cover border-[lightgray]"
+            />
+          </div>
         </div>
 
+        <div className="flex flex-col gap-2 p-5 w-full h-full sm:w-2/3">
         {(updateUserError || updateUserSuccess) && (
           <Alert
             color={updateUserError ? "failure" : "success"}
@@ -287,105 +293,112 @@ export const DashProfile = () => {
             {updateUserError ? updateUserError : updateUserSuccess}
           </Alert>
         )}
-        <div className="group">
-          <Label
-            value="Username"
-            className="group-focus-within:text-green-700"
-          ></Label>
-          <TextInput
-            type="text"
-            placeholder="username"
-            id="username"
-            name="username"
-            onChange={(e) => {
-              formik.handleChange(e);
-              setUsernameErrorMsg(null);
-            }}
-            value={formik.values.username}
-          />
-          {formik.touched.username && formik.errors.username ? (
-            <h6 className="ml-2 text-red-300 text-[0.8rem]  phone:text-[1rem] tablet:text-[1.2rem]">
-              {formik.errors.username}
-            </h6>
-          ) : null}
-          {usernameErrorMsg ? (
-            <h6 className="ml-2 text-red-300 text-[0.8rem]  phone:text-[1rem] tablet:text-[1.2rem]">
-              {usernameErrorMsg}
-            </h6>
-          ) : null}
+          <div className="group">
+            <Label
+              value="Username"
+              className="group-focus-within:text-green-700"
+            ></Label>
+            <TextInput
+              type="text"
+              placeholder="username"
+              id="username"
+              name="username"
+              onChange={(e) => {
+                formik.handleChange(e);
+                setUsernameErrorMsg(null);
+              }}
+              value={formik.values.username}
+            />
+            {formik.touched.username && formik.errors.username ? (
+              <h6 className="ml-2 text-red-300 text-[0.8rem]  phone:text-[1rem] tablet:text-[1.2rem]">
+                {formik.errors.username}
+              </h6>
+            ) : null}
+            {usernameErrorMsg ? (
+              <h6 className="ml-2 text-red-300 text-[0.8rem]  phone:text-[1rem] tablet:text-[1.2rem]">
+                {usernameErrorMsg}
+              </h6>
+            ) : null}
+          </div>
+
+          <div className="group">
+            <Label
+              value="Email"
+              className="group-focus-within:text-green-700"
+            ></Label>
+            <TextInput
+              type="email"
+              placeholder="name@company.com"
+              id="email"
+              name="email"
+              onChange={(e) => {
+                formik.handleChange(e), setEmailErrorMsg(null);
+              }}
+              value={formik.values.email}
+            />
+            {formik.touched.email && formik.errors.email ? (
+              <h6 className="ml-2 text-red-300 text-[0.8rem]  phone:text-[1rem] tablet:text-[1.2rem]">
+                {formik.errors.email}
+              </h6>
+            ) : null}
+            {emailErrorMsg ? (
+              <h6 className="ml-2 text-red-300 text-[0.8rem]  phone:text-[1rem] tablet:text-[1.2rem]">
+                {emailErrorMsg}
+              </h6>
+            ) : null}
+          </div>
+
+          <div className="group">
+            <Label
+              value="Password"
+              className="group-focus-within:text-green-700"
+            ></Label>
+            <TextInput
+              type="password"
+              placeholder="password"
+              id="password"
+              name="password"
+              onChange={formik.handleChange}
+              value={formik.values.password}
+            />
+            {formik.touched.password && formik.errors.password ? (
+              <h6 className="ml-2 text-red-300 text-[0.8rem]  phone:text-[1rem] tablet:text-[1.2rem]">
+                {formik.errors.password}
+              </h6>
+            ) : null}
+          </div>
+          <Button
+            type="submit"
+            gradientDuoTone="purpleToBlue"
+            outline
+            disabled={isLoading || imageFileUploading}
+          >
+            {isLoading ? (
+              <>
+                <Spinner size="sm" />
+                <span className="ml-3">Loading..</span>
+              </>
+            ) : (
+              <span>Modify</span>
+            )}
+          </Button>
+          <div className="text-red-500 justify-between flex flex-col items-center gap-4 mt-5">
+            <span
+              className="cursor-pointer font-semibold"
+              onClick={() => setShowModal(true)}
+            >
+              Delete Account
+            </span>
+            <span
+              onClick={handleSignOut}
+              className="cursor-pointer font-semibold"
+            >
+              Sign Out
+            </span>
+          </div>
         </div>
-        <div className="group">
-          <Label
-            value="Email"
-            className="group-focus-within:text-green-700"
-          ></Label>
-          <TextInput
-            type="email"
-            placeholder="name@company.com"
-            id="email"
-            name="email"
-            onChange={(e) => {
-              formik.handleChange(e), setEmailErrorMsg(null);
-            }}
-            value={formik.values.email}
-          />
-          {formik.touched.email && formik.errors.email ? (
-            <h6 className="ml-2 text-red-300 text-[0.8rem]  phone:text-[1rem] tablet:text-[1.2rem]">
-              {formik.errors.email}
-            </h6>
-          ) : null}
-          {emailErrorMsg ? (
-            <h6 className="ml-2 text-red-300 text-[0.8rem]  phone:text-[1rem] tablet:text-[1.2rem]">
-              {emailErrorMsg}
-            </h6>
-          ) : null}
-        </div>
-        <div className="group">
-          <Label
-            value="Password"
-            className="group-focus-within:text-green-700"
-          ></Label>
-          <TextInput
-            type="password"
-            placeholder="password"
-            id="password"
-            name="password"
-            onChange={formik.handleChange}
-            value={formik.values.password}
-          />
-          {formik.touched.password && formik.errors.password ? (
-            <h6 className="ml-2 text-red-300 text-[0.8rem]  phone:text-[1rem] tablet:text-[1.2rem]">
-              {formik.errors.password}
-            </h6>
-          ) : null}
-        </div>
-        <Button
-          type="submit"
-          gradientDuoTone="purpleToBlue"
-          outline
-          disabled={isLoading || imageFileUploading}
-        >
-          {isLoading ? (
-            <>
-              <Spinner size="sm" />
-              <span className="ml-3">Loading..</span>
-            </>
-          ) : (
-            <span>Modify</span>
-          )}
-        </Button>
       </form>
-      <div className="text-red-500 justify-between flex mt-5">
-        <span
-          className="cursor-pointer font-semibold"
-          onClick={() => setShowModal(true)}
-        >
-          Delete Account
-        </span>
-        <span onClick={handleSignOut} className="cursor-pointer font-semibold">
-          Sign Out
-        </span>
-      </div>
+
       <Modal
         show={showModal}
         onClose={() => setShowModal(false)}

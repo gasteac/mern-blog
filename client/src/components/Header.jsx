@@ -33,7 +33,7 @@ export const Header = () => {
     }
   };
   return (
-    <Navbar className="border-b-4">
+    <Navbar className="border-b-4 w-full sticky top-0 z-50">
       <Link
         to="/"
         className="hidden lowEndPhone:inline text-sm sm:text-xl font-semibold  dark:text-white uppercase"
