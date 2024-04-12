@@ -36,13 +36,16 @@ export const Header = () => {
     <Navbar className="border-b-4 w-full sticky top-0 z-50">
       <Link
         to="/"
-        className="hidden lowEndPhone:inline text-sm font-semibold  dark:text-white"
+        className="lowEndPhone:inline text-sm font-semibold  dark:text-white"
       >
-        <span className="px-2 py-1 hiText font-bold text-2xl sm:text-3xl ">
+        <span className="hidden sm:block px-2 py-1 hiText font-bold text-2xl sm:text-3xl ">
           FaceRook
         </span>
+        <span className="sm:hidden px-2 py-1 hiText font-bold text-2xl sm:text-3xl ">
+          FR
+        </span>
       </Link>
-      <form>
+      {/* <form>
         <TextInput
           type="text"
           placeholder="Search"
@@ -52,7 +55,7 @@ export const Header = () => {
       </form>
       <Button className="w-12 h-10 lg:hidden" color="gray" pill>
         <AiOutlineSearch />
-      </Button>
+      </Button> */}
       <div className="flex gap-2 md:order-2">
         <Button
           className="w-12 h-10 hidden sm:inline"

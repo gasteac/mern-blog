@@ -242,7 +242,7 @@ export const DashProfile = () => {
   };
 
   return (
-    <div className="mx-auto h-full w-full p-2">
+    <div className="mx-auto h-full w-full pb-6">
       <form
         className="flex flex-col sm:flex-row items-center justify-center gap-12 sm:p-6 "
         onSubmit={formik.handleSubmit}
@@ -292,7 +292,7 @@ export const DashProfile = () => {
               //Si el usuario subió una imagen la muestro, sino muestro la imagen de perfil del usuario
               src={imageFileUrl ? imageFileUrl : currentUser.profilePic}
               alt="user"
-              className="rounded-full w-full h-full border-8 object-cover border-[lightgray]"
+              className="rounded-full w-full h-full border-8 object-cover border-[lightgray] "
             />
           </div>
         </div>
