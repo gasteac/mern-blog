@@ -20,14 +20,14 @@ export const Home = () => {
 
       {currentUser ? (
         <span
-          className="cursor-pointer text-2xl rounded-lg text-white px-2 py-2 bg-gradient-to-r from-emerald-400 via-emerald-500 to-teal-400 rounded-xl hover:from-emerald-500 hover:via-emerald-600 hover:to-teal-500"
+          className="cursor-pointer text-2xl rounded-lg text-white px-2 py-2 bg-gradient-to-r from-emerald-400 via-emerald-500 to-teal-400 hover:from-emerald-500 hover:via-emerald-600 hover:to-teal-500"
           onClick={() => navigate("/dashboard?tab=profile")}
         >
           Go to profile
         </span>
       ) : (
         <span
-          className="cursor-pointer text-2xl rounded-lg text-white px-2 py-2 bg-gradient-to-r from-emerald-400 via-emerald-500 to-teal-400 rounded-xl hover:from-emerald-500 hover:via-emerald-600 hover:to-teal-500"
+          className="cursor-pointer text-2xl rounded-lg text-white px-2 py-2 bg-gradient-to-r from-emerald-400 via-emerald-500 to-teal-400  hover:from-emerald-500 hover:via-emerald-600 hover:to-teal-500"
           onClick={() => navigate("/sign-up")}
         >
           {" "}
