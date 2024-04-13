@@ -8,6 +8,7 @@ import {
   Alert,
   Modal,
 } from "flowbite-react";
+import { Link } from "react-router-dom";
 import {
   getDownloadURL,
   getStorage,
@@ -387,6 +388,27 @@ export const DashProfile = () => {
               <span>Save!</span>
             )}
           </Button>
+          {currentUser.isAdmin && (
+            <Link to='/create-post'>
+            <Button
+              className="mt-3 w-full"
+              type="button"
+            
+              gradientDuoTone="purpleToPink"
+              disabled={isLoading || imageFileUploading}
+            >
+              {isLoading ? (
+                <>
+                  <Spinner size="sm" />
+                  <span className="ml-3">Loading..</span>
+                </>
+              ) : (
+                <span>Create a post</span>
+              )}
+            </Button>
+            </Link>
+            
+          )}
           <div className="justify-between flex flex-col items-center gap-4 mt-5">
             <span
               className="cursor-pointer font-semibold hiText"
