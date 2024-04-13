@@ -23,12 +23,15 @@ export const CreatePost = () => {
           </Select>
         </div>
         <div className="flex items-center gap-4 justify-between border-4 border-teal-400 border-dotted p-3">
-          <FileInput type="file" accept="image/*" />
+          <FileInput type="file" accept="image/*" required />
           <Button type="button" gradientDuoTone="purpleToBlue" size="sm">
             Upload Image
           </Button>
         </div>
         <ReactQuill theme="snow" placeholder='Write something' className='h-72 mb-12'/>
+        <Button type="submit" gradientDuoTone="purpleToBlue" size="lg">
+          Create Post
+        </Button>
       </form>
     </div>
   );
