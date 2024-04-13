@@ -249,10 +249,15 @@ export const DashProfile = () => {
         onSubmit={formik.handleSubmit}
       >
         <div className="flex flex-col items-center justify-center sm:self-start h-full">
-          <h1 className="my-7 text-center font-semibold text-3xl text-nowrap capitalize">
+          <h1 className="mt-7 text-center font-semibold text-3xl text-nowrap capitalize">
             <span className="hiText">Hi </span>
             {currentUser.username}
           </h1>
+          {currentUser.isAdmin && (
+            <h1 className=" mb-3 text-center font-semibold text-xl text-nowrap capitalize">
+              <span className="hiText">ADMIN💫</span>
+            </h1>
+          )}
           <input
             hidden
             type="file"
