@@ -23,6 +23,10 @@ const userSchema = new mongoose.Schema(
       default:
         "https://firebasestorage.googleapis.com/v0/b/facerook-gasteac.appspot.com/o/userImage.png?alt=media&token=7d0d43bb-c429-4de2-8aaf-c57a56b957c0",
     },
+    isAdmin: {
+      type: Boolean,
+      default: false,
+    }
   },
   { timestamps: true } //quiero que cuando se crea o modifique quede guardado la fecha y hora
 );

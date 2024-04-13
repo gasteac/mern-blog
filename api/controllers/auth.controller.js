@@ -111,7 +111,7 @@ export const signin = async (req, res, next) => {
    
     const token = jwt.sign(
       //en este caso le paso el id del usuario que encontré en la bdd
-      { id: validUser._id},
+      { id: validUser._id, isAdmin: validUser.isAdmin},
       //le paso la clave secreta que tengo en el .env para que genere el token
       process.env.JWT_SECRET
     );
@@ -148,7 +148,7 @@ export const google = async (req, res, next) => {
     if (user) {
       //si existe el usuario en la bdd, genero un token con jwt.sign
       const token = jwt.sign(
-        { id: user._id},
+        { id: user._id, isAdmin: user.isAdmin },
         process.env.JWT_SECRET
       );
       const { password, ...rest } = user._doc;
@@ -182,7 +182,7 @@ export const google = async (req, res, next) => {
       //intento guardar el usuario en la bdd y genero un token
       await newUser.save();
       const token = jwt.sign(
-        { id: newUser._id },
+        { id: newUser._id, isAdmin: newUser.isAdmin },
         process.env.JWT_SECRET
       );
       const { password, ...rest } = newUser._doc;
