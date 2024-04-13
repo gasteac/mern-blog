@@ -22,3 +22,8 @@
   -webkit-background-clip: text;
   background-clip: text;
 }
+
+body{
+  height: 100vh;
+}
+
