@@ -12,7 +12,7 @@ export const App = () => {
         <Header />
         <Routes>
           {/* si pongo una ruta mal me redirige a home con el *   */}
-          <Route path="*" element={<Navigate to="/" replace />} />
+          {/* <Route path="*" element={<Navigate to="/" replace />} /> */}
           <Route path="/" element={<Home />} />
 
           {/* Solo puedo acceder al dashboard si ESTOY autenticado (PrivateRoute) */}
