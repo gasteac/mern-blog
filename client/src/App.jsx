@@ -26,8 +26,8 @@ export const App = () => {
           </Route>
           {/* Solo puedo acceder a estas rutas si NO ESTOY autenticado (PublicRoute) */}
           <Route element={<PublicRoute />}>
-            <Route path="/sign-up" element={<SignUp />} />
-            <Route path="/sign-in" element={<SignIn />} />
+            <Route path="/signup" element={<SignUp />} />
+            <Route path="/signin" element={<SignIn />} />
           </Route>
         </Routes>
       </BrowserRouter>

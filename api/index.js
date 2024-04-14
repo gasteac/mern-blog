@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 import userRoute from "./routes/user.route.js";
 import authRoute from "./routes/auth.route.js";
+import postRoute from "./routes/post.route.js";
 import cookieParser from "cookie-parser";
 import path from "path";
 dotenv.config(); //esto va a setear las variables del .env en process.env osea en el entorno
@@ -34,6 +35,8 @@ app.use(cookieParser());
 app.use("/api/user", userRoute);
 //aca le paso las rutas para user como "USE" porque los get push delete y eso ya están en userRoute
 app.use("/api/auth", authRoute);
+//aca le paso las rutas para post como "USE" porque los get push delete y eso ya están en postRoute
+app.use("/api/post", postRoute);
 
 
 //Le decimos al server que escuche en el puerto 3000

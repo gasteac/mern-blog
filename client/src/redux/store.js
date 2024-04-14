@@ -6,10 +6,12 @@ import { persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import persistStore from "redux-persist/es/persistStore";
 import { themeSlice } from "./theme/themeSlice";
+import { postSlice } from "./post/postSlice";
 
 //creamos un combinador de reducers para dsp pasarle a la store como 1 solo reducer
 const rootReducer = combineReducers({
   user: userSlice.reducer,
+  post: postSlice.reducer,
   theme: themeSlice.reducer,
 });
 

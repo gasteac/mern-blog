@@ -16,6 +16,8 @@ export const updateUser = async (req, res, next) => {
   //verifico que el id del usuario que hizo la petición sea el mismo que el id del usuario que quiere actualizar
   //req.params.userId es el id que se pasa en la url "http://localhost:3000/api/user/update/6617823d4a6fca588b043c34" ese ultimo código
   //req.user.id es el id del usuario que esta en el token
+
+  //pregunto por req.USER porque nos fijamos en las cookies no en la petición http en si, es verifyToken el q nos devuelve user
   if (req.params.userId !== req.user.id) {
     return next(errorHandler(401, "Unauthorized"));
   }
@@ -54,11 +56,11 @@ export const updateUser = async (req, res, next) => {
   //   );
   // }
   //encripto la nueva contraseña antes de guardarla en la base de datos
-  const hashedPassword = req.body.password = bcryptjs.hashSync(req.body.password, 10);
+  const hashedPassword = (req.body.password = bcryptjs.hashSync(
+    req.body.password,
+    10
+  ));
   try {
-    
-    
-
     //busco al usuario por el id que se pasa en la url (o podría haber utilizado req.user.id da igual)
     const updatedUser = await User.findByIdAndUpdate(
       req.params.userId,
@@ -72,7 +74,7 @@ export const updateUser = async (req, res, next) => {
     );
     //devuelvo el usuario actualizado sin la contraseña
     const { password, ...rest } = updatedUser._doc;
-  
+
     res.status(200).json(rest);
   } catch (error) {
     next(error);

@@ -7,5 +7,5 @@ export const PrivateRoute = () => {
   //Si el usuario ESTA logueado, mostramos el contenido de la ruta
   //Outlet es un componente de react-router-dom que se usa para renderizar algo ahi
   //Una especie de children, en este caso, las rutas que estan dentro de PrivateRoute en App.jsx
-  return currentUser ? <Outlet /> : <Navigate to="/sign-in" />;
+  return currentUser ? <Outlet /> : <Navigate to="/signin" />;
 };

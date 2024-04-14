@@ -180,7 +180,7 @@ export const SignUp = () => {
           </form>
           <div className="flex gap-2 justify-end px-1 text-sm mt-3">
             <span>Have an account?</span>
-            <Link to="/sign-in" className="hiText font-bold">
+            <Link to="/signin" className="hiText font-bold">
               Sign In
             </Link>
           </div>

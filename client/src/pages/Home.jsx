@@ -28,7 +28,7 @@ export const Home = () => {
       ) : (
         <span
           className="cursor-pointer text-2xl rounded-lg hiText font-semibold"
-          onClick={() => navigate("/sign-up")}
+          onClick={() => navigate("/signup")}
         >
           {" "}
           Sign Up!

@@ -86,7 +86,7 @@ export const Header = () => {
           </Dropdown>
         ) : (
           // Si no esta logueado mostramos el boton para ingresar
-          <Link to="sign-in">
+          <Link to="signin">
             <Button gradientDuoTone="purpleToBlue" outline>
               Sign In
             </Button>
@@ -117,34 +117,34 @@ export const Header = () => {
               </Link>
             </NavbarLink>
             <NavbarLink
-              active={path === "/sign-in"}
+              active={path === "/signin"}
               as="div"
               className={`
     rounded-xl w-full
     ${
-      path === "/sign-in"
+      path === "/signin"
         ? "bg-gradient-to-br from-purple-500 to-blue-500 md:text-white font-semibold"
         : "dark:text-white light:text-black"
     }
   `}
             >
-              <Link to="/sign-in" className="w-full flex md:p-2">
+              <Link to="/signin" className="w-full flex md:p-2">
                 Sign In
               </Link>
             </NavbarLink>
             <NavbarLink
-              active={path === "/sign-up"}
+              active={path === "/signup"}
               as="div"
               className={`
     rounded-xl w-full
     ${
-      path === "/sign-up"
+      path === "/signup"
         ? "bg-gradient-to-br from-purple-500 to-blue-500 md:text-white font-semibold"
         : "dark:text-white light:text-black"
     }
   `}
             >
-              <Link to="/sign-up" className="w-full flex md:p-2">
+              <Link to="/signup" className="w-full flex md:p-2">
                 Sign Up
               </Link>
             </NavbarLink>
