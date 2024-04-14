@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { DashProfile, DashSideBar } from "../components";
+import { DashPosts } from "../components/DashPosts";
 
 export const Dashboard = () => {
   //location nos devuelve un objeto con información de la URL actual y los parametros
@@ -20,7 +21,10 @@ export const Dashboard = () => {
       <div className="md:w-56">
         <DashSideBar />
       </div>
+      {/* perfil */}
       {tab === "profile" ? <DashProfile /> : null}
+      {/* posts */}
+      {tab === "posts" ? <DashPosts /> : null}
     </div>
   );
 };

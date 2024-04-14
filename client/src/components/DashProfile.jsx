@@ -254,7 +254,7 @@ export const DashProfile = () => {
             {currentUser.username}
           </h1>
           {currentUser.isAdmin && (
-            <h1 className=" mb-3 text-center font-semibold text-xl text-nowrap capitalize">
+            <h1 className="text-center font-semibold text-xl text-nowrap capitalize mt-2">
               <span className="hiText">ADMIN💫</span>
             </h1>
           )}
@@ -270,7 +270,7 @@ export const DashProfile = () => {
           <div
             //Cuando se hace click en la imagen, se hace click en el input file mediante filePickerRef.current.click()
             onClick={() => filePickerRef.current.click()}
-            className="relative w-36 h-36 self-center cursor-pointer shadow-lg overflow-hidden rounded-full"
+            className="relative w-36 h-36 self-center cursor-pointer shadow-lg overflow-hidden rounded-full mt-5"
           >
             {imageFileUploadProgress && (
               <CircularProgressbar

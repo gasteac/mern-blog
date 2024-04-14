@@ -1,13 +1,14 @@
 import React from "react";
 import { Sidebar } from "flowbite-react";
-import { HiUser, HiArrowSmRight } from "react-icons/hi";
+import { HiUser, HiArrowSmRight, HiDocumentText } from "react-icons/hi";
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import axios from "axios";
 import { logoutSuccess } from "../redux/user/userSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 export const DashSideBar = () => {
+  const { currentUser } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   //Obtenemos el path actual mediante useLocation de react-router-dom
   //useLocation nos da un objeto con información sobre la ruta actual (URL)
@@ -41,24 +42,39 @@ export const DashSideBar = () => {
   return (
     <Sidebar className="w-full h-full md:w-56">
       <Sidebar.Items>
-        <Sidebar.ItemGroup>
+        <Sidebar.ItemGroup className="flex flex-col">
           {/* Si tab es igual a profile mostramos el item con el icono de HiUser y el label User */}
-          <Sidebar.Item
-            active={tab === "profile"}
-            icon={HiUser}
-            label={"User"}
-            labelColor="dark"
-            as="div"
-          >
-            <Link to="/dashboard?tab=profile">Profile</Link>
-          </Sidebar.Item>
-          <Sidebar.Item
-            icon={HiArrowSmRight}
-            className="cursor-pointer"
-            onClick={handleSignOut}
-          >
-            Sign Out
-          </Sidebar.Item>
+          <Link to="/dashboard?tab=profile">
+            <Sidebar.Item
+              active={tab === "profile"}
+              icon={HiUser}
+              labelColor="dark"
+              as="div"
+            >
+              Profile
+            </Sidebar.Item>
+          </Link>
+          {currentUser.isAdmin && (
+            <Link to="/dashboard?tab=posts">
+              <Sidebar.Item
+                active={tab === "posts"}
+                icon={HiDocumentText}
+                labelColor="dark"
+                as="div"
+              >
+                Posts
+              </Sidebar.Item>
+            </Link>
+          )}
+
+          <Link to="/signin">
+            <Sidebar.Item
+              icon={HiArrowSmRight}
+              onClick={handleSignOut}
+            >
+              Sign Out
+            </Sidebar.Item>
+          </Link>
         </Sidebar.ItemGroup>
       </Sidebar.Items>
     </Sidebar>
