@@ -17,7 +17,7 @@ export const Dashboard = () => {
     setTab(tabFromUrl);
   }, [location.search]);
   return (
-    <div className="flex flex-col md:flex-row h-full">
+    <div className="flex flex-col md:flex-row">
       <div className="md:w-56 ">
         <DashSideBar />
       </div>

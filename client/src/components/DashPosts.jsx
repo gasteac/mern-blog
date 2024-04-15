@@ -2,12 +2,30 @@ import React, { useState } from "react";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import axios from "axios";
-import { Table } from "flowbite-react";
+import { Button, Table } from "flowbite-react";
 import { Link } from "react-router-dom";
 export const DashPosts = () => {
   const { currentUser } = useSelector((state) => state.user);
   const [userPosts, setUserPosts] = useState([]);
+  const [showMore, setShowMore] = useState(true);
 
+  const handleShowMore = async() =>{
+    const startIndex = userPosts.length;
+    try {
+      const res = await axios.get(
+        `api/post/getposts?userId=${currentUser._id}&startIndex=${startIndex}`
+      );
+      if (res.statusText === "OK") {
+        setUserPosts([...userPosts, ...res.data.posts]);
+        if(res.data.posts.length < 9) {
+          setShowMore(false);
+        }
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+   
   useEffect(() => {
     const fetchPosts = async () => {
       try {
@@ -16,6 +34,9 @@ export const DashPosts = () => {
         );
         if (res.statusText === "OK") {
           setUserPosts(res.data.posts);
+          if(res.data.posts.length < 9) {
+            setShowMore(false);
+          }
         }
       } catch (error) {
         console.log(error);
@@ -27,59 +48,72 @@ export const DashPosts = () => {
   }, [currentUser._id]);
 
   return (
-    <div className="p-4 table-auto overflow-x-scroll md:mx-auto scrollbar scrollbar-track-slate-100 scrollbar-thumb-slate-300 dark:scrollbar-track-slate-700 dark:scrollbar-thumb-slate-500">
+    <div className="p-4 table-auto overflow-x-scroll md:mx-auto scrollbar scrollbar-track-slate-100 scrollbar-thumb-slate-300 dark:scrollbar-track-transparent dark:scrollbar-thumb-transparent">
       {currentUser.isAdmin && userPosts.length > 0 ? (
-        <Table hoverable className="bg-white dark:bg-slate-800 rounded-xl">
-          <Table.Head>
-            <Table.HeadCell className="text-nowrap">Post Image</Table.HeadCell>
-            <Table.HeadCell className="text-nowrap">Post Title</Table.HeadCell>
-            <Table.HeadCell className="text-nowrap">Date updated</Table.HeadCell>
+        <>
+          <Table hoverable className="bg-white dark:bg-slate-800 rounded-xl">
+            <Table.Head>
+              <Table.HeadCell className="text-nowrap">
+                Post Image
+              </Table.HeadCell>
+              <Table.HeadCell className="text-nowrap">
+                Post Title
+              </Table.HeadCell>
+              <Table.HeadCell className="text-nowrap">
+                Date updated
+              </Table.HeadCell>
               <Table.HeadCell>Category</Table.HeadCell>
-            <Table.HeadCell>Delete</Table.HeadCell>
-            <Table.HeadCell>Edit</Table.HeadCell>
-          </Table.Head>
-          {userPosts.map((post) => (
-            <Table.Body key={post._id} className="divide-y-2 ">
-              <Table.Row>
-                <Table.Cell as="div">
-                  <Link to={`/posts/${post.slug}`}>
-                    <img
-                      src={post.image}
-                      alt={post.title}
-                      className="min-w-20 w-32 h-auto object-cover rounded-lg"
-                    />
-                  </Link>
-                </Table.Cell>
-                <Table.Cell>
-                  <Link className="font-medium" to={`/posts/${post.slug}`}>
-                    {post.title}
-                  </Link>
-                </Table.Cell>
-                <Table.Cell className="font-medium ">
-                  {" "}
-                  {new Date(post.updatedAt).toLocaleDateString()}
-                </Table.Cell>
+              <Table.HeadCell>Delete</Table.HeadCell>
+              <Table.HeadCell>Edit</Table.HeadCell>
+            </Table.Head>
+            {userPosts.map((post) => (
+              <Table.Body key={post._id} className="divide-y-2 ">
+                <Table.Row>
+                  <Table.Cell as="div">
+                    <Link to={`/posts/${post.slug}`}>
+                      <img
+                        src={post.image}
+                        alt={post.title}
+                        className="min-w-20 w-32 h-auto object-cover rounded-lg"
+                      />
+                    </Link>
+                  </Table.Cell>
+                  <Table.Cell>
+                    <Link className="font-medium" to={`/posts/${post.slug}`}>
+                      {post.title}
+                    </Link>
+                  </Table.Cell>
+                  <Table.Cell className="font-medium ">
+                    {" "}
+                    {new Date(post.updatedAt).toLocaleDateString()}
+                  </Table.Cell>
                   <Table.Cell className="font-medium">
                     {post.category}
                   </Table.Cell>
-                <Table.Cell>
-                  <Link to={`/deletepost/${post._id}`}>
-                    <span className="text-red-500 font-medium hover:underline">
-                      Delete
-                    </span>
-                  </Link>
-                </Table.Cell>
-                <Table.Cell>
-                  <Link to={`/updatepost/${post._id}`}>
-                    <span className="text-teal-500 font-medium hover:underline">
-                      Edit
-                    </span>
-                  </Link>
-                </Table.Cell>
-              </Table.Row>
-            </Table.Body>
-          ))}
-        </Table>
+                  <Table.Cell>
+                    <Link to={`/deletepost/${post._id}`}>
+                      <span className="text-red-500 font-medium hover:underline">
+                        Delete
+                      </span>
+                    </Link>
+                  </Table.Cell>
+                  <Table.Cell>
+                    <Link to={`/updatepost/${post._id}`}>
+                      <span className="text-teal-500 font-medium hover:underline">
+                        Edit
+                      </span>
+                    </Link>
+                  </Table.Cell>
+                </Table.Row>
+              </Table.Body>
+            ))}
+          </Table>
+          {showMore && (
+              <button onClick={handleShowMore} className="w-full my-5 self-center font-bold ">
+                  Show more
+              </button>
+          )}
+        </>
       ) : (
         <div className="w-full h-full">You have no posts yet.</div>
       )}
