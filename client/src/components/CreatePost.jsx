@@ -21,6 +21,7 @@ import "react-circular-progressbar/dist/styles.css";
 import ProgressBar from "@ramonak/react-progress-bar";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { set } from "mongoose";
 export const CreatePost = () => {
   const navigate = useNavigate();
   const [postUploadSuccess, setPostUploadSuccess] = useState(false);
@@ -43,10 +44,18 @@ export const CreatePost = () => {
     const file = e.target.files[0];
     if (file) {
       setImageFile(e.target.files[0]);
+
       // setImageFileUrl(URL.createObjectURL(file)); lo hacia de forma local
       setUploadImgError(null);
     }
   };
+
+  // Efecto para iniciar la carga de la imagen cuando el estado `imageFile` cambia
+  useEffect(() => {
+    if (imageFile) {
+      uploadImage();
+    }
+  }, [imageFile]);
 
   // Efecto para limpiar el estado `imageFileUploadProgress` cuando la carga de la imagen llega al 100%
   useEffect(() => {
@@ -59,7 +68,6 @@ export const CreatePost = () => {
   }, [imageFileUploadProgress]);
   // Función asíncrona para cargar la imagen en el almacenamiento storage de firebase
   const uploadImage = async () => {
-    console.log("hola");
     //Seteo el estado de subida de la imagen a true para que el usuario no pueda hacer nada mientras se sube
     setImageFileUploading(true);
     //Obtengo el storage de firebase, le paso la conf mediante app que exporte en el archivo firebase.js
@@ -103,7 +111,9 @@ export const CreatePost = () => {
           (downloadURL) => {
             //Luego la guardo y la muestro en la imagen de perfil del usuario con imageFileUrl
             setImageFileUrl(downloadURL);
-            //Reseteo el estado de subida de la imagen
+            console.log(imageFileUrl);
+            //Reseteo los errores y la subida de la imagen          
+            setImageFileUploadProgress(null);
             setImageFileUploading(false);
             setUploadImgError(null);
           }
@@ -115,7 +125,8 @@ export const CreatePost = () => {
     initialValues: {
       title: "",
       content: "",
-      category: "",
+      category: undefined,
+      image: imageFileUrl,
     },
     validationSchema: Yup.object({
       title: Yup.string()
@@ -135,10 +146,9 @@ export const CreatePost = () => {
           title,
           content,
           category,
-          image: imageFileUrl ? imageFileUrl : null,
+          image: imageFileUrl ? imageFileUrl : undefined,
         });
         if (postSaved.status === 201) {
-
           setUploadPostError(null);
           formik.resetForm();
           setImageFile(null);
@@ -147,18 +157,17 @@ export const CreatePost = () => {
           setImageFileUploading(false);
           setPostUploadSuccess(true);
           setTimeout(() => {
-            navigate(`/post/${postSaved.data.slug}`);
+            setPostUploadSuccess(null);
           }, 3000);
         }
-        console.log(postSaved.data)
+        console.log(postSaved.data);
       } catch (error) {
         const { message } = error.response.data;
         console.log(message);
         setUploadPostError(message);
-         setTimeout(() => {
-            setUploadPostError(null);
-          }, 3000);
-      
+        setTimeout(() => {
+          setUploadPostError(null);
+        }, 3000);
       }
     },
   });
@@ -221,20 +230,24 @@ export const CreatePost = () => {
             accept="image/*"
             onChange={(e) => handleImageChange(e)}
           />
-          <Button
+          {/* <Button
             type="button"
             disabled={!imageFile || imageFileUploading}
             gradientDuoTone="purpleToBlue"
             size="sm"
             onClick={uploadImage}
           >
-            "Upload Image"
-          </Button>
+            Upload Image
+          </Button> */}
         </div>
         {imageFileUploadProgress && (
           <ProgressBar completed={imageFileUploadProgress} bgColor="#5d55f6" />
         )}
         {uploadImgError ? (
+          setTimeout(() => {
+            setUploadImgError(null);
+          }
+          , 4500),
           <Alert
             color="failure"
             className="font-semibold h-1 text-clip flex items-center justify-center"
