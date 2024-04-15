@@ -79,7 +79,7 @@ export const Header = () => {
               </span>
             </Dropdown.Header>
             <Link to={"/dashboard?tab=profile"}>
-              <Dropdown.Item>Dashboard</Dropdown.Item>
+              <Dropdown.Item as='div'>Dashboard</Dropdown.Item>
             </Link>
             <Dropdown.Divider />
             <Dropdown.Item onClick={handleSignOut}>Sign Out</Dropdown.Item>

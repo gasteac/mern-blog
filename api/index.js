@@ -1,9 +1,9 @@
 import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
-import userRoute from "./routes/user.route.js";
-import authRoute from "./routes/auth.route.js";
-import postRoute from "./routes/post.route.js";
+import userRoutes from "./routes/user.routes.js";
+import authRoutes from "./routes/auth.routes.js";
+import postRoutes from "./routes/post.routes.js";
 import cookieParser from "cookie-parser";
 import path from "path";
 dotenv.config(); //esto va a setear las variables del .env en process.env osea en el entorno
@@ -32,11 +32,11 @@ app.use(cookieParser());
 //se pone api para que se pueda redireccionar a la url de la api mediante un proxy en la conf del server en el frontend (vite.config.js)
 
 //aca le paso las rutas para user como "USE" porque los get push delete y eso ya están en userRoute
-app.use("/api/user", userRoute);
+app.use("/api/user", userRoutes);
 //aca le paso las rutas para user como "USE" porque los get push delete y eso ya están en userRoute
-app.use("/api/auth", authRoute);
+app.use("/api/auth", authRoutes);
 //aca le paso las rutas para post como "USE" porque los get push delete y eso ya están en postRoute
-app.use("/api/post", postRoute);
+app.use("/api/post", postRoutes);
 
 
 //Le decimos al server que escuche en el puerto 3000

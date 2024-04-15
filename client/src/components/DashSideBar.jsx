@@ -71,6 +71,7 @@ export const DashSideBar = () => {
             <Sidebar.Item
               icon={HiArrowSmRight}
               onClick={handleSignOut}
+              as="div"
             >
               Sign Out
             </Sidebar.Item>
