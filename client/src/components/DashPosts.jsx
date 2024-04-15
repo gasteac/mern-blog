@@ -27,22 +27,17 @@ export const DashPosts = () => {
   }, [currentUser._id]);
 
   return (
-    <div className="p-4  table-auto overflow-x-scroll md:mx-auto scrollbar scrollbar-track-slate-100 scrollbar-thumb-slate-300 dark:scrollbar-track-slate-700 dark:scrollbar-thumb-slate-500">
+    <div className="p-4 table-auto overflow-x-scroll md:mx-auto scrollbar scrollbar-track-slate-100 scrollbar-thumb-slate-300 dark:scrollbar-track-slate-700 dark:scrollbar-thumb-slate-500">
       {currentUser.isAdmin && userPosts.length > 0 ? (
         <Table hoverable className="bg-white dark:bg-slate-800 rounded-xl">
           <Table.Head>
-            <Table.HeadCell>Post Image</Table.HeadCell>
-            <Table.HeadCell>Post Title</Table.HeadCell>
-            <Table.HeadCell>Date updated</Table.HeadCell>
-
-            <div className="hidden sm:block">
+            <Table.HeadCell className="text-nowrap">Post Image</Table.HeadCell>
+            <Table.HeadCell className="text-nowrap">Post Title</Table.HeadCell>
+            <Table.HeadCell className="text-nowrap">Date updated</Table.HeadCell>
               <Table.HeadCell>Category</Table.HeadCell>
-            </div>
-
             <Table.HeadCell>Delete</Table.HeadCell>
             <Table.HeadCell>Edit</Table.HeadCell>
           </Table.Head>
-
           {userPosts.map((post) => (
             <Table.Body key={post._id} className="divide-y-2 ">
               <Table.Row>
@@ -64,13 +59,9 @@ export const DashPosts = () => {
                   {" "}
                   {new Date(post.updatedAt).toLocaleDateString()}
                 </Table.Cell>
-
-                <div className="hidden sm:block px-6 py-4">
                   <Table.Cell className="font-medium">
                     {post.category}
                   </Table.Cell>
-                </div>
-
                 <Table.Cell>
                   <Link to={`/deletepost/${post._id}`}>
                     <span className="text-red-500 font-medium hover:underline">

@@ -10,7 +10,7 @@ export const ThemeProvider = ({ children }) => {
     //Agregamos la clase del tema actual al div que contiene a la app
     <div className={theme}>
       {/* Aca le pasamos las clases dependiendo si es dark o light */}
-      <div className="h-screen flex flex-col text-gray-800 dark:text-gray-200 ">
+      <div className="min-h-screen flex flex-col text-gray-800 dark:text-gray-200 ">
         <div className="fixed inset-0 z-0">
           {/* El fondo, que se mantiene fijo en la pantalla */}
           <div className="h-full w-full bg-[rgb(234,234,234)] dark:bg-[rgb(16,23,42)]"></div>
