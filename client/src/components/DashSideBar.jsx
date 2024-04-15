@@ -40,9 +40,9 @@ export const DashSideBar = () => {
     }
   };
   return (
-    <Sidebar className="w-full h-full md:w-56">
+    <Sidebar className="w-full h-screen md:w-56 ">
       <Sidebar.Items>
-        <Sidebar.ItemGroup className="flex flex-col  ">
+        <Sidebar.ItemGroup className="flex flex-col ">
           {/* Si tab es igual a profile mostramos el item con el icono de HiUser y el label User */}
           <Link to="/dashboard?tab=profile">
             <Sidebar.Item
