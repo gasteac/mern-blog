@@ -142,8 +142,6 @@ export const DashProfile = () => {
       }
     );
   };
-
-
   const formik = useFormik({
     initialValues: {
       username: currentUser.username,
@@ -438,7 +436,7 @@ export const DashProfile = () => {
         size="md"
       >
         <Modal.Header />
-        <Modal.Body className="flex items-center justify-center flex-col gap-5">
+        <Modal.Body className="flex items-center justify-center flex-col gap-3">
           <HiOutlineExclamationCircle className="text-red-500 text-6xl" />
           <h1 className="text-center text-2xl font-semibold">
             Are you sure? :(

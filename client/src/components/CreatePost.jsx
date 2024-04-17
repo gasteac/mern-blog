@@ -11,6 +11,7 @@ import {
   Select,
   TextInput,
   Textarea,
+  Progress
 } from "flowbite-react";
 import React, { useEffect, useState } from "react";
 import "react-quill/dist/quill.snow.css";
@@ -241,7 +242,7 @@ export const CreatePost = () => {
           </Button> */}
         </div>
         {imageFileUploadProgress && (
-          <ProgressBar completed={imageFileUploadProgress} bgColor="#5d55f6" />
+          <Progress progress={imageFileUploadProgress} bgColor="#5d55f6" />
         )}
         {uploadImgError ? (
           setTimeout(() => {
