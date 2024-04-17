@@ -3,16 +3,19 @@ import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import { Button, Modal, Table } from "flowbite-react";
+import { deleteObject, getStorage, ref } from "firebase/storage";
 import { Link } from "react-router-dom";
 import { HiOutlineExclamationCircle } from "react-icons/hi";
 export const DashPosts = () => {
   const { currentUser } = useSelector((state) => state.user);
   const [userPosts, setUserPosts] = useState([]);
   const [showMore, setShowMore] = useState(true);
-  const [showModal, setShowModal] = useState(false)
+  const [showModal, setShowModal] = useState(false);
   const [postIdtoDelete, setPostIdtoDelete] = useState("");
   const [postTitletoDelete, setPostTitletoDelete] = useState("");
-  const handleShowMore = async() =>{
+  const [imageToDelete, setImageToDelete] = useState(null);
+  const storage = getStorage();
+  const handleShowMore = async () => {
     const startIndex = userPosts.length;
     try {
       const res = await axios.get(
@@ -20,31 +23,35 @@ export const DashPosts = () => {
       );
       if (res.statusText === "OK") {
         setUserPosts([...userPosts, ...res.data.posts]);
-        if(res.data.posts.length < 9) {
+        if (res.data.posts.length < 9) {
           setShowMore(false);
         }
       }
     } catch (error) {
       console.log(error);
     }
-  }
+  };
 
   const handleDelete = async () => {
     try {
       const response = await axios.delete(
         `api/post/deletepost/${postIdtoDelete}/${currentUser._id}`
       );
-     if (response.status ===200) {
-      setUserPosts(userPosts.filter((post) => post._id !== postIdtoDelete));
-    }
+
+      if (response.status === 200) {
+        setUserPosts(userPosts.filter((post) => post._id !== postIdtoDelete));
+        const desertRef = ref(storage, imageToDelete);
+        try {
+          const imgDel = await deleteObject(desertRef);
+        } catch (error) {
+          console.log(error);
+        }
+      }
     } catch (error) {
-      return json.status(400).json({message: error.message})
+      return status(400).json({ message: error.message });
     }
-    
-  
-   
-  }
-   
+  };
+
   useEffect(() => {
     const fetchPosts = async () => {
       try {
@@ -53,7 +60,7 @@ export const DashPosts = () => {
         );
         if (res.statusText === "OK") {
           setUserPosts(res.data.posts);
-          if(res.data.posts.length < 9) {
+          if (res.data.posts.length < 9) {
             setShowMore(false);
           }
         }
@@ -115,6 +122,7 @@ export const DashPosts = () => {
                         setShowModal(true);
                         setPostIdtoDelete(post._id);
                         setPostTitletoDelete(post.title);
+                        setImageToDelete(post.image);
                       }}
                       className="cursor-pointer text-red-500 font-medium hover:underline"
                     >

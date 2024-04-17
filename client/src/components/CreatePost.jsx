@@ -112,7 +112,6 @@ export const CreatePost = () => {
           (downloadURL) => {
             //Luego la guardo y la muestro en la imagen de perfil del usuario con imageFileUrl
             setImageFileUrl(downloadURL);
-            console.log(imageFileUrl);
             //Reseteo los errores y la subida de la imagen          
             setImageFileUploadProgress(null);
             setImageFileUploading(false);
@@ -141,7 +140,6 @@ export const CreatePost = () => {
       category: Yup.string(),
     }),
     onSubmit: async ({ title, content, category }) => {
-      console.log(title, content, category);
       try {
         const postSaved = await axios.post("/api/post/create", {
           title,
@@ -150,6 +148,7 @@ export const CreatePost = () => {
           image: imageFileUrl ? imageFileUrl : undefined,
         });
         if (postSaved.status === 201) {
+          //TODO, cargar imagen solo cuando el post se subio correctamente, dsp asignar la imagen a ese post.
           setUploadPostError(null);
           formik.resetForm();
           setImageFile(null);
@@ -161,14 +160,13 @@ export const CreatePost = () => {
             setPostUploadSuccess(null);
           }, 3000);
         }
-        console.log(postSaved.data);
       } catch (error) {
         const { message } = error.response.data;
         console.log(message);
         setUploadPostError(message);
         setTimeout(() => {
           setUploadPostError(null);
-        }, 3000);
+        }, 4500);
       }
     },
   });
@@ -242,7 +240,7 @@ export const CreatePost = () => {
           </Button> */}
         </div>
         {imageFileUploadProgress && (
-          <Progress progress={imageFileUploadProgress} bgColor="#5d55f6" />
+          <Progress progress={imageFileUploadProgress}/>
         )}
         {uploadImgError ? (
           setTimeout(() => {
