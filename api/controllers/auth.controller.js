@@ -72,7 +72,6 @@ export const signup = async (req, res, next) => {
     //si hay error, se lo paso al siguiente middleware, en este caso no es el manejador de errores sino 
     //el ultimo middleware de mi proceso, osea el que esta en index.js al final (muestra los errores)
     next(error);
-    console.log(error)
   }
 };
 

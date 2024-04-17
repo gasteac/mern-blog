@@ -50,7 +50,6 @@ export const SignIn = () => {
 
         }
       } catch (error) {
-        console.log(error.response.data.message)
         dispatch(signInFailure(error.response.data.message));
         // Si hay un error en la petición, se dispara la acción SignInFailure, que guarda el mensaje de error en el estado global.
         const message = error.response.data.message;
