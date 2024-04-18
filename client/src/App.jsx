@@ -1,8 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { About, Dashboard, Home, Projects, SignIn, SignUp } from "./pages";
+import { About, CreatePost, Dashboard, Home, Projects, SignIn, SignUp, UpdatePost } from "./pages";
 import { Header, PublicRoute, PrivateRoute } from "./components";
 import { AdminRoute } from "./components/AdminRoute";
-import { CreatePost } from "./components/CreatePost";
 
 export const App = () => {
   return (
@@ -12,7 +11,7 @@ export const App = () => {
         <Header />
         <Routes>
           {/* si pongo una ruta mal me redirige a home con el *   */}
-          {/* <Route path="*" element={<Navigate to="/" replace />} /> */}
+          <Route path="*" element={<Navigate to="/" replace />} />
           <Route path="/" element={<Home />} />
 
           {/* Solo puedo acceder al dashboard si ESTOY autenticado (PrivateRoute) */}
@@ -23,6 +22,7 @@ export const App = () => {
           </Route>
           <Route element={<AdminRoute />}>
             <Route path="/create-post" element={<CreatePost />} />
+            <Route path="/update-post/:postId" element={<UpdatePost/>} />
           </Route>
           {/* Solo puedo acceder a estas rutas si NO ESTOY autenticado (PublicRoute) */}
           <Route element={<PublicRoute />}>
