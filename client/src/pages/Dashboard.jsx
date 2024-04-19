@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import { DashProfile, DashSideBar } from "../components";
+import { DashProfile, DashSideBar, DashUsers } from "../components";
 import { DashPosts } from "../components/DashPosts";
 
 export const Dashboard = () => {
@@ -23,8 +23,10 @@ export const Dashboard = () => {
       </div>
       {/* posts */}
       {tab === "posts" ? <DashPosts /> : null}
-      {/* perfil */}
+      {/* profile */}
       {tab === "profile" ? <DashProfile /> : null}
+      {/* users */}
+      {tab === "users" ? <DashUsers/> : null}
     </div>
   );
 };

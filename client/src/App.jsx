@@ -28,8 +28,8 @@ export const App = () => {
           {/* Solo puedo acceder al dashboard si ESTOY autenticado (PrivateRoute) */}
           <Route element={<PrivateRoute />}>
             <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/projects" element={<Projects />} />
+            {/* <Route path="/about" element={<About />} />
+            <Route path="/projects" element={<Projects />} /> */}
           </Route>
           <Route element={<AdminRoute />}>
             <Route path="/update-post/:postId" element={<UpdatePost />} />

@@ -5,3 +5,4 @@ export * from "./OAuth.jsx";
 export * from "./PrivateRoute.jsx";
 export * from "./PublicRoute.jsx";
 export * from "./ThemeProvider.jsx";
+export * from "./DashUsers.jsx";
