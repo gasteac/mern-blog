@@ -17,13 +17,15 @@ export const DashPosts = () => {
   const storage = getStorage();
 
   const handleShowMore = async () => {
-    const startIndex = userPosts.length;
+    const startIndex = userPosts?.length;
     try {
       const res = await axios.get(
         `api/post/getposts?userId=${currentUser._id}&startIndex=${startIndex}`
       );
       if (res.statusText === "OK") {
-        setUserPosts([...userPosts, ...res.data.posts]);
+        setTimeout(() => {
+          setUserPosts([...userPosts, ...res?.data?.posts]);
+        }, 200); 
         if (res.data.posts.length < 5) {
           setShowMore(false);
         }
