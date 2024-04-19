@@ -6,7 +6,7 @@ import { Button, Modal, Table } from "flowbite-react";
 import { deleteObject, getStorage, ref } from "firebase/storage";
 import { Link } from "react-router-dom";
 import { HiOutlineExclamationCircle } from "react-icons/hi";
-
+import {FaCheck, FaTimes} from "react-icons/fa";
 export const DashUsers = () => {
   const { currentUser } = useSelector((state) => state.user);
   const [users, setUsers] = useState([]);
@@ -98,7 +98,7 @@ export const DashUsers = () => {
             </Table.Head>
             {users?.map((user) => (
               <Table.Body key={user._id} className="divide-y-2">
-                <Table.Row >
+                <Table.Row>
                   <Table.Cell as="div">
                     {new Date(user.updatedAt).toLocaleDateString()}
                   </Table.Cell>
@@ -112,11 +112,13 @@ export const DashUsers = () => {
                   <Table.Cell className="font-medium ">
                     {user.username}
                   </Table.Cell>
+                  <Table.Cell className="font-medium">{user.email}</Table.Cell>
                   <Table.Cell className="font-medium">
-                  {user.email}
-                  </Table.Cell>
-                  <Table.Cell className="font-medium">
-                    {user.isAdmin ? "Yes" : "No"}
+                    {user.isAdmin ? (
+                      <FaCheck className="text-emerald-500" />
+                    ) : (
+                      <FaTimes className="text-red-500" />
+                    )}
                   </Table.Cell>
                   <Table.Cell>
                     <span

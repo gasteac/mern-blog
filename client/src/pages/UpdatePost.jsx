@@ -330,7 +330,7 @@ export const UpdatePost = () => {
               <img
                 src={imageFileUrl ? imageFileUrl : postData.image}
                 alt="Post"
-                className="w-32 h-32 md:hover:scale-[2] md:hover:z-50 transition-all duration-300 ease-in-out"
+                className="w-32 h-32 object-cover rounded-lg shadow-lg"
               />
             )}
         {formik.touched.content && formik.errors.content ? (
