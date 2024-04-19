@@ -42,7 +42,12 @@ export const OAuth = () => {
         dispatch(signInSuccess(data));
 
       }
-    } catch (error) {}
+    } catch (error) {
+      dispatch(signInSuccess(null))
+      dispatch(signInFailure(error))
+      dispatch(signUpFailure(error));
+      console.log(error);
+    }
   };
 
   return (

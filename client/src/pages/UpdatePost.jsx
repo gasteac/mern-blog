@@ -1,4 +1,5 @@
 import {
+  deleteObject,
   getDownloadURL,
   getStorage,
   ref,
@@ -21,48 +22,40 @@ import * as Yup from "yup";
 import "react-circular-progressbar/dist/styles.css";
 import axios from "axios";
 import { useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 export const UpdatePost = () => {
+  const storage = getStorage();
+  const { currentUser } = useSelector((state) => state.user);
   const postId = useParams().postId;
   const [postData, setPostData] = useState({});
-
-  useEffect(() => {
-    try {
-      const getPostById = async () => {
-        const res = await axios.get(`/api/post/getposts?=postId=${postId}`);
-        if (res.status !== 200) setUploadPostError("Error getting post data");
-        if (res.status === 200) {
-          setPostData(res.data.posts[0]);
-          setUploadPostError(null);
-        }
-      };
-      getPostById();
-    } catch (error) {
-      console.log(error);
-      setUploadPostError("Error getting post data");
-    }
-  }, [postId]);
-
-  // console.log(postData)
-  // useEffect(() => {
-  //   if (!postData) return;
-  //   if (postData) {
-  //     formik.setValues({
-  //       title: postData?.title,
-  //       content: postData?.content,
-  //       category: postData?.category,
-  //       image: postData?.image,
-  //     });
-  //   }
-  // }, [postData]);
-
-  const [postUploadSuccess, setPostUploadSuccess] = useState(false);
+  const [postTitle, setPostTitle] = useState(""); //TODO
+  const [uploadPostSuccess, setUploadPostSuccess] = useState(false);
   const [uploadImgError, setUploadImgError] = useState(null);
-  const [uploadPostError, setUploadPostError] = useState(null);
+  const [updatePostError, setUpdatePostError] = useState(null);
   const [imageFile, setImageFile] = useState(null);
   const [imageFileUrl, setImageFileUrl] = useState(null);
   const [imageFileUploading, setImageFileUploading] = useState(false);
   const [imageFileUploadProgress, setImageFileUploadProgress] = useState(null);
+  const [oldImagePost, setOldImagePost] = useState(null);
+
+  // useEffect(() => {
+  //   try {
+  //     const getPostById = async () => {
+  //       const res = await axios.get(`/api/post/getposts?postId=${postId}`);
+  //       if (res.status !== 200) setUpdatePostError(res.data.message);
+  //       if (res.status === 200) {
+  //         setPostData(res.data.posts[0]);
+  //         setUpdatePostError(null);
+          
+  //       }
+  //     };
+  //     getPostById();
+  //   } catch (error) {
+  //     console.log(error.response.data.message);
+  //     setUpdatePostError(error.response.data.message);
+  //   }
+  // }, [postId]);
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -72,11 +65,33 @@ export const UpdatePost = () => {
     }
   };
 
-  useEffect(() => {
-    if (imageFile) {
-      uploadImage();
+  // const handleDeleteImage = async () => {
+  //   console.log(oldImagePost)
+  //   const desertRef = ref(storage, oldImagePost);
+  //   try {
+  //     const imgDel = await deleteObject(desertRef);
+  //     setOldImagePost(null);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+
+  const handleDeleteImage = async () => {
+    const fileRef = ref(storage, oldImagePost);
+    if (oldImagePost === null) {
+      return;
+    } else {
+      // Eliminar el archivo utilizando la referencia no raíz
+      await deleteObject(fileRef);
+      setOldImagePost(null);
     }
-  }, [imageFile]);
+  };
+
+  // useEffect(() => {
+  //   if (imageFile) {
+  //     uploadImage();
+  //   }
+  // }, [imageFile]);
 
   useEffect(() => {
     if (imageFileUploadProgress == 100) {
@@ -86,7 +101,8 @@ export const UpdatePost = () => {
       }, 1500);
     }
   }, [imageFileUploadProgress]);
-  const uploadImage = async () => {
+
+  const uploadImage = async (title, content, category) => {
     setImageFileUploading(true);
     const storage = getStorage(app);
     const fileName = new Date().getTime() + imageFile.name;
@@ -109,74 +125,138 @@ export const UpdatePost = () => {
       () => {
         const downloadURL = getDownloadURL(uploadTask.snapshot.ref).then(
           (downloadURL) => {
-            setImageFileUrl(downloadURL);
             setImageFileUploadProgress(null);
             setImageFileUploading(false);
             setUploadImgError(null);
+            const postSaved = axios
+              .put(`/api/post/updatepost/${postId}/${currentUser._id}`, {
+                title,
+                content,
+                category,
+                image: downloadURL ? downloadURL : undefined,
+              })
+              .then(() => {
+                handleDeleteImage();
+                if (postSaved.status === 200) {
+                  setUpdatePostError(null);
+                  setUploadPostSuccess(true);
+                  setTimeout(() => {
+                    setUploadPostSuccess(null);
+                  }, 3000);
+
+                  setImageFileUploadProgress(null);
+                  setImageFileUploading(false);
+                }
+              })
+              .catch((error) => {
+                console.log(error);
+              });
+
+            
           }
         );
       }
     );
   };
+
   const formik = useFormik({
+    //si no pongo lo de abajo el form se carga antes q los valores traidos de axios asique no me muestra nada
+    enableReinitialize: true,
     initialValues: {
-      title: postData.title,
-      content: postData.content,
-      category: postData.category,
-      image: postData.image,
+      title: postData.title ? postData.title : "",
+      content: postData.content ? postData.content : "",
+      category: postData.category ? postData.category : "",
+      image: postData.image ? postData.image : "",
     },
     validationSchema: Yup.object({
       title: Yup.string()
-        .required("Title of the post is required!")
         .min(4, "Must be 4 characters or more")
         .max(30, "Must be 30 characters or less"),
       content: Yup.string()
-        .required("Content of the post is required!")
         .min(4, "Must be 4 characters or more")
         .max(2000, "Must be 2000 characters or less"),
       category: Yup.string(),
     }),
     onSubmit: async ({ title, content, category }) => {
+      if (
+        title === postData.title &&
+        content === postData.content &&
+        category === postData.category &&
+        !imageFile
+      ) {
+        setUpdatePostError("No changes detected :)");
+        return;
+      }
+      setUpdatePostError(null);
+      setUploadPostSuccess(false);
       try {
-        const postSaved = await axios.post("/api/post/create", {
-          title,
-          content,
-          category,
-          image: imageFileUrl ? imageFileUrl : undefined,
-        });
-        if (postSaved.status === 201) {
-          setUploadPostError(null);
-          formik.resetForm();
+        if (imageFile) {
+          return uploadImage(title, content, category);
+        }
+
+        const postSaved = await axios.put(
+          `/api/post/updatepost/${postId}/${currentUser._id}`,
+          {
+            title,
+            content,
+            category,
+          }
+        );
+        if (postSaved.status === 200) {
+          setUpdatePostError(null);
+          setUploadPostSuccess(true);
+          setTimeout(() => {
+            setUploadPostSuccess(null);
+          }, 3000);
           setImageFile(null);
-          setImageFileUrl(null);
           setImageFileUploadProgress(null);
           setImageFileUploading(false);
-          setPostUploadSuccess(true);
-          setTimeout(() => {
-            setPostUploadSuccess(null);
-          }, 3000);
         }
       } catch (error) {
         const { message } = error.response.data;
-        setUploadPostError(message);
+        setUpdatePostError(message);
         setTimeout(() => {
-          setUploadPostError(null);
+          setUpdatePostError(null);
         }, 4500);
       }
     },
   });
+
+  useEffect(() => {
+    try {
+      const getPostById = async () => {
+        const res = await axios.get(`/api/post/getposts?postId=${postId}`);
+        if (res.status !== 200) setUpdatePostError(res.data.message);
+        if (res.status === 200) {
+          setPostData(res.data.posts[0]);
+          setUpdatePostError(null);
+          setOldImagePost(postData.image);
+        }
+      };
+      getPostById();
+    } catch (error) {
+      console.log(error.response.data.message);
+      setUpdatePostError(error.response.data.message);
+    }
+  }, [postId, formik.isSubmitting, oldImagePost]);
+
   return (
     <div className="min-h-screen p-3 max-w-3xl mx-auto">
-      <h1 className="text-center text-3xl font-semibold my-7">Edit POSTNAME</h1>
-      {uploadPostError && (
+      <h1 className="text-center text-3xl font-semibold my-7">
+        Edit{" "}
+        <span className="dark:text-blue-300 text-blue-600 ">
+          {postData.title ? postData.title : "Post"}
+        </span>
+      </h1>
+      {updatePostError && (
         <Alert
           color="failure"
           className="mb-4 font-semibold h-1 text-clip flex items-center justify-center"
         >
-          Error: Duplicated title
+          {updatePostError}
         </Alert>
       )}
-      {postUploadSuccess && (
+      {uploadPostSuccess && (
         <Alert
           color="success"
           className="mb-4 font-semibold h-1 text-clip flex items-center justify-center"
@@ -192,7 +272,7 @@ export const UpdatePost = () => {
         ) : null}
         <div className="flex flex-col sm:flex-row justify-between gap-4">
           <TextInput
-            value={postData.title || ""}
+            value={formik.values.title}
             type="text"
             placeholder="Title"
             className="flex-1"
@@ -205,7 +285,7 @@ export const UpdatePost = () => {
           <Select
             id="category"
             name="category"
-            value={postData.category || "unselected"}
+            value={formik.values.category}
             onChange={(e) => {
               formik.handleChange(e);
             }}
@@ -258,7 +338,7 @@ export const UpdatePost = () => {
           className="h-32 resize-none"
           id="content"
           name="content"
-          value={postData.content || ""}
+          value={formik.values.content}
           onChange={(e) => {
             formik.handleChange(e);
           }}

@@ -32,6 +32,7 @@ export const createPost = async (req, res, next) => {
 };
 
 export const getposts = async (req, res, next) => {
+
   try {
     //parseInt convierte el string en un número
     //startIndex es un numero que indica desde que post se empieza a buscar
@@ -41,6 +42,7 @@ export const getposts = async (req, res, next) => {
     const limit = parseInt(req.query.limit) || 9;
     //sortDirection es un número que indica si los posts se van a mostrar en orden ascendente o descendente
     const sortDirection = req.query.order === "asc" ? 1 : -1;
+    // if (req.params.length < 1 || req.body.length < 1 || req.query.length <1) return;
     const posts = await Post.find({
       //... es un spread operator, si el campo no esta vacio (haciendo la comprobación en el paréntesis) lo agrega al objeto
       //no podemos hacerlo solamente preguntando si req.query.userId existe porque si existe pero esta vacio, lo va a agregar como undefined
@@ -63,7 +65,7 @@ export const getposts = async (req, res, next) => {
       //el método skip saltea los primeros startIndex posts (para mostrar los siguientes posts de los que ya se están mostrando)
       //el método limit limita la cantidad de posts que se muestran
     })
-      .sort({ updateAt: sortDirection })
+      .sort({ updatedAt: sortDirection })
       .skip(startIndex)
       .limit(limit);
     //el método countDocuments cuenta la cantidad de posts que se encontraron
@@ -99,6 +101,37 @@ export const deletePost = async (req, res, next) => {
   try {
     const del = await Post.findByIdAndDelete(req.params.postId);
     res.status(200).json({ message: "Post deleted" });
+  } catch (error) {
+    next(error);
+  }
+};
+
+
+// TODO COMENTAR
+export const updatePost = async (req, res, next) => {
+  if (req.params.userId !== req.user.id && !req.user.isAdmin) {
+    return next(errorHandler(403, "You are not allowed to update this post"));
+  }
+  try {
+      const slug = req.body.title
+        .toLowerCase()
+        .split(" ")
+        .join("-")
+        .replace(/[^a-zA-Z0-9-]/g, "");
+    const updatedPost = await Post.findByIdAndUpdate(
+      req.params.postId,
+      {
+        $set: {
+          title: req.body.title,
+          content: req.body.content,
+          category: req.body.category,
+          image: req.body.image,
+          slug,
+        },
+      },
+      { new: true }
+    );
+    res.status(200).json(updatedPost);
   } catch (error) {
     next(error);
   }

@@ -32,25 +32,30 @@ export const DashPosts = () => {
     }
   };
 
-  const handleDelete = async () => {
-    try {
-      const response = await axios.delete(
-        `api/post/deletepost/${postIdtoDelete}/${currentUser._id}`
-      );
+const handleDelete = async () => {
+  try {
+    const response = await axios.delete(
+      `api/post/deletepost/${postIdtoDelete}/${currentUser._id}`
+    );
 
-      if (response.status === 200) {
-        setUserPosts(userPosts.filter((post) => post._id !== postIdtoDelete));
-        const desertRef = ref(storage, imageToDelete);
-        try {
-          const imgDel = await deleteObject(desertRef);
-        } catch (error) {
-          console.log(error);
-        }
+    if (response.status === 200) {
+      setUserPosts(userPosts.filter((post) => post._id !== postIdtoDelete));
+      // Crear una referencia no raíz utilizando child
+      const fileRef = ref(storage, imageToDelete);
+      if (
+        imageToDelete === null
+      ) {
+        return
+      } else {
+        // Eliminar el archivo utilizando la referencia no raíz
+        await deleteObject(fileRef);
       }
-    } catch (error) {
-      return status(400).json({ message: error.message });
     }
-  };
+  } catch (error) {
+    console.log(error);
+    // Manejar el error de forma adecuada
+  }
+};
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -122,7 +127,7 @@ export const DashPosts = () => {
                         setShowModal(true);
                         setPostIdtoDelete(post._id);
                         setPostTitletoDelete(post.title);
-                        setImageToDelete(post.image);
+                        setImageToDelete(post.image.includes("video-tutoriales-sobre-email-marketing") ? null : post.image);
                       }}
                       className="cursor-pointer text-red-500 font-medium hover:underline"
                     >
