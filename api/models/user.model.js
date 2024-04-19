@@ -21,7 +21,7 @@ const userSchema = new mongoose.Schema(
     profilePic: {
       type: String,
       default:
-        "https://w7.pngwing.com/pngs/304/275/png-transparent-user-profile-computer-icons-profile-miscellaneous-logo-monochrome.png",
+        "https://firebasestorage.googleapis.com/v0/b/facerook-gasteac.appspot.com/o/userImage.png?alt=media&token=cc4e3144-0e2d-41ea-9754-1621bd941bfd",
     },
     isAdmin: {
       type: Boolean,
