@@ -11,7 +11,7 @@ import {
   Select,
   TextInput,
   Textarea,
-  Progress
+  Progress,
 } from "flowbite-react";
 import React, { useEffect, useState } from "react";
 import "react-quill/dist/quill.snow.css";
@@ -44,18 +44,17 @@ export const CreatePost = () => {
     const file = e.target.files[0];
     if (file) {
       setImageFile(e.target.files[0]);
-
       // setImageFileUrl(URL.createObjectURL(file)); lo hacia de forma local
       setUploadImgError(null);
     }
   };
 
   // Efecto para iniciar la carga de la imagen cuando el estado `imageFile` cambia
-  useEffect(() => {
-    if (imageFile) {
-      uploadImage();
-    }
-  }, [imageFile]);
+  // useEffect(() => {
+  //   if (imageFile) {
+  //     uploadImage();
+  //   }
+  // }, [imageFile]);
 
   // Efecto para limpiar el estado `imageFileUploadProgress` cuando la carga de la imagen llega al 100%
   useEffect(() => {
@@ -67,7 +66,7 @@ export const CreatePost = () => {
     }
   }, [imageFileUploadProgress]);
   // Función asíncrona para cargar la imagen en el almacenamiento storage de firebase
-  const uploadImage = async () => {
+  const uploadImage = async (title, content, category) => {
     //Seteo el estado de subida de la imagen a true para que el usuario no pueda hacer nada mientras se sube
     setImageFileUploading(true);
     //Obtengo el storage de firebase, le paso la conf mediante app que exporte en el archivo firebase.js
@@ -109,12 +108,39 @@ export const CreatePost = () => {
         //Es una promesa que me devuelve la URL de la imagen en firebase
         const downloadURL = getDownloadURL(uploadTask.snapshot.ref).then(
           (downloadURL) => {
-            //Luego la guardo y la muestro en la imagen de perfil del usuario con imageFileUrl
-            setImageFileUrl(downloadURL);
-            //Reseteo los errores y la subida de la imagen          
+            //Reseteo los errores y la subida de la imagen
             setImageFileUploadProgress(null);
             setImageFileUploading(false);
             setUploadImgError(null);
+            const postSaved = axios
+              .post(
+                "/api/post/create",
+                {
+                  title,
+                  content,
+                  category,
+                  image: downloadURL ? downloadURL : undefined,
+                },
+              )
+              .then((response) => {
+                if (response.status === 201) {
+                  formik.resetForm();
+                  setUploadPostError(null);
+                 
+                  setPostUploadSuccess(true);
+                  setTimeout(() => {
+                    setPostUploadSuccess(null);
+                     navigate("/dashboard?tab=posts");
+                  }, 3000);
+                  // setImageFile(null);
+                  // setImageFileUrl(null);
+                  // setImageFileUploadProgress(null);
+                  // setImageFileUploading(false);
+                }
+              })
+              .catch((error) => {
+                console.log(error);
+              });
           }
         );
       }
@@ -140,6 +166,9 @@ export const CreatePost = () => {
     }),
     onSubmit: async ({ title, content, category }) => {
       try {
+        if (imageFile) {
+          return uploadImage(title, content, category);
+        }
         const postSaved = await axios.post("/api/post/create", {
           title,
           content,
@@ -147,17 +176,17 @@ export const CreatePost = () => {
           image: imageFileUrl ? imageFileUrl : undefined,
         });
         if (postSaved.status === 201) {
-          //TODO, cargar imagen solo cuando el post se subio correctamente, dsp asignar la imagen a ese post.
           setUploadPostError(null);
           formik.resetForm();
           setImageFile(null);
           setImageFileUrl(null);
           setImageFileUploadProgress(null);
           setImageFileUploading(false);
-          setPostUploadSuccess(true);
-          setTimeout(() => {
-            setPostUploadSuccess(null);
-          }, 3000);
+          navigate("/dashboard?tab=posts");
+          // setPostUploadSuccess(true);
+          // setTimeout(() => {
+          //   setPostUploadSuccess(null);
+          // }, 3000);
         }
       } catch (error) {
         const { message } = error.response.data;

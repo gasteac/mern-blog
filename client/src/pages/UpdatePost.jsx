@@ -23,8 +23,10 @@ import "react-circular-progressbar/dist/styles.css";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 export const UpdatePost = () => {
+   const navigate = useNavigate();
   const storage = getStorage();
   const { currentUser } = useSelector((state) => state.user);
   const postId = useParams().postId;
@@ -135,17 +137,19 @@ export const UpdatePost = () => {
                 category,
                 image: downloadURL ? downloadURL : undefined,
               })
-              .then(() => {
-                handleDeleteImage();
-                if (postSaved.status === 200) {
+              .then((response) => {
+               
+                if (response.status === 200) {
                   setUpdatePostError(null);
                   setUploadPostSuccess(true);
+                   handleDeleteImage();
                   setTimeout(() => {
                     setUploadPostSuccess(null);
-                  }, 3000);
+                    navigate("/dashboard?tab=posts");
+                  }, 2000);
 
-                  setImageFileUploadProgress(null);
-                  setImageFileUploading(false);
+                  // setImageFileUploadProgress(null);
+                  // setImageFileUploading(false);
                 }
               })
               .catch((error) => {
@@ -207,7 +211,7 @@ export const UpdatePost = () => {
           setUploadPostSuccess(true);
           setTimeout(() => {
             setUploadPostSuccess(null);
-          }, 3000);
+          }, 2000);
           setImageFile(null);
           setImageFileUploadProgress(null);
           setImageFileUploading(false);
@@ -217,7 +221,7 @@ export const UpdatePost = () => {
         setUpdatePostError(message);
         setTimeout(() => {
           setUpdatePostError(null);
-        }, 4500);
+        }, 2000);
       }
     },
   });
@@ -229,11 +233,14 @@ export const UpdatePost = () => {
         if (res.status !== 200) setUpdatePostError(res.data.message);
         if (res.status === 200) {
           setPostData(res.data.posts[0]);
-          setUpdatePostError(null);
+          // setUpdatePostError(null);
           setOldImagePost(postData.image);
         }
       };
       getPostById();
+       setTimeout(() => {
+         setUpdatePostError(null);
+       }, 3000);
     } catch (error) {
       console.log(error.response.data.message);
       setUpdatePostError(error.response.data.message);
