@@ -15,6 +15,7 @@ export const DashPosts = () => {
   const [postTitletoDelete, setPostTitletoDelete] = useState("");
   const [imageToDelete, setImageToDelete] = useState(null);
   const storage = getStorage();
+
   const handleShowMore = async () => {
     const startIndex = userPosts.length;
     try {
@@ -63,9 +64,11 @@ const handleDelete = async () => {
         const res = await axios.get(
           `api/post/getposts?userId=${currentUser._id}`
         );
-        if (res.statusText === "OK") {
-          setUserPosts(res.data.posts);
-          if (res.data.posts.length < 9) {
+       
+        const {data} = res
+        if (res.status === 200) {
+          setUserPosts(data.posts);
+          if (data.posts.length < 9) {
             setShowMore(false);
           }
         }
@@ -97,7 +100,7 @@ const handleDelete = async () => {
               <Table.HeadCell>Delete</Table.HeadCell>
               <Table.HeadCell>Edit</Table.HeadCell>
             </Table.Head>
-            {userPosts.map((post) => (
+            {userPosts?.map((post) => (
               <Table.Body key={post._id} className="divide-y-2 ">
                 <Table.Row>
                   <Table.Cell as="div">

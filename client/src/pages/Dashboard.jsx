@@ -6,7 +6,7 @@ import { DashPosts } from "../components/DashPosts";
 export const Dashboard = () => {
   //location nos devuelve un objeto con información de la URL actual y los parametros
   const location = useLocation();
-  const [tab, setTab] = useState("profile");
+  const [tab, setTab] = useState(null);
   //este useEffect se va a ejecutar siempre que cambie el search osea el ?tab=valor de la url
   //se va a utilizar para mostrar diferentes componentes dentro del mismo componente
   useEffect(() => {
