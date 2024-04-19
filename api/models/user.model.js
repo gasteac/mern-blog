@@ -21,12 +21,12 @@ const userSchema = new mongoose.Schema(
     profilePic: {
       type: String,
       default:
-        "https://firebasestorage.googleapis.com/v0/b/facerook-gasteac.appspot.com/o/userImage.png?alt=media&token=7d0d43bb-c429-4de2-8aaf-c57a56b957c0",
+        "https://w7.pngwing.com/pngs/304/275/png-transparent-user-profile-computer-icons-profile-miscellaneous-logo-monochrome.png",
     },
     isAdmin: {
       type: Boolean,
       default: true,
-    }
+    },
   },
   { timestamps: true } //quiero que cuando se crea o modifique quede guardado la fecha y hora
 );
