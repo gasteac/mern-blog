@@ -379,7 +379,7 @@ export const DashProfile = () => {
             className="mt-3"
             type="submit"
             gradientDuoTone="purpleToBlue"
-            outline
+        
             disabled={isLoading || imageFileUploading}
           >
             {isLoading ? (
@@ -388,7 +388,7 @@ export const DashProfile = () => {
                 <span className="ml-3">Loading..</span>
               </>
             ) : (
-              <span>Save!</span>
+              <span>Don't forget to save!</span>
             )}
           </Button>
           {currentUser.isAdmin && (
