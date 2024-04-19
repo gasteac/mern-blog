@@ -79,7 +79,7 @@ export const Header = () => {
               </span>
             </Dropdown.Header>
             <Link to={"/dashboard?tab=profile"}>
-              <Dropdown.Item as='div'>Dashboard</Dropdown.Item>
+              <Dropdown.Item as="div">Dashboard</Dropdown.Item>
             </Link>
             <Dropdown.Divider />
             <Dropdown.Item onClick={handleSignOut}>Sign Out</Dropdown.Item>
@@ -117,35 +117,35 @@ export const Header = () => {
               </Link>
             </NavbarLink>
             <NavbarLink
-              active={path === "/signin"}
+              active={path === "/allposts"}
               as="div"
               className={`
     rounded-xl w-full
     ${
-      path === "/signin"
+      path === "/allposts"
         ? "bg-gradient-to-br from-purple-500 to-blue-500 md:text-white font-semibold"
         : "dark:text-white light:text-black"
     }
   `}
             >
-              <Link to="/signin" className="w-full flex md:p-2">
-                Sign In
+              <Link to="/allposts" className="w-full flex md:p-2">
+                All Posts
               </Link>
             </NavbarLink>
             <NavbarLink
-              active={path === "/signup"}
+              active={path === "/create-post"}
               as="div"
               className={`
     rounded-xl w-full
     ${
-      path === "/signup"
+      path === "/create-post"
         ? "bg-gradient-to-br from-purple-500 to-blue-500 md:text-white font-semibold"
         : "dark:text-white light:text-black"
     }
   `}
             >
-              <Link to="/signup" className="w-full flex md:p-2">
-                Sign Up
+              <Link to="/create-post" className="w-full flex md:p-2">
+                Create Post
               </Link>
             </NavbarLink>
           </>
@@ -168,35 +168,35 @@ export const Header = () => {
               </Link>
             </NavbarLink>
             <NavbarLink
-              active={path === "/about"}
+              active={path === "/allposts"}
               as="div"
               className={`
     rounded-xl w-full
     ${
-      path === "/about"
+      path === "/allposts"
         ? "bg-gradient-to-br from-purple-500 to-blue-500 md:text-white font-semibold"
         : "dark:text-white light:text-black"
     }
   `}
             >
-              <Link to="/about" className="w-full flex md:p-2">
-                About
+              <Link to="/allposts" className="w-full flex md:p-2">
+                All Posts
               </Link>
             </NavbarLink>
             <NavbarLink
-              active={path === "/projects"}
+              active={path === "/create-post"}
               as="div"
               className={`
     rounded-xl w-full
     ${
-      path === "/projects"
-        ? "bg-gradient-to-br from-purple-500 to-blue-500 md:text-white light:text-white font-semibold"
+      path === "/create-post"
+        ? "bg-gradient-to-br from-purple-500 to-blue-500 md:text-white font-semibold"
         : "dark:text-white light:text-black"
     }
   `}
             >
-              <Link to="/projects" className="w-full flex md:p-2">
-                Projects
+              <Link to="/create-post" className="w-full flex md:p-2">
+                Create Post
               </Link>
             </NavbarLink>
           </>

@@ -18,6 +18,16 @@ export const Home = () => {
         )}
       </h1>
 
+      {!currentUser ? (
+        <>
+          <h1 className="text-3xl">
+            This page is still in progress
+          </h1>
+        
+        </>
+      ) : (
+        ""
+      )}
       {currentUser ? (
         <span
           className="cursor-pointer text-2xl rounded-lg hiText font-semibold"
@@ -33,23 +43,6 @@ export const Home = () => {
           {" "}
           Sign Up!
         </span>
-      )}
-
-      {!currentUser ? (
-        <>
-          <h1 className="text-3xl">
-            This page is in progress, you will be able to:
-          </h1>
-          <ul className="text-lg list-disc">
-            <li>Have an admin account to manage the site</li>
-            <li>Follow other users and see their posts.</li>
-            <li>Change your profile pic, email, pass.</li>
-            <li>Comment on posts and give likes.</li>
-            <li>Maybe more, we'll see :)</li>
-          </ul>
-        </>
-      ) : (
-        ""
       )}
     </div>
   );

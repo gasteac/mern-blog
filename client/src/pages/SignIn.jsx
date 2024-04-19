@@ -70,8 +70,8 @@ export const SignIn = () => {
               FaceRook
             </span>
           </Link>
-          <p className="text-lg text-c mt-5">
-            Welcome to <span className="font-bold hiText">FaceRook</span>
+          <p className="text-lg  mt-5">
+            Page in progress <span className="font-bold hiText">:)</span>
           </p>
         </div>
         {/* right side */}

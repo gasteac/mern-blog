@@ -26,7 +26,7 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 export const UpdatePost = () => {
-   const navigate = useNavigate();
+  const navigate = useNavigate();
   const storage = getStorage();
   const { currentUser } = useSelector((state) => state.user);
   const postId = useParams().postId;
@@ -49,7 +49,7 @@ export const UpdatePost = () => {
   //       if (res.status === 200) {
   //         setPostData(res.data.posts[0]);
   //         setUpdatePostError(null);
-          
+
   //       }
   //     };
   //     getPostById();
@@ -138,11 +138,10 @@ export const UpdatePost = () => {
                 image: downloadURL ? downloadURL : undefined,
               })
               .then((response) => {
-               
                 if (response.status === 200) {
                   setUpdatePostError(null);
                   setUploadPostSuccess(true);
-                   handleDeleteImage();
+                  handleDeleteImage();
                   setTimeout(() => {
                     setUploadPostSuccess(null);
                     navigate("/dashboard?tab=posts");
@@ -155,8 +154,6 @@ export const UpdatePost = () => {
               .catch((error) => {
                 console.log(error);
               });
-
-            
           }
         );
       }
@@ -238,9 +235,9 @@ export const UpdatePost = () => {
         }
       };
       getPostById();
-       setTimeout(() => {
-         setUpdatePostError(null);
-       }, 3000);
+      setTimeout(() => {
+        setUpdatePostError(null);
+      }, 3000);
     } catch (error) {
       console.log(error.response.data.message);
       setUpdatePostError(error.response.data.message);
@@ -298,9 +295,12 @@ export const UpdatePost = () => {
             }}
           >
             <option value="unselected">Select Category</option>
-            <option value="javascript">Javascript</option>
-            <option value="react">React.js</option>
-            <option value="react">Next.js</option>
+            <option value="funny">Funny</option>
+            <option value="sad">Sad</option>
+            <option value="animals">Animals</option>
+            <option value="people">People</option>
+            <option value="TI">TI</option>
+            <option value="Other">Other</option>
           </Select>
         </div>
         <div className="flex items-center gap-4 justify-between border-2 border-teal-400 border-dashed p-3">
@@ -327,13 +327,11 @@ export const UpdatePost = () => {
               </Alert>
             ))
           : (postData.image || imageFileUrl) && (
-              <div className="max-w-full h-32 hover:h-52 overflow-y-scroll transition-all duration-30 ease-in-out">
-                <img
-                  src={imageFileUrl ? imageFileUrl : postData.image}
-                  alt="Post"
-                  className="w-full object-cover "
-                />
-              </div>
+              <img
+                src={imageFileUrl ? imageFileUrl : postData.image}
+                alt="Post"
+                className="w-32 h-32 md:hover:scale-[2] md:hover:z-50 transition-all duration-300 ease-in-out"
+              />
             )}
         {formik.touched.content && formik.errors.content ? (
           <h6 className="ml-2 text-red-300 text-[0.8rem]  phone:text-[1rem] tablet:text-[1.2rem]">

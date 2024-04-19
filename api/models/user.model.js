@@ -21,7 +21,7 @@ const userSchema = new mongoose.Schema(
     profilePic: {
       type: String,
       default:
-        "https://firebasestorage.googleapis.com/v0/b/facerook-gasteac.appspot.com/o/userImage.png?alt=media&token=cc4e3144-0e2d-41ea-9754-1621bd941bfd",
+        "https://gifdb.com/images/high/eren-yeager-blowing-hair-o63aaatimhxaojbu.webp",
     },
     isAdmin: {
       type: Boolean,

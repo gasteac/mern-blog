@@ -51,7 +51,7 @@ export const DashSideBar = () => {
               labelColor="dark"
               as="div"
             >
-              Profile
+              My Profile
             </Sidebar.Item>
           </Link>
           {currentUser.isAdmin && (
@@ -62,7 +62,7 @@ export const DashSideBar = () => {
                 labelColor="dark"
                 as="div"
               >
-                Posts
+                My Posts
               </Sidebar.Item>
             </Link>
           )}

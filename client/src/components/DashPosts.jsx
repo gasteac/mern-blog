@@ -24,7 +24,7 @@ export const DashPosts = () => {
       );
       if (res.statusText === "OK") {
         setUserPosts([...userPosts, ...res.data.posts]);
-        if (res.data.posts.length < 9) {
+        if (res.data.posts.length < 5) {
           setShowMore(false);
         }
       }
@@ -68,7 +68,7 @@ const handleDelete = async () => {
         const {data} = res
         if (res.status === 200) {
           setUserPosts(data.posts);
-          if (data.posts.length < 9) {
+          if (data.posts.length < 5) {
             setShowMore(false);
           }
         }

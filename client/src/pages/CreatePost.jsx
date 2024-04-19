@@ -21,9 +21,11 @@ import * as Yup from "yup";
 import "react-circular-progressbar/dist/styles.css";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 export const CreatePost = () => {
   const navigate = useNavigate();
+  const { currentUser } = useSelector((state) => state.user);
   const [postUploadSuccess, setPostUploadSuccess] = useState(false);
   // Estado para almacenar los errores en la actualizacion de usuario
   const [uploadImgError, setUploadImgError] = useState(null);
@@ -200,65 +202,109 @@ export const CreatePost = () => {
     },
   });
   return (
-    <div className="min-h-screen p-3 max-w-3xl mx-auto">
-      <h1 className="text-center text-3xl font-semibold my-7">Create a post</h1>
-      {uploadPostError && (
-        <Alert
-          color="failure"
-          className="mb-4 font-semibold h-1 text-clip flex items-center justify-center"
-        >
-          Error: Duplicated title
-        </Alert>
-      )}
-      {postUploadSuccess && (
-        <Alert
-          color="success"
-          className="mb-4 font-semibold h-1 text-clip flex items-center justify-center"
-        >
-          Post created successfully!
-        </Alert>
-      )}
-      <form className="flex flex-col gap-4" onSubmit={formik.handleSubmit}>
-        {formik.touched.title && formik.errors.title ? (
-          <h6 className="ml-2 text-red-300 text-[0.8rem]  phone:text-[1rem] tablet:text-[1.2rem]">
-            {formik.errors.title}
-          </h6>
-        ) : null}
-        <div className="flex flex-col sm:flex-row justify-between gap-4">
-          <TextInput
-            value={formik.values.title}
-            type="text"
-            placeholder="Title"
-            className="flex-1"
-            id="title"
-            name="title"
-            onChange={(e) => {
-              formik.handleChange(e);
-            }}
-          />
-          <Select
-            id="category"
-            name="category"
-            value={formik.values.category}
-            onChange={(e) => {
-              formik.handleChange(e);
-            }}
-          >
-            <option value="unselected">Select Category</option>
-            <option value="javascript">Javascript</option>
-            <option value="react">React.js</option>
-            <option value="react">Next.js</option>
-          </Select>
+    <>
+      {!currentUser ? (
+        <div className="h-full w-screen flex flex-col gap-5 items-center justify-center mt-12">
+          <h1 className="text-5xl mb-2 text-center">
+            Hey, hello{" "}
+            {currentUser ? (
+              <span className="hiText capitalize font-bold">
+                {currentUser.username}!
+              </span>
+            ) : (
+              <span className="hiText capitalize font-bold">Visitor!</span>
+            )}
+          </h1>
+
+          {!currentUser ? (
+            <>
+              <h1 className="text-3xl">You need an account for this</h1>
+            </>
+          ) : (
+            ""
+          )}
+          {currentUser ? (
+            <span
+              className="cursor-pointer text-2xl rounded-lg hiText font-semibold"
+              onClick={() => navigate("/dashboard?tab=profile")}
+            >
+              Go to profile
+            </span>
+          ) : (
+            <span
+              className="cursor-pointer text-2xl rounded-lg hiText font-semibold"
+              onClick={() => navigate("/signup")}
+            >
+              {" "}
+              Sign Up!
+            </span>
+          )}
         </div>
-        <div className="flex items-center gap-4 justify-between border-2 border-teal-400 border-dashed p-3">
-          <FileInput
-            // value={postUploadSuccess ? 'Image uploaded successfully!' : 'Upload Image'}
-            disabled={imageFileUploading}
-            type="file"
-            accept="image/*"
-            onChange={(e) => handleImageChange(e)}
-          />
-          {/* <Button
+      ) : (
+        <div className="min-h-screen p-3 max-w-3xl mx-auto">
+          <h1 className="text-center text-3xl font-semibold my-7">
+            Create a post
+          </h1>
+          {uploadPostError && (
+            <Alert
+              color="failure"
+              className="mb-4 font-semibold h-1 text-clip flex items-center justify-center"
+            >
+              Error: Duplicated title
+            </Alert>
+          )}
+          {postUploadSuccess && (
+            <Alert
+              color="success"
+              className="mb-4 font-semibold h-1 text-clip flex items-center justify-center"
+            >
+              Post created successfully!
+            </Alert>
+          )}
+          <form className="flex flex-col gap-4" onSubmit={formik.handleSubmit}>
+            {formik.touched.title && formik.errors.title ? (
+              <h6 className="ml-2 text-red-300 text-[0.8rem]  phone:text-[1rem] tablet:text-[1.2rem]">
+                {formik.errors.title}
+              </h6>
+            ) : null}
+            <div className="flex flex-col sm:flex-row justify-between gap-4">
+              <TextInput
+                value={formik.values.title}
+                type="text"
+                placeholder="Title"
+                className="flex-1"
+                id="title"
+                name="title"
+                onChange={(e) => {
+                  formik.handleChange(e);
+                }}
+              />
+              <Select
+                id="category"
+                name="category"
+                value={formik.values.category}
+                onChange={(e) => {
+                  formik.handleChange(e);
+                }}
+              >
+                <option value="unselected">Select Category</option>
+                <option value="funny">Funny</option>
+                <option value="sad">Sad</option>
+                <option value="animals">Animals</option>
+                <option value="people">People</option>
+                <option value="TI">TI</option>
+                <option value="Other">Other</option>
+              </Select>
+            </div>
+            <div className="flex items-center gap-4 justify-between border-2 border-teal-400 border-dashed p-3">
+              <FileInput
+                // value={postUploadSuccess ? 'Image uploaded successfully!' : 'Upload Image'}
+                disabled={imageFileUploading}
+                type="file"
+                accept="image/*"
+                onChange={(e) => handleImageChange(e)}
+              />
+              {/* <Button
             type="button"
             disabled={!imageFile || imageFileUploading}
             gradientDuoTone="purpleToBlue"
@@ -267,55 +313,57 @@ export const CreatePost = () => {
           >
             Upload Image
           </Button> */}
-        </div>
-        {imageFileUploadProgress && (
-          <Progress progress={imageFileUploadProgress} />
-        )}
-        {uploadImgError
-          ? (setTimeout(() => {
-              setUploadImgError(null);
-            }, 4500),
-            (
-              <Alert
-                color="failure"
-                className="font-semibold h-1 text-clip flex items-center justify-center"
-              >
-                {uploadImgError}
-              </Alert>
-            ))
-          : imageFileUrl && (
-              <div className="max-w-full h-32 hover:h-52 overflow-y-scroll transition-all duration-30 ease-in-out">
-                <img
-                  src={imageFileUrl}
-                  alt="Post"
-                  className="w-full object-cover "
-                />
-              </div>
+            </div>
+            {imageFileUploadProgress && (
+              <Progress progress={imageFileUploadProgress} />
             )}
-        {formik.touched.content && formik.errors.content ? (
-          <h6 className="ml-2 text-red-300 text-[0.8rem]  phone:text-[1rem] tablet:text-[1.2rem]">
-            {formik.errors.content}
-          </h6>
-        ) : null}
-        <Textarea
-          placeholder="Write something"
-          className="h-32 resize-none"
-          id="content"
-          name="content"
-          value={formik.values.content}
-          onChange={(e) => {
-            formik.handleChange(e);
-          }}
-        />
-        <Button
-          type="submit"
-          gradientDuoTone="purpleToBlue"
-          size="lg"
-          disabled={imageFileUploading}
-        >
-          Create Post
-        </Button>
-      </form>
-    </div>
+            {uploadImgError
+              ? (setTimeout(() => {
+                  setUploadImgError(null);
+                }, 4500),
+                (
+                  <Alert
+                    color="failure"
+                    className="font-semibold h-1 text-clip flex items-center justify-center"
+                  >
+                    {uploadImgError}
+                  </Alert>
+                ))
+              : imageFileUrl && (
+                  <div className="max-w-full h-32 hover:h-52 overflow-y-scroll transition-all duration-30 ease-in-out">
+                    <img
+                      src={imageFileUrl}
+                      alt="Post"
+                      className="w-full object-cover "
+                    />
+                  </div>
+                )}
+            {formik.touched.content && formik.errors.content ? (
+              <h6 className="ml-2 text-red-300 text-[0.8rem]  phone:text-[1rem] tablet:text-[1.2rem]">
+                {formik.errors.content}
+              </h6>
+            ) : null}
+            <Textarea
+              placeholder="Write something"
+              className="h-32 resize-none"
+              id="content"
+              name="content"
+              value={formik.values.content}
+              onChange={(e) => {
+                formik.handleChange(e);
+              }}
+            />
+            <Button
+              type="submit"
+              gradientDuoTone="purpleToBlue"
+              size="lg"
+              disabled={imageFileUploading}
+            >
+              Create Post
+            </Button>
+          </form>
+        </div>
+      )}
+    </>
   );
 };

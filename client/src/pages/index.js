@@ -6,3 +6,4 @@ export * from "./Projects";
 export * from "./Home";
 export * from "./CreatePost";
 export * from "./UpdatePost";
+export * from "./AllPosts";
