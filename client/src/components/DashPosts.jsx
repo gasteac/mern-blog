@@ -26,7 +26,7 @@ export const DashPosts = () => {
         setTimeout(() => {
           setUserPosts([...userPosts, ...res?.data?.posts]);
         }, 200); 
-        if (res.data.posts.length < 5) {
+        if (res.data.posts.length < 500) {
           setShowMore(false);
         }
       }
