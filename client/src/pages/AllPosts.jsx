@@ -19,7 +19,7 @@ export const AllPosts = () => {
           setAllPosts([...allPosts, ...res?.data?.posts]);
         }, 200);
 
-        if (res.data.posts.length < 5) {
+        if (res.data.posts.length < 500) {
           setShowMore(false);
         }
       }
