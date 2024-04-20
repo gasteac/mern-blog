@@ -74,19 +74,9 @@ export const SignUp = () => {
   });
 
   return (
-    <div className="min-h-screen mt-20">
-      <div className="flex p-3 max-w-3xl mx-auto flex-col md:flex-row md:items-center gap-5">
-        {/* left side */}
-        <div className="flex-1 self-center md:self-start md:mt-16">
-          <Link to="/" className="font-bold dark:text-white text-4xl">
-            <span className="px-2 py-1 rounded-2xl bg-[linear-gradient(135deg,_#9c77f3,_#5d55f6)] text-white">
-              FaceRook
-            </span>
-          </Link>
-          <p className="text-lg  mt-5">
-            Page in progress <span className="font-bold hiText">:)</span>
-          </p>
-        </div>
+    <div className="mt-20">
+      <div className="flex p-3 max-w-lg mx-auto flex-col md:flex-row md:items-center gap-5">
+       
         {/* right side */}
         <div className="flex-1">
           <form className="flex flex-col gap-4" onSubmit={formik.handleSubmit}>

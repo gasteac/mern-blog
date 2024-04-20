@@ -2,14 +2,14 @@ import React, { useState } from "react";
 import { useEffect } from "react";
 
 import axios from "axios";
-import { Table } from "flowbite-react";
+import { Spinner, Table } from "flowbite-react";
 
 import { Link } from "react-router-dom";
 
 export const AllPosts = () => {
   const [allPosts, setAllPosts] = useState([]);
   const [showMore, setShowMore] = useState(true);
-
+  const [loading, setLoading] = useState(false);
   const handleShowMore = async () => {
     const startIndex = allPosts.length;
     try {
@@ -31,25 +31,34 @@ export const AllPosts = () => {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
+        setLoading(true);
         const res = await axios.get(`api/post/getposts`);
 
         const { data } = res;
         if (res.status === 200) {
           setAllPosts(data.posts);
+          setLoading(false);
           if (data.posts.length < 5) {
             setShowMore(false);
           }
         }
       } catch (error) {
         console.log(error);
+        setLoading(false);
       }
     };
 
     fetchPosts();
   }, []);
-
+if (loading) {
   return (
-    <div className="p-4 max-w-[60%] table-auto overflow-x-scroll md:mx-auto scrollbar scrollbar-track-slate-100 scrollbar-thumb-slate-300 dark:scrollbar-track-transparent dark:scrollbar-thumb-transparent">
+    <div className="flex w-full h-screen items-start justify-center mt-12">
+      <Spinner size="xl" />
+    </div>
+  );
+}
+  return (
+    <div className="py-6 px-4 md:max-w-[800px] table-auto overflow-x-scroll md:mx-auto scrollbar scrollbar-track-slate-100 scrollbar-thumb-slate-300 dark:scrollbar-track-transparent dark:scrollbar-thumb-transparent">
       {allPosts.length > 0 ? (
         <>
           <Table hoverable className="bg-white dark:bg-slate-800 rounded-xl">
@@ -105,7 +114,7 @@ export const AllPosts = () => {
           )}
         </>
       ) : (
-        <div className="w-full h-full">You have no posts yet.</div>
+        <div className="w-full h-full text-center text-2xl">There are no posts yet :(</div>
       )}
     </div>
   );

@@ -204,14 +204,10 @@ export const CreatePost = () => {
       {!currentUser ? (
         <div className="h-full w-screen flex flex-col gap-5 items-center justify-center mt-12">
           <h1 className="text-5xl mb-2 text-center">
-            Hey, hello{" "}
-            {currentUser ? (
-              <span className="hiText capitalize font-bold">
-                {currentUser.username}!
-              </span>
-            ) : (
-              <span className="hiText capitalize font-bold">Visitor!</span>
-            )}
+           
+            
+              <span className="hiText capitalize font-bold">ERROR</span>
+            
           </h1>
 
           {!currentUser ? (
@@ -239,7 +235,7 @@ export const CreatePost = () => {
           )}
         </div>
       ) : (
-        <div className="min-h-screen p-3 max-w-3xl mx-auto">
+        <div className=" p-3 max-w-3xl mx-auto">
           <h1 className="text-center text-3xl font-semibold my-7">
             Create a post
           </h1>

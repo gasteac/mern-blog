@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import axios from "axios";
-import { Button, Modal, Table } from "flowbite-react";
+import { Button, Modal, Spinner, Table } from "flowbite-react";
 import { deleteObject, getStorage, ref } from "firebase/storage";
 import { Link } from "react-router-dom";
 import { HiOutlineExclamationCircle } from "react-icons/hi";
@@ -16,6 +16,7 @@ export const DashUsers = () => {
   const [usertoDelete, setUsertoDelete] = useState("");
   const [imageToDelete, setImageToDelete] = useState(null);
   const [userPic, setUserPic] = useState(null)
+      const [loading, setLoading] = useState(false);
   const storage = getStorage();
 
   const handleShowMore = async () => {
@@ -61,26 +62,35 @@ export const DashUsers = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
+        setLoading(true);
         const res = await axios.get(`api/user/getusers`);
 
         const { data } = res;
         if (res.status === 200) {
           setUsers(data.users);
+          setLoading(false);
           if (data.users.length < 5) {
             setShowMore(false);
           }
         }
       } catch (error) {
         console.log(error);
+        setLoading(false);
       }
     };
     if (currentUser.isAdmin) {
       fetchUsers();
     }
   }, [currentUser._id]);
-
+if (loading) {
   return (
-    <div className="p-4 table-auto overflow-x-scroll md:mx-auto scrollbar scrollbar-track-slate-100 scrollbar-thumb-slate-300 dark:scrollbar-track-transparent dark:scrollbar-thumb-transparent">
+    <div className="flex h-screen w-full items-start justify-center mt-12">
+      <Spinner size="xl" />
+    </div>
+  );
+}
+  return (
+    <div className="p-2 md:p-6 h-screen table-auto overflow-x-scroll md:mx-auto scrollbar scrollbar-track-slate-100 scrollbar-thumb-slate-300 dark:scrollbar-track-transparent dark:scrollbar-thumb-transparent">
       {currentUser.isAdmin && users.length > 0 ? (
         <>
           <Table hoverable className="bg-white dark:bg-slate-800 rounded-xl">
@@ -103,14 +113,11 @@ export const DashUsers = () => {
                     {new Date(user.updatedAt).toLocaleDateString()}
                   </Table.Cell>
                   <Table.Cell>
-                    <div className="w-32 h-20 bg-transparent">
-                      <img
-                        src={user.profilePic}
-                        alt={user.username}
-                        className=" w-auto h-full rounded-lg"
-                      />
-                    </div>
-                  
+                    <img
+                      src={user.profilePic}
+                      alt={user.username}
+                      className=" h-24 w-24 object-cover  rounded-lg"
+                    />
                   </Table.Cell>
                   <Table.Cell className="font-medium ">
                     {user.username}
@@ -157,7 +164,9 @@ export const DashUsers = () => {
           )}
         </>
       ) : (
-        <div className="w-full h-full">There are no users yet</div>
+        <div className="h-screen text-center text-2xl">
+          There are no users yet
+        </div>
       )}
       <Modal
         show={showModal}
@@ -167,10 +176,7 @@ export const DashUsers = () => {
       >
         <Modal.Header />
         <Modal.Body className="flex items-center justify-center flex-col gap-3">
-          <img
-            src={userPic}
-            className="min-w-20 w-24 h-auto object-cover rounded-lg"
-          />
+          <img src={userPic} className="w-24 h-auto object-cover rounded-lg" />
           <h1 className="text-center text-2xl font-semibold">
             Delete "{usertoDelete}" ?
           </h1>

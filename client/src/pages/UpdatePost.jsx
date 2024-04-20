@@ -244,7 +244,7 @@ export const UpdatePost = () => {
   }, [postId, formik.isSubmitting, oldImagePost]);
 
   return (
-    <div className="min-h-screen p-3 max-w-3xl mx-auto">
+    <div className="p-3 max-w-3xl mx-auto">
       <h1 className="text-center text-3xl font-semibold my-7">
         Edit{" "}
         <span className="dark:text-blue-300 text-blue-600 ">
@@ -273,7 +273,7 @@ export const UpdatePost = () => {
             {formik.errors.title}
           </h6>
         ) : null}
-        <div className="flex flex-col sm:flex-row justify-between gap-4">
+        <div className="flex sm:flex-row justify-between gap-4">
           <TextInput
             value={formik.values.title}
             type="text"

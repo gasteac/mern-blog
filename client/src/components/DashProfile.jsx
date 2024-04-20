@@ -10,6 +10,7 @@ import {
 } from "flowbite-react";
 import { Link } from "react-router-dom";
 import {
+  deleteObject,
   getDownloadURL,
   getStorage,
   ref,
@@ -29,11 +30,14 @@ import {
   modifyUserSuccess,
 } from "../redux/user/userSlice";
 import { HiOutlineExclamationCircle } from "react-icons/hi";
+import { set } from "mongoose";
 
 //Aclaración, no confundir ref de firebase con ref de useRef de react
 
 export const DashProfile = () => {
+  const storage = getStorage(app);
   const dispatch = useDispatch();
+
   // showModal es un estado local que nos permite mostrar un modal al usuario
   const [showModal, setShowModal] = useState(false);
   // usernameErrorMsg y emailErrorMsg son estados locales que nos permiten mostrar mensajes de error personalizados.
@@ -56,6 +60,8 @@ export const DashProfile = () => {
   const [updateUserSuccess, setUpdateUserSuccess] = useState(null);
   // Referencia al selector de archivos de entrada en el DOM (se usa para que al hacer clic en la imagen, en realidad se haga clic en el input de tipo file)
   const filePickerRef = useRef();
+  //Estado para guardar la imagen anterior del usuario
+  const [oldImageUser, setOldImageUser] = useState(currentUser.profilePic);
   // Función para manejar el cambio de imagen seleccionada
   const handleImageChange = (e) => {
     //Se sube una sola imagen asi que se selecciona la primera posición
@@ -79,6 +85,7 @@ export const DashProfile = () => {
   // Efecto para iniciar la carga de la imagen cuando el estado `imageFile` cambia
   useEffect(() => {
     if (imageFile) {
+      setOldImageUser(currentUser.profilePic);
       uploadImage();
     }
   }, [imageFile]);
@@ -137,11 +144,51 @@ export const DashProfile = () => {
             setImageFileUrl(downloadURL);
             //Reseteo el estado de subida de la imagen
             setImageFileUploading(false);
+            //Elimino la imagen anterior de firebase
+            const res = axios
+              .put(`/api/user/update/${currentUser._id}`, {
+                ...currentUser,
+                username: currentUser.username,
+                email: currentUser.email,
+                password: "",
+                profilePic: downloadURL,
+              })
+              .then((response) => {
+                if (response.status === 200) {
+                  dispatch(modifyUserSuccess(response.data));
+                  setUpdateUserSuccess(
+                    "Image updated! (your old img was deleted)"
+                  );
+                  handleDeleteImage(downloadURL);
+                  setTimeout(() => {
+                    setUpdateUserSuccess(null);
+                  }, 3500);
+                }
+              })
+              .catch((error) => {
+                setUpdateUserError("Error updating image");
+                setImageFileUrl(null);
+              });
           }
         );
       }
     );
   };
+  const handleDeleteImage = async (downloadURL) => {
+     if (!oldImageUser.includes("firebase")) {
+      return setOldImageUser(downloadURL);
+     }
+    const fileRef = ref(storage, oldImageUser);
+    setOldImageUser(downloadURL);
+   
+    try {
+      await deleteObject(fileRef);
+      setImageFile(null);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const formik = useFormik({
     initialValues: {
       username: currentUser.username,
@@ -183,9 +230,7 @@ export const DashProfile = () => {
           username: username,
           email: email,
           password: password,
-          profilePic: imageFileUrl ? imageFileUrl : currentUser.profilePic,
         });
-        setImageFileUrl(null);
         if (res.status === 200) {
           //obtengo el usuario de la respuesta, que esta en data
           // Si la petición es exitosa, se dispara la acción SignUpSuccess, que guarda el usuario en el estado global y redirige al usuario a la página principal.
@@ -205,7 +250,7 @@ export const DashProfile = () => {
         // Si la petición falla, se dispara la acción SignUpFailure, que cambia el estado isLoading a false y muestra un mensaje de error al usuario.
         dispatch(modifyUserFailure());
         setUpdateUserSuccess(false);
-       
+
         // Si el mensaje de error incluye "duplicate" y "email", mostramos un mensaje de error personalizado.
         // if (message.includes("duplicate") && message.includes("email")) {
         //   setEmailErrorMsg("Email already in use");
@@ -241,7 +286,7 @@ export const DashProfile = () => {
   };
 
   return (
-    <div className="mx-auto h-full w-full md:w-[920px] pb-6">
+    <div className="mx-auto h-full w-full md:mx-auto pb-6 md:ml-2">
       <form
         className="flex flex-col sm:flex-row items-center justify-center gap-12 sm:p-6 "
         onSubmit={formik.handleSubmit}
@@ -379,7 +424,6 @@ export const DashProfile = () => {
             className="mt-3"
             type="submit"
             gradientDuoTone="purpleToBlue"
-        
             disabled={isLoading || imageFileUploading}
           >
             {isLoading ? (
@@ -388,29 +432,27 @@ export const DashProfile = () => {
                 <span className="ml-3">Loading..</span>
               </>
             ) : (
-              <span>Don't forget to save!</span>
+              <span>Update Profile</span>
             )}
           </Button>
           {currentUser.isAdmin && (
-            <Link to='/create-post'>
-            <Button
-              className="mt-3 w-full"
-              type="button"
-            
-              gradientDuoTone="purpleToPink"
-              disabled={isLoading || imageFileUploading}
-            >
-              {isLoading ? (
-                <>
-                  <Spinner size="sm" />
-                  <span className="ml-3">Loading..</span>
-                </>
-              ) : (
-                <span>Create a post</span>
-              )}
-            </Button>
+            <Link to="/create-post">
+              <Button
+                className="mt-3 w-full"
+                type="button"
+                gradientDuoTone="purpleToPink"
+                disabled={isLoading || imageFileUploading}
+              >
+                {isLoading ? (
+                  <>
+                    <Spinner size="sm" />
+                    <span className="ml-3">Loading..</span>
+                  </>
+                ) : (
+                  <span>Create a post</span>
+                )}
+              </Button>
             </Link>
-            
           )}
           <div className="justify-between flex flex-col items-center gap-4 mt-5">
             <span

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import axios from "axios";
-import { Button, Modal, Table } from "flowbite-react";
+import { Button, Modal, Spinner, Table } from "flowbite-react";
 import { deleteObject, getStorage, ref } from "firebase/storage";
 import { Link } from "react-router-dom";
 import { HiOutlineExclamationCircle } from "react-icons/hi";
@@ -14,6 +14,7 @@ export const DashPosts = () => {
   const [postIdtoDelete, setPostIdtoDelete] = useState("");
   const [postTitletoDelete, setPostTitletoDelete] = useState("");
   const [imageToDelete, setImageToDelete] = useState(null);
+  const [loading, setLoading] = useState(false);
   const storage = getStorage();
 
   const handleShowMore = async () => {
@@ -63,6 +64,7 @@ const handleDelete = async () => {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
+        setLoading(true);
         const res = await axios.get(
           `api/post/getposts?userId=${currentUser._id}`
         );
@@ -70,12 +72,14 @@ const handleDelete = async () => {
         const {data} = res
         if (res.status === 200) {
           setUserPosts(data.posts);
+          setLoading(false);
           if (data.posts.length < 5) {
             setShowMore(false);
           }
         }
       } catch (error) {
         console.log(error);
+        setLoading(false);
       }
     };
     if (currentUser.isAdmin) {
@@ -83,8 +87,15 @@ const handleDelete = async () => {
     }
   }, [currentUser._id]);
 
+if (loading) {
   return (
-    <div className="p-4 table-auto overflow-x-scroll md:mx-auto scrollbar scrollbar-track-slate-100 scrollbar-thumb-slate-300 dark:scrollbar-track-transparent dark:scrollbar-thumb-transparent">
+    <div className="flex h-screen w-full items-start justify-center mt-12">
+      <Spinner size="xl" />
+    </div>
+  );
+}
+  return (
+    <div className="p-2 md:p-6 h-screen table-auto overflow-x-scroll md:mx-auto scrollbar scrollbar-track-slate-100 scrollbar-thumb-slate-300 dark:scrollbar-track-transparent dark:scrollbar-thumb-transparent">
       {currentUser.isAdmin && userPosts.length > 0 ? (
         <>
           <Table hoverable className="bg-white dark:bg-slate-800 rounded-xl">
@@ -108,11 +119,11 @@ const handleDelete = async () => {
                   <Table.Cell as="div">
                     <Link to={`/post/${post.slug}`}>
                       <div className="w-32 h-20 bg-transparent">
-                          <img
-                        src={post.image}
-                        alt={post.title}
-                        className="object-cover w-full h-full rounded-lg"
-                      />
+                        <img
+                          src={post.image}
+                          alt={post.title}
+                          className="object-cover w-full h-full rounded-lg"
+                        />
                       </div>
                     </Link>
                   </Table.Cell>
@@ -134,7 +145,13 @@ const handleDelete = async () => {
                         setShowModal(true);
                         setPostIdtoDelete(post._id);
                         setPostTitletoDelete(post.title);
-                        setImageToDelete(post.image.includes("video-tutoriales-sobre-email-marketing") ? null : post.image);
+                        setImageToDelete(
+                          post.image.includes(
+                            "video-tutoriales-sobre-email-marketing"
+                          )
+                            ? null
+                            : post.image
+                        );
                       }}
                       className="cursor-pointer text-red-500 font-medium hover:underline"
                     >
@@ -162,7 +179,9 @@ const handleDelete = async () => {
           )}
         </>
       ) : (
-        <div className="w-full h-full">You have no posts yet.</div>
+        <div className="h-screen text-center text-2xl">
+          You have no posts yet.
+        </div>
       )}
       <Modal
         show={showModal}
