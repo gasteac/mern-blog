@@ -241,7 +241,7 @@ export const DashProfile = () => {
   };
 
   return (
-    <div className="mx-auto h-full w-full pb-6">
+    <div className="mx-auto h-full w-full md:w-[920px] pb-6">
       <form
         className="flex flex-col sm:flex-row items-center justify-center gap-12 sm:p-6 "
         onSubmit={formik.handleSubmit}

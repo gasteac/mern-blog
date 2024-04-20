@@ -3,9 +3,9 @@
 @tailwind utilities;
 
 /* no quiero que se muestre la barra de scroll de la derecha ni de abajo */
-/* ::-webkit-scrollbar {
+::-webkit-scrollbar {
   display: none;
-} */
+}
 
 ::-webkit-scrollbar {
   width: 12px; /* Ancho de la barra de desplazamiento */

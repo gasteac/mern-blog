@@ -71,7 +71,13 @@ export const Header = () => {
           <Dropdown
             arrowIcon={false}
             inline
-            label={<Avatar alt="avatar" img={currentUser.profilePic} rounded />}
+            label={
+              <img
+                src={currentUser.profilePic}
+                alt="avatar"
+                className="h-10 w-10 object-cover rounded-full"
+              />
+            }
           >
             <Dropdown.Header>
               <span className="block text-sm font-medium truncate">

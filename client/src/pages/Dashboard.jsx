@@ -17,16 +17,14 @@ export const Dashboard = () => {
     setTab(tabFromUrl);
   }, [location.search]);
   return (
-    <div className="flex flex-col md:flex-row h-screen ">
-      <div className="md:w-56 ">
-        <DashSideBar />
-      </div>
+    <div className="flex flex-col md:flex-row">
+      <DashSideBar />
       {/* posts */}
       {tab === "posts" ? <DashPosts /> : null}
       {/* profile */}
       {tab === "profile" ? <DashProfile /> : null}
       {/* users */}
-      {tab === "users" ? <DashUsers/> : null}
+      {tab === "users" ? <DashUsers /> : null}
     </div>
   );
 };
