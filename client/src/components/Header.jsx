@@ -117,18 +117,18 @@ export const Header = () => {
               </Link>
             </NavbarLink>
             <NavbarLink
-              active={path === "/allposts"}
+              active={path === "/all-posts"}
               as="div"
               className={`
     rounded-xl w-full
     ${
-      path === "/allposts"
+      path === "/all-posts"
         ? "bg-gradient-to-br from-purple-500 to-blue-500 md:text-white font-semibold"
         : "dark:text-white light:text-black"
     }
   `}
             >
-              <Link to="/allposts" className="w-full flex md:p-2">
+              <Link to="/all-posts" className="w-full flex md:p-2">
                 All Posts
               </Link>
             </NavbarLink>
@@ -168,18 +168,18 @@ export const Header = () => {
               </Link>
             </NavbarLink>
             <NavbarLink
-              active={path === "/allposts"}
+              active={path === "/all-posts"}
               as="div"
               className={`
     rounded-xl w-full
     ${
-      path === "/allposts"
+      path === "/all-posts"
         ? "bg-gradient-to-br from-purple-500 to-blue-500 md:text-white font-semibold"
         : "dark:text-white light:text-black"
     }
   `}
             >
-              <Link to="/allposts" className="w-full flex md:p-2">
+              <Link to="/all-posts" className="w-full flex md:p-2">
                 All Posts
               </Link>
             </NavbarLink>

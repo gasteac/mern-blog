@@ -5,6 +5,7 @@ import {
   CreatePost,
   Dashboard,
   Home,
+  PostPage,
   Projects,
   SignIn,
   SignUp,
@@ -21,10 +22,11 @@ export const App = () => {
         <Header />
         <Routes>
           {/* si pongo una ruta mal me redirige a home con el *   */}
-          <Route path="*" element={<Navigate to="/" replace />} />
+          {/* <Route path="*" element={<Navigate to="/" replace />} /> */}
           <Route path="/" element={<Home />} />
-          <Route path="/allPosts" element={<AllPosts />} />
+          <Route path="/all-posts" element={<AllPosts />} />
           <Route path="/create-post" element={<CreatePost />} />
+          <Route path="/post/:postSlug" element={<PostPage />} />
           {/* Solo puedo acceder al dashboard si ESTOY autenticado (PrivateRoute) */}
           <Route element={<PrivateRoute />}>
             <Route path="/dashboard" element={<Dashboard />} />

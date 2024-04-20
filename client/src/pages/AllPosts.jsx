@@ -69,7 +69,7 @@ export const AllPosts = () => {
               <Table.Body key={post._id} className="divide-y-2 ">
                 <Table.Row>
                   <Table.Cell as="div">
-                    <Link to={`/posts/${post.slug}`}>
+                    <Link to={`/post/${post.slug}`}>
                       <div className="w-32 h-20 bg-transparent">
                         <img
                           src={post.image}
