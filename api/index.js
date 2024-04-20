@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import userRoutes from "./routes/user.routes.js";
 import authRoutes from "./routes/auth.routes.js";
 import postRoutes from "./routes/post.routes.js";
+import commentRoutes from "./routes/comment.routes.js";
 import cookieParser from "cookie-parser";
 import path from "path";
 dotenv.config(); //esto va a setear las variables del .env en process.env osea en el entorno
@@ -37,7 +38,8 @@ app.use("/api/user", userRoutes);
 app.use("/api/auth", authRoutes);
 //aca le paso las rutas para post como "USE" porque los get push delete y eso ya están en postRoute
 app.use("/api/post", postRoutes);
-
+//aca le paso las rutas para comment como "USE" porque los get push delete y eso ya están en commentRoute
+app.use("/api/comment", commentRoutes);
 
 //Le decimos al server que escuche en el puerto 3000
 app.listen(3000, () => {

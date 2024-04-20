@@ -13,11 +13,14 @@ import {
 } from "./pages";
 import { Header, PublicRoute, PrivateRoute } from "./components";
 import { AdminRoute } from "./components/AdminRoute";
+import { ScrollToTop } from "./components/ScrollToTop";
 
 export const App = () => {
   return (
     <>
       <BrowserRouter>
+      {/* Componente para que si nos movemos a otra ruta, la página se muestre desde arriba (osea sube el scroll arriba) */}
+      <ScrollToTop/>
         {/* aca va el header, que es el único componente que se va a ver siempre */}
         <Header />
         <Routes>

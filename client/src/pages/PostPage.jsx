@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import { Button, Spinner } from "flowbite-react";
 import axios from "axios";
+import { CommentSection } from "../components/CommentSection";
 export const PostPage = () => {
   const { postSlug } = useParams();
   const [post, setPost] = useState({});
@@ -58,8 +59,12 @@ export const PostPage = () => {
         alt={post && post.title}
         className="mt-5 p-3 max-h-[300px] w-full object-cover self-center rounded-3xl"
       />
-      <div className="mt-5 w-[90%] self-center bg-gray-300 rounded-xl dark:bg-slate-800 p-6">
+      <div className="mt-5 mb-5 w-[90%] self-center bg-gray-300 rounded-xl dark:bg-slate-800 p-6">
         <p>{post && post.content}</p>
+      </div>
+      <div className="self-center w-[90%] flex items-center justify-center">
+
+      <CommentSection postId={post._id}/>
       </div>
     </main>
   );

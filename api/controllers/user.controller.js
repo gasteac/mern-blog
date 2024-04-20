@@ -22,39 +22,6 @@ export const updateUser = async (req, res, next) => {
     return next(errorHandler(401, "Unauthorized"));
   }
   const { username, email, profilePic } = req.body;
-  //verifico que los datos que se quieren actualizar sean correctos
-  //si el password tiene menos de 6 caracteres, devuelvo un error
-  // if (req.body.password.length < 6) {
-  //   return next(errorHandler(400, "Password must be at least 6 characters"));
-  // }
-  // //si el username tiene menos de 7 caracteres o mas de 20, devuelvo un error
-  // if (req.body.username.length < 7 || req.body.username.length > 20) {
-  //   return next(
-  //     errorHandler(400, "Username must be between 7 and 20 characters")
-  //   );
-  // }
-  // //si el email tiene menos de 7 caracteres o mas de 50, devuelvo un error
-  // if (req.body.email.length < 7 || req.body.email.length > 50) {
-  //   return next(errorHandler(400, "Email must be between 7 and 50 characters"));
-  // }
-  // //si el email no tiene un @ o un punto, devuelvo un error
-  // if (!req.body.email.includes("@") || !req.body.email.includes(".")) {
-  //   return next(errorHandler(400, "Invalid email"));
-  // }
-  // //si el username tiene espacios, devuelvo un error
-  // if (req.body.username.includes(" ")) {
-  //   return next(errorHandler(400, "Username cannot contain spaces"));
-  // }
-  // //si el username no es todo en minúsculas, devuelvo un error
-  // if (req.body.username !== req.body.username.toLowerCase()) {
-  //   return next(errorHandler(400, "Username must be lowercase"));
-  // }
-  // //si el username no tiene solo letras y números, devuelvo un error
-  // if (!req.body.username.match(/^[a-zA-Z0-9]+$/)) {
-  //   return next(
-  //     errorHandler(400, "Username must contain only letters and numbers")
-  //   );
-  // }
   //encripto la nueva contraseña antes de guardarla en la base de datos
   const hashedPassword = (req.body.password = bcryptjs.hashSync(
     req.body.password,
