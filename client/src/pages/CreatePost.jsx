@@ -125,7 +125,6 @@ export const CreatePost = () => {
                 },
               )
               .then((response) => {
-                console.log(response)
                 if (response.status === 201) {
                   formik.resetForm();
                   setUploadPostError(null);
@@ -193,7 +192,6 @@ export const CreatePost = () => {
         }
       } catch (error) {
         const { message } = error.response.data;
-        console.log(message);
         setUploadPostError(message);
         setTimeout(() => {
           setUploadPostError(null);

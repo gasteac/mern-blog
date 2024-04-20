@@ -49,7 +49,7 @@ export const AllPosts = () => {
   }, []);
 
   return (
-    <div className="p-12 table-auto overflow-x-scroll md:mx-auto scrollbar scrollbar-track-slate-100 scrollbar-thumb-slate-300 dark:scrollbar-track-transparent dark:scrollbar-thumb-transparent">
+    <div className="p-4 max-w-[60%] table-auto overflow-x-scroll md:mx-auto scrollbar scrollbar-track-slate-100 scrollbar-thumb-slate-300 dark:scrollbar-track-transparent dark:scrollbar-thumb-transparent">
       {allPosts.length > 0 ? (
         <>
           <Table hoverable className="bg-white dark:bg-slate-800 rounded-xl">
@@ -70,11 +70,13 @@ export const AllPosts = () => {
                 <Table.Row>
                   <Table.Cell as="div">
                     <Link to={`/posts/${post.slug}`}>
-                      <img
-                        src={post.image}
-                        alt={post.title}
-                        className="min-w-20 w-32 h-auto object-cover rounded-lg"
-                      />
+                      <div className="w-32 h-20 bg-transparent">
+                        <img
+                          src={post.image}
+                          alt={post.title}
+                          className="object-cover w-full h-full rounded-lg"
+                        />
+                      </div>
                     </Link>
                   </Table.Cell>
                   <Table.Cell>

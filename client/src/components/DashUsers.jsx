@@ -35,28 +35,28 @@ export const DashUsers = () => {
     }
   };
 
-  //   const handleDelete = async () => {
-  //     try {
-  //       const response = await axios.delete(
-  //         `api/user/deleteuser/${userIdtoDelete}`
-  //       );
+    const handleDelete = async () => {
+      try {
+        const response = await axios.delete(
+          `api/user/deleteuser/${userIdtoDelete}`
+        );
 
-  //       if (response.status === 200) {
-  //         setUsers(users.filter((user) => user._id !== userIdtoDelete));
-  //         // Crear una referencia no raíz utilizando child
-  //         const fileRef = ref(storage, imageToDelete);
-  //         if (imageToDelete === null) {
-  //           return;
-  //         } else {
-  //           // Eliminar el archivo utilizando la referencia no raíz
-  //           await deleteObject(fileRef);
-  //         }
-  //       }
-  //     } catch (error) {
-  //       console.log(error);
-  //       // Manejar el error de forma adecuada
-  //     }
-  //   };
+        if (response.status === 200) {
+          setUsers(users.filter((user) => user._id !== userIdtoDelete));
+          // Crear una referencia no raíz utilizando child
+          const fileRef = ref(storage, imageToDelete);
+          if (imageToDelete === null) {
+            return;
+          } else {
+            // Eliminar el archivo utilizando la referencia no raíz
+            await deleteObject(fileRef);
+          }
+        }
+      } catch (error) {
+        console.log(error);
+        // Manejar el error de forma adecuada
+      }
+    };
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -103,11 +103,14 @@ export const DashUsers = () => {
                     {new Date(user.updatedAt).toLocaleDateString()}
                   </Table.Cell>
                   <Table.Cell>
-                    <img
-                      src={user.profilePic}
-                      alt={user.username}
-                      className="min-w-20 w-32 h-auto object-cover rounded-lg"
-                    />
+                    <div className="w-32 h-20 bg-transparent">
+                      <img
+                        src={user.profilePic}
+                        alt={user.username}
+                        className=" w-auto h-full rounded-lg"
+                      />
+                    </div>
+                  
                   </Table.Cell>
                   <Table.Cell className="font-medium ">
                     {user.username}
@@ -132,7 +135,7 @@ export const DashUsers = () => {
                             "video-tutoriales-sobre-email-marketing"
                           )
                             ? null
-                            : user.image
+                            : user.profilePic
                         );
                       }}
                       className="cursor-pointer text-red-500 font-medium hover:underline"

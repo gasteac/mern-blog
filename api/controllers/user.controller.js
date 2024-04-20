@@ -103,7 +103,6 @@ export const signOut = (req, res, next) => {
 }
 
 export const getUsers = async(req, res,next) =>{
-  console.log(req.query)
   if (!req.user.isAdmin){
     return next(errorHandler(401, "You are not allowed to see all users"));
   }
@@ -135,3 +134,15 @@ export const getUsers = async(req, res,next) =>{
     next(errorHandler(500, "Internal server error"));
   }
 }
+
+export const deleteUserAdmin = async (req, res, next) => {
+  if (!req.user.isAdmin) {
+    return next(errorHandler(401, "Unauthorized"));
+  }
+  try {
+    await User.findByIdAndDelete(req.params.userId);
+    res.status(200).json("User has been deleted");
+  } catch (error) {
+    next(error);
+  }
+};

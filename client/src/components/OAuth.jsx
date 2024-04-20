@@ -46,7 +46,6 @@ export const OAuth = () => {
       dispatch(signInSuccess(null))
       dispatch(signInFailure(error))
       dispatch(signUpFailure(error));
-      console.log(error);
     }
   };
 

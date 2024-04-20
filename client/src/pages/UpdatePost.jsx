@@ -239,7 +239,6 @@ export const UpdatePost = () => {
         setUpdatePostError(null);
       }, 3000);
     } catch (error) {
-      console.log(error.response.data.message);
       setUpdatePostError(error.response.data.message);
     }
   }, [postId, formik.isSubmitting, oldImagePost]);

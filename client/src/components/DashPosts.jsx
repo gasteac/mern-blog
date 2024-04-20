@@ -107,11 +107,13 @@ const handleDelete = async () => {
                 <Table.Row>
                   <Table.Cell as="div">
                     <Link to={`/posts/${post.slug}`}>
-                      <img
+                      <div className="w-32 h-20 bg-transparent">
+                          <img
                         src={post.image}
                         alt={post.title}
-                        className="min-w-20 w-32 h-auto object-cover rounded-lg"
+                        className="object-cover w-full h-full rounded-lg"
                       />
+                      </div>
                     </Link>
                   </Table.Cell>
                   <Table.Cell>
