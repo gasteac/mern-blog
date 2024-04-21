@@ -24,9 +24,7 @@ export const DashPosts = () => {
         `api/post/getposts?userId=${currentUser._id}&startIndex=${startIndex}`
       );
       if (res.statusText === "OK") {
-          console.log('res dashpost', res)
           setUserPosts([...userPosts, ...res.data.posts]);
-   
         if (res.data.posts.length < 5) {
           setShowMore(false);
         }
@@ -98,6 +96,7 @@ if (loading) {
     <div className="p-2 md:p-6 h-screen table-auto overflow-x-scroll md:mx-auto scrollbar scrollbar-track-slate-100 scrollbar-thumb-slate-300 dark:scrollbar-track-transparent dark:scrollbar-thumb-transparent">
       {currentUser.isAdmin && userPosts.length > 0 ? (
         <>
+        <h1 className="mb-2">Currently showing: {userPosts.length} posts</h1>
           <Table hoverable className="bg-white dark:bg-slate-800 rounded-xl">
             <Table.Head>
               <Table.HeadCell className="text-nowrap">

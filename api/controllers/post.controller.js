@@ -68,7 +68,6 @@ export const getposts = async (req, res, next) => {
       .sort({ updatedAt: sortDirection })
       .skip(startIndex)
       .limit(limit);
-          console.log("api", res);
     //el método countDocuments cuenta la cantidad de posts que se encontraron
     const totalPost = await Post.countDocuments();
     const now = new Date();
