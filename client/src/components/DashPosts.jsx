@@ -42,22 +42,19 @@ export const DashPosts = () => {
   };
 
   const handleShowMore = async () => {
-    const startIndex = userPosts.length;
-    try {
-      const res = await axios.get(
-        `api/post/getposts?userId=${currentUser._id}&startIndex=${startIndex}`
-      );
-      const { data } = res;
-      const { posts } = data;
-      if (res.statusText === "OK") {
-        setForceRender(forceRender + 1);
-        setUserPosts([...userPosts, ...posts]);
-        if (res.data.posts.length < 5) {
-          setShowMore(false);
-        }
+    const numberOfPosts = userPosts.length;
+    const startIndex = numberOfPosts;
+    const res = await axios.get(
+      `api/post/getposts?userId=${currentUser._id}&startIndex=${startIndex}`);
+    const { data } = res;
+    if (res.statusText !== "OK") {
+      return;
+    }
+    if (res.statusText === "OK") {
+      setUserPosts([...userPosts, ...data.posts]);
+      if (data.posts.length < 5) {
+        setShowMore(false);
       }
-    } catch (error) {
-      console.log(error);
     }
   };
 

@@ -13,20 +13,18 @@ export const AllPosts = () => {
   const [forceRender, setForceRender] = useState(1);
 
   const handleShowMore = async () => {
-    const startIndex = allPosts.length;
-    try {
-      const res = await axios.get(`api/post/getposts?startIndex=${startIndex}`);
-      const { data } = res;
-      const { posts } = data;
-      if (res.statusText === "OK") {
-        setAllPosts([...allPosts, ...posts]);
-        setForceRender(forceRender + 1);
-        if (res.data.posts.length < 5) {
-          setShowMore(false);
-        }
+    const numberOfPosts = userPosts.length;
+    const startIndex = numberOfPosts;
+    const res = await axios.get(`api/post/getposts?startIndex=${startIndex}`);
+    const { data } = res;
+    if (res.statusText !== "OK") {
+      return;
+    }
+    if (res.statusText === "OK") {
+      setAllPosts([...allPosts, ...data.posts]);
+      if (data.posts.length < 5) {
+        setShowMore(false);
       }
-    } catch (error) {
-      console.log(error);
     }
   };
 
