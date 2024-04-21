@@ -10,23 +10,6 @@ export const AllPosts = () => {
   const [allPosts, setAllPosts] = useState([]);
   const [showMore, setShowMore] = useState(true);
   const [loading, setLoading] = useState(false);
-  const [forceRender, setForceRender] = useState(1);
-
-  const handleShowMore = async () => {
-    const numberOfPosts = userPosts.length;
-    const startIndex = numberOfPosts;
-    const res = await axios.get(`api/post/getposts?startIndex=${startIndex}`);
-    const { data } = res;
-    if (res.statusText !== "OK") {
-      return;
-    }
-    if (res.statusText === "OK") {
-      setAllPosts([...allPosts, ...data.posts]);
-      if (data.posts.length < 5) {
-        setShowMore(false);
-      }
-    }
-  };
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -57,6 +40,25 @@ export const AllPosts = () => {
       </div>
     );
   }
+
+    const handleShowMore = async () => {
+    const numberOfPosts = allPosts.length;
+    const startIndex = numberOfPosts;
+    const response = await axios.get(
+      `api/post/getposts?startIndex=${startIndex}`
+    );
+    const data = response?.data;
+    if (response.status !== 200) {
+      return;
+    }
+    if (response.status === 200 && data.posts.length > 0) {
+      setAllPosts([...allPosts, ...data.posts]);
+      if (data.posts.length < 5) {
+        setShowMore(false);
+      }
+    }
+  };
+
   return (
     <div className="py-6 px-4 md:max-w-[800px] table-auto overflow-x-scroll md:mx-auto scrollbar scrollbar-track-slate-100 scrollbar-thumb-slate-300 dark:scrollbar-track-transparent dark:scrollbar-thumb-transparent">
       {allPosts.length > 0 ? (

@@ -16,7 +16,6 @@ export const DashPosts = () => {
   const [imageToDelete, setImageToDelete] = useState(null);
   const [loading, setLoading] = useState(false);
   const storage = getStorage();
-  const [forceRender, setForceRender] = useState(1);
 
   const handleDelete = async () => {
     try {
@@ -44,13 +43,12 @@ export const DashPosts = () => {
   const handleShowMore = async () => {
     const numberOfPosts = userPosts.length;
     const startIndex = numberOfPosts;
-    const res = await axios.get(
-      `api/post/getposts?userId=${currentUser._id}&startIndex=${startIndex}`);
-    const { data } = res;
-    if (res.statusText !== "OK") {
+    const response = await axios.get(`api/post/getposts?userId=${currentUser._id}&startIndex=${startIndex}`);
+    const data = response?.data;
+    if (response.status !== 200) {
       return;
     }
-    if (res.statusText === "OK") {
+    if (response.status === 200 && data.posts.length > 0) {
       setUserPosts([...userPosts, ...data.posts]);
       if (data.posts.length < 5) {
         setShowMore(false);
@@ -94,7 +92,6 @@ export const DashPosts = () => {
     <div className="p-2 md:p-6 h-screen table-auto overflow-x-scroll md:mx-auto scrollbar scrollbar-track-slate-100 scrollbar-thumb-slate-300 dark:scrollbar-track-transparent dark:scrollbar-thumb-transparent">
       {currentUser.isAdmin && userPosts.length > 0 ? (
         <>
-          <h1 className="mb-2">Currently showing: {userPosts.length} posts</h1>
           <Table hoverable className="bg-white dark:bg-slate-800 rounded-xl">
             <Table.Head>
               <Table.HeadCell className="text-nowrap">
