@@ -14,10 +14,11 @@ export const AllPosts = () => {
     const startIndex = allPosts.length;
     try {
       const res = await axios.get(`api/post/getposts?startIndex=${startIndex}`);
-      const { data } = res;
+        const { data } = res;
+        const { posts } = data;
+        const newPosts = [...userPosts, ...posts];
       if (res.statusText === "OK") {
-        setAllPosts([...allPosts, ...data.posts]);
-
+        setAllPosts(newPosts);
         if (res.data.posts.length < 5) {
           setShowMore(false);
         }

@@ -50,8 +50,10 @@ export const DashPosts = () => {
         `api/post/getposts?userId=${currentUser._id}&startIndex=${startIndex}`
       );
        const { data } = res;
+       const { posts } = data;
+       const newPosts = [...userPosts, ...posts];
       if (res.statusText === "OK") {
-          setUserPosts([...userPosts, ...data.posts]);
+          setUserPosts(newPosts);
         if (res.data.posts.length < 5) {
           setShowMore(false);
         }
