@@ -10,15 +10,17 @@ export const AllPosts = () => {
   const [allPosts, setAllPosts] = useState([]);
   const [showMore, setShowMore] = useState(true);
   const [loading, setLoading] = useState(false);
+  const [forceRender, setForceRender] = useState(1);
+
   const handleShowMore = async () => {
     const startIndex = allPosts.length;
     try {
       const res = await axios.get(`api/post/getposts?startIndex=${startIndex}`);
-        const { data } = res;
-        const { posts } = data;
-        const newPosts = [...userPosts, ...posts];
+      const { data } = res;
+      const { posts } = data;
       if (res.statusText === "OK") {
-        setAllPosts(newPosts);
+        setAllPosts([...allPosts, ...posts]);
+        setForceRender(forceRender + 1);
         if (res.data.posts.length < 5) {
           setShowMore(false);
         }

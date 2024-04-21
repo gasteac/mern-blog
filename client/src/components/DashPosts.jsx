@@ -16,22 +16,20 @@ export const DashPosts = () => {
   const [imageToDelete, setImageToDelete] = useState(null);
   const [loading, setLoading] = useState(false);
   const storage = getStorage();
-  
-  
+  const [forceRender, setForceRender] = useState(1);
+
   const handleDelete = async () => {
     try {
       const response = await axios.delete(
         `api/post/deletepost/${postIdtoDelete}/${currentUser._id}`
       );
-  
+
       if (response.status === 200) {
         setUserPosts(userPosts.filter((post) => post._id !== postIdtoDelete));
         // Crear una referencia no raíz utilizando child
         const fileRef = ref(storage, imageToDelete);
-        if (
-          imageToDelete === null
-        ) {
-          return
+        if (imageToDelete === null) {
+          return;
         } else {
           // Eliminar el archivo utilizando la referencia no raíz
           await deleteObject(fileRef);
@@ -49,11 +47,11 @@ export const DashPosts = () => {
       const res = await axios.get(
         `api/post/getposts?userId=${currentUser._id}&startIndex=${startIndex}`
       );
-       const { data } = res;
-       const { posts } = data;
-       const newPosts = [...userPosts, ...posts];
+      const { data } = res;
+      const { posts } = data;
       if (res.statusText === "OK") {
-          setUserPosts(newPosts);
+        setForceRender(forceRender + 1);
+        setUserPosts([...userPosts, ...posts]);
         if (res.data.posts.length < 5) {
           setShowMore(false);
         }
@@ -70,7 +68,7 @@ export const DashPosts = () => {
         const res = await axios.get(
           `api/post/getposts?userId=${currentUser._id}`
         );
-        const {data} = res
+        const { data } = res;
         if (res.status === 200) {
           setUserPosts(data.posts);
           setLoading(false);
@@ -88,18 +86,18 @@ export const DashPosts = () => {
     }
   }, [currentUser._id]);
 
-if (loading) {
-  return (
-    <div className="flex h-screen w-full items-start justify-center mt-12">
-      <Spinner size="xl" />
-    </div>
-  );
-}
+  if (loading) {
+    return (
+      <div className="flex h-screen w-full items-start justify-center mt-12">
+        <Spinner size="xl" />
+      </div>
+    );
+  }
   return (
     <div className="p-2 md:p-6 h-screen table-auto overflow-x-scroll md:mx-auto scrollbar scrollbar-track-slate-100 scrollbar-thumb-slate-300 dark:scrollbar-track-transparent dark:scrollbar-thumb-transparent">
       {currentUser.isAdmin && userPosts.length > 0 ? (
         <>
-        <h1 className="mb-2">Currently showing: {userPosts.length} posts</h1>
+          <h1 className="mb-2">Currently showing: {userPosts.length} posts</h1>
           <Table hoverable className="bg-white dark:bg-slate-800 rounded-xl">
             <Table.Head>
               <Table.HeadCell className="text-nowrap">
