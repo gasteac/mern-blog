@@ -15,11 +15,9 @@ export const AllPosts = () => {
     try {
       const res = await axios.get(`api/post/getposts?startIndex=${startIndex}`);
       if (res.statusText === "OK") {
-        setTimeout(() => {
-          setAllPosts([...allPosts, ...res?.data?.posts]);
-        }, 200);
+        setAllPosts([...allPosts, ...res.data.posts]);
 
-        if (res.data.posts.length < 500) {
+        if (res.data.posts.length < 5) {
           setShowMore(false);
         }
       }
@@ -50,13 +48,13 @@ export const AllPosts = () => {
 
     fetchPosts();
   }, []);
-if (loading) {
-  return (
-    <div className="flex w-full h-screen items-start justify-center mt-12">
-      <Spinner size="xl" />
-    </div>
-  );
-}
+  if (loading) {
+    return (
+      <div className="flex w-full h-screen items-start justify-center mt-12">
+        <Spinner size="xl" />
+      </div>
+    );
+  }
   return (
     <div className="py-6 px-4 md:max-w-[800px] table-auto overflow-x-scroll md:mx-auto scrollbar scrollbar-track-slate-100 scrollbar-thumb-slate-300 dark:scrollbar-track-transparent dark:scrollbar-thumb-transparent">
       {allPosts.length > 0 ? (
@@ -114,7 +112,9 @@ if (loading) {
           )}
         </>
       ) : (
-        <div className="w-full h-full text-center text-2xl">There are no posts yet :(</div>
+        <div className="w-full h-full text-center text-2xl">
+          There are no posts yet :(
+        </div>
       )}
     </div>
   );

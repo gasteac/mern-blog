@@ -20,14 +20,12 @@ export const DashUsers = () => {
   const storage = getStorage();
 
   const handleShowMore = async () => {
-    const startIndex = users?.length;
+    const startIndex = users.length;
     try {
       const res = await axios.get(`api/user/getusers?startIndex=${startIndex}`);
       if (res.statusText === "OK") {
-        setTimeout(() => {
-          setUsers([...users, ...res?.data?.users]);
-        }, 200);
-        if (res.data.users.length < 500) {
+          setUsers([...users, ...res.data.users]);
+        if (res.data.users.length < 5) {
           setShowMore(false);
         }
       }
