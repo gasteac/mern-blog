@@ -16,6 +16,32 @@ export const DashPosts = () => {
   const [imageToDelete, setImageToDelete] = useState(null);
   const [loading, setLoading] = useState(false);
   const storage = getStorage();
+  
+  
+  const handleDelete = async () => {
+    try {
+      const response = await axios.delete(
+        `api/post/deletepost/${postIdtoDelete}/${currentUser._id}`
+      );
+  
+      if (response.status === 200) {
+        setUserPosts(userPosts.filter((post) => post._id !== postIdtoDelete));
+        // Crear una referencia no raíz utilizando child
+        const fileRef = ref(storage, imageToDelete);
+        if (
+          imageToDelete === null
+        ) {
+          return
+        } else {
+          // Eliminar el archivo utilizando la referencia no raíz
+          await deleteObject(fileRef);
+        }
+      }
+    } catch (error) {
+      console.log(error);
+      // Manejar el error de forma adecuada
+    }
+  };
 
   const handleShowMore = async () => {
     const startIndex = userPosts.length;
@@ -23,8 +49,9 @@ export const DashPosts = () => {
       const res = await axios.get(
         `api/post/getposts?userId=${currentUser._id}&startIndex=${startIndex}`
       );
+       const { data } = res;
       if (res.statusText === "OK") {
-          setUserPosts([...userPosts, ...res.data.posts]);
+          setUserPosts([...userPosts, ...data.posts]);
         if (res.data.posts.length < 5) {
           setShowMore(false);
         }
@@ -34,31 +61,6 @@ export const DashPosts = () => {
     }
   };
 
-const handleDelete = async () => {
-  try {
-    const response = await axios.delete(
-      `api/post/deletepost/${postIdtoDelete}/${currentUser._id}`
-    );
-
-    if (response.status === 200) {
-      setUserPosts(userPosts.filter((post) => post._id !== postIdtoDelete));
-      // Crear una referencia no raíz utilizando child
-      const fileRef = ref(storage, imageToDelete);
-      if (
-        imageToDelete === null
-      ) {
-        return
-      } else {
-        // Eliminar el archivo utilizando la referencia no raíz
-        await deleteObject(fileRef);
-      }
-    }
-  } catch (error) {
-    console.log(error);
-    // Manejar el error de forma adecuada
-  }
-};
-
   useEffect(() => {
     const fetchPosts = async () => {
       try {
@@ -66,7 +68,6 @@ const handleDelete = async () => {
         const res = await axios.get(
           `api/post/getposts?userId=${currentUser._id}`
         );
-       
         const {data} = res
         if (res.status === 200) {
           setUserPosts(data.posts);

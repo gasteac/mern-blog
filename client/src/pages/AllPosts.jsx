@@ -14,8 +14,9 @@ export const AllPosts = () => {
     const startIndex = allPosts.length;
     try {
       const res = await axios.get(`api/post/getposts?startIndex=${startIndex}`);
+      const { data } = res;
       if (res.statusText === "OK") {
-        setAllPosts([...allPosts, ...res.data.posts]);
+        setAllPosts([...allPosts, ...data.posts]);
 
         if (res.data.posts.length < 5) {
           setShowMore(false);
