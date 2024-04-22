@@ -25,7 +25,7 @@ const userSchema = new mongoose.Schema(
     },
     isAdmin: {
       type: Boolean,
-      default: true,
+      default: false,
     },
   },
   { timestamps: true } //quiero que cuando se crea o modifique quede guardado la fecha y hora
