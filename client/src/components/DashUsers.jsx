@@ -174,7 +174,7 @@ if (loading) {
         <Modal.Header />
         <Modal.Body className="flex items-center justify-center flex-col gap-3">
           <img src={userPic} className="w-24 h-auto object-cover rounded-lg" />
-          <h1 className="text-center text-2xl font-semibold">
+          <h1 className="text-center text-2xl font-semibold dark:text-white">
             Delete "{usertoDelete}" ?
           </h1>
           <div className="flex justify-between gap-5">

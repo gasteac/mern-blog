@@ -187,7 +187,7 @@ export const DashPosts = () => {
         <Modal.Header />
         <Modal.Body className="flex items-center justify-center flex-col gap-3">
           <HiOutlineExclamationCircle className="text-red-500 text-6xl" />
-          <h1 className="text-center text-2xl font-semibold">
+          <h1 className="text-center text-2xl font-semibold dark:text-white">
             Delete "{postTitletoDelete}" ?
           </h1>
           <div className="flex justify-between gap-5">

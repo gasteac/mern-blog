@@ -481,8 +481,8 @@ export const DashProfile = () => {
         <Modal.Header />
         <Modal.Body className="flex items-center justify-center flex-col gap-3">
           <HiOutlineExclamationCircle className="text-red-500 text-6xl" />
-          <h1 className="text-center text-2xl font-semibold">
-            Are you sure? :(
+          <h1 className="text-center text-2xl font-semibold dark:text-white">
+            Delete your account ??!!
           </h1>
           <div className="flex justify-between gap-5">
             <Button onClick={deleteUser} color="failure">

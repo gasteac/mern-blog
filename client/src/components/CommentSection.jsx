@@ -184,10 +184,10 @@ export const CommentSection = ({ postId }) => {
         <Modal.Header />
         <Modal.Body className="flex items-center justify-center flex-col gap-3 text-justify">
           <HiOutlineExclamationCircle className="text-red-500 text-6xl" />
-          <h1 className="text-center text-2xl font-semibold">
+          <h1 className="text-center text-2xl font-semibold dark:text-white">
             Delete this comment?
           </h1>
-          <p>{commentContent}</p>
+          <p className="dark:text-white">{commentContent}</p>
           <div className="flex justify-between gap-5">
             <Button
               color="failure"
