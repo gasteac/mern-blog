@@ -3,7 +3,7 @@ import { errorHandler } from "../utils/error.js";
 
 export const createPost = async (req, res, next) => {
   //pregunto por req.USER porque nos fijamos en las cookies no en la petición http en si, es verifyToken el q nos devuelve user
-  if (!req.user.isAdmin) {
+  if (!req.user) {
     return next(errorHandler(403, "You are not allowed to create a post"));
   }
   if (!req.body.title || !req.body.content) {

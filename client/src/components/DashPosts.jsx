@@ -79,9 +79,9 @@ export const DashPosts = () => {
         setLoading(false);
       }
     };
-    if (currentUser.isAdmin) {
+  
       fetchPosts();
-    }
+    
   }, [currentUser._id]);
 
   if (loading) {
@@ -93,7 +93,7 @@ export const DashPosts = () => {
   }
   return (
     <div className="p-2 md:p-6 table-auto overflow-x-scroll md:mx-auto scrollbar scrollbar-track-slate-100 scrollbar-thumb-slate-300 dark:scrollbar-track-transparent dark:scrollbar-thumb-transparent">
-      {currentUser.isAdmin && userPosts.length > 0 ? (
+      {userPosts.length > 0 ? (
         <>
           <Table hoverable className="bg-white dark:bg-slate-800 rounded-xl">
             <Table.Head>

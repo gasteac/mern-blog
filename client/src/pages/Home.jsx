@@ -17,7 +17,10 @@ export const Home = () => {
           <span className="hiText capitalize font-bold">Visitor!</span>
         )}
       </h1>
-
+      {currentUser &&   <div className="h-80 w-80  rounded-full overflow-hidden">
+        <img src={currentUser.profilePic} alt={currentUser.username}  className="object-cover w-full h-full"/>
+      </div>}
+    
       {!currentUser ? (
         <>
           <h1 className="text-3xl">

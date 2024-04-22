@@ -71,14 +71,16 @@ export const Header = () => {
               />
             }
           >
-            <Dropdown.Header>
-              <span className="block text-sm font-medium truncate">
-                {currentUser.email}
-              </span>
-            </Dropdown.Header>
             <Link to={"/dashboard?tab=profile"}>
-              <Dropdown.Item as="div">Dashboard</Dropdown.Item>
+              <Dropdown.Item as="div">{currentUser.username}</Dropdown.Item>
             </Link>
+            <Dropdown.Divider />
+            {currentUser.isAdmin && (
+              <Link to={"/dashboard?tab=overview"}>
+                <Dropdown.Item as="div">Dashboard</Dropdown.Item>
+              </Link>
+            )}
+
             <Dropdown.Divider />
             <Dropdown.Item onClick={handleSignOut}>Sign Out</Dropdown.Item>
           </Dropdown>
@@ -149,10 +151,11 @@ export const Header = () => {
           </>
         ) : (
           <>
-            <NavbarLink
-              active={path === "/dashboard"}
-              as="div"
-              className={`
+            {currentUser.isAdmin ? (
+              <NavbarLink
+                active={path === "/dashboard"}
+                as="div"
+                className={`
     rounded-xl w-full 
     ${
       path === "/dashboard"
@@ -160,11 +163,36 @@ export const Header = () => {
         : "dark:text-white light:text-black"
     }
   `}
-            >
-              <Link to="/dashboard?tab=profile" className="w-full flex md:p-2">
-                Dashboard
-              </Link>
-            </NavbarLink>
+              >
+                <Link
+                  to="/dashboard?tab=overview"
+                  className="w-full flex md:p-2"
+                >
+                  Dashboard
+                </Link>
+              </NavbarLink>
+            ) : (
+              <NavbarLink
+                active={path === "/dashboard"}
+                as="div"
+                className={`
+    rounded-xl w-full 
+    ${
+      path === "/dashboard"
+        ? "bg-gradient-to-br from-purple-500 to-blue-500 md:text-white font-semibold"
+        : "dark:text-white light:text-black"
+    }
+  `}
+              >
+                <Link
+                  to="/dashboard?tab=profile"
+                  className="w-full flex md:p-2"
+                >
+                  My profile
+                </Link>
+              </NavbarLink>
+            )}
+
             <NavbarLink
               active={path === "/all-posts"}
               as="div"
