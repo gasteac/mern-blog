@@ -1,5 +1,5 @@
 import express from "express";
-import { createComment, deleteComment, getPostComments, likeComment } from "../controllers/comment.controller.js";
+import { createComment, deleteComment, getComments, getPostComments, likeComment } from "../controllers/comment.controller.js";
 import { verifyToken } from "../utils/verifyUser.js";
 
 
@@ -9,5 +9,6 @@ route.post("/create", verifyToken ,createComment);
 route.get("/getPostComments/:postId", getPostComments);
 route.put("/likeComment/:commentId", verifyToken, likeComment);
 route.delete("/deleteComment/:commentId", verifyToken, deleteComment);
+route.get("/getComments/", verifyToken, getComments);
 
 export default route;

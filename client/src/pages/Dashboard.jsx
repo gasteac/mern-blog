@@ -1,7 +1,12 @@
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
-import { DashProfile, DashSideBar, DashUsers } from "../components";
-import { DashPosts } from "../components/DashPosts";
+import {
+  DashProfile,
+  DashSideBar,
+  DashUsers,
+  DashPosts,
+  DashComments,
+} from "../components";
 
 export const Dashboard = () => {
   //location nos devuelve un objeto con información de la URL actual y los parametros
@@ -25,6 +30,8 @@ export const Dashboard = () => {
       {tab === "profile" ? <DashProfile /> : null}
       {/* users */}
       {tab === "users" ? <DashUsers /> : null}
+      {/* comments */}
+      {tab === "comments" ? <DashComments /> : null}
     </div>
   );
 };

@@ -5,6 +5,7 @@ import {
   HiArrowSmRight,
   HiDocumentText,
   HiUserGroup,
+  HiAnnotation,
 } from "react-icons/hi";
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
@@ -108,10 +109,7 @@ export const DashSideBar = () => {
  
   return (
     <Flowbite theme={{ theme: customTheme }}>
-      <Sidebar
-     
-        className=" w-full min-w-56 p-2 md:p-0 md:w-56 md:sticky top-[12%] left-4 z-40"
-      >
+      <Sidebar className=" w-full min-w-56 p-2 md:p-0 md:w-56 md:sticky top-[12%] left-4 z-40">
         <Sidebar.Items>
           <Sidebar.ItemGroup className="flex flex-col">
             {/* Si tab es igual a profile mostramos el item con el icono de HiUser y el label User */}
@@ -150,6 +148,20 @@ export const DashSideBar = () => {
                 </Sidebar.Item>
               </Link>
             )}
+            
+            {currentUser.isAdmin && (
+              <Link to="/dashboard?tab=comments">
+                <Sidebar.Item
+                  active={tab === "comments"}
+                  icon={HiAnnotation}
+                  labelColor="dark"
+                  as="div"
+                >
+                  Comments
+                </Sidebar.Item>
+              </Link>
+            )}
+
             <Link to="/signin">
               <Sidebar.Item
                 icon={HiArrowSmRight}

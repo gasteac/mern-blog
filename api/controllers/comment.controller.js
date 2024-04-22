@@ -66,3 +66,51 @@ export const deleteComment = async (req, res, next) => {
     next(error);
   }
 };
+
+
+export const getComments = async (req, res, next) => {
+   try {
+     //parseInt convierte el string en un número
+     //startIndex es un numero que indica desde que post se empieza a buscar
+     //cuando recién buscamos este es 0, pero como establecimos el limite en 9, la segunda vez que busquemos, va a ignorar los primeros 9 (porque ya se estan mostrando en la pagina) y va a empezar a buscar desde el 10
+     const startIndex = parseInt(req.query.startIndex) || 0;
+     //limit es la cantidad de posts que se van a buscar (por eso startIndex es importante, porque si no se establece, siempre se va a buscar desde el principio y se van a mostrar los mismos posts una y otra vez)
+     const limit = parseInt(req.query.limit) || 40;
+     //sortDirection es un número que indica si los posts se van a mostrar en orden ascendente o descendente
+     const sortDirection = req.query.order === "asc" ? 1 : -1;
+     // if (req.params.length < 1 || req.body.length < 1 || req.query.length <1) return;
+     const comments = await Comment.find({
+       //... es un spread operator, si el campo no esta vacio (haciendo la comprobación en el paréntesis) lo agrega al objeto
+       //entonces los tres puntos "obtienen" los campos del objeto que no estan vacíos y los agrega al objeto para la consulta
+       ...(req.query.userId && { userId: req.query.userId }),
+       //el método sort ordena los posts por la fecha de actualización, el valor de sortDirection indica si se ordena de forma ascendente o descendente
+       //el método skip saltea los primeros startIndex posts (para mostrar los siguientes posts de los que ya se están mostrando)
+       //el método limit limita la cantidad de posts que se muestran
+     })
+       .sort({ updatedAt: sortDirection })
+       .skip(startIndex)
+       .limit(limit);
+     //el método countDocuments cuenta la cantidad de posts que se encontraron
+     const totalComments = await Comment.countDocuments();
+     const now = new Date();
+     //creamos una fecha que sea un mes antes de la fecha actual
+     const oneMonthAgo = new Date(
+       now.getFullYear(),
+       now.getMonth() - 1,
+       now.getDate()
+     );
+     //contamos la cantidad de posts que se crearon en el último mes
+     const lastMonth = await Comment.countDocuments({
+       createdAt: { $gte: oneMonthAgo },
+     });
+
+     res.status(200).json({
+       //devolvemos los posts, la cantidad total de posts y la cantidad de posts creados en el último mes
+       comments,
+       totalComments,
+       lastMonth,
+     });
+   } catch (error) {
+     next(error);
+   }
+}
