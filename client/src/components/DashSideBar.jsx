@@ -128,7 +128,13 @@ export const DashSideBar = () => {
               </Link>
             )}
 
-            <Link to="/dashboard?tab=profile">
+            <Link
+              to={
+                currentUser.isAdmin
+                  ? "/dashboard?tab=profile"
+                  : "/userDashboard?tab=profile"
+              }
+            >
               <Sidebar.Item
                 active={tab === "profile"}
                 icon={HiUser}
@@ -138,18 +144,23 @@ export const DashSideBar = () => {
                 My Profile
               </Sidebar.Item>
             </Link>
-           
-              <Link to="/dashboard?tab=posts">
-                <Sidebar.Item
-                  active={tab === "posts"}
-                  icon={HiDocumentText}
-                  labelColor="dark"
-                  as="div"
-                >
-                  My Posts
-                </Sidebar.Item>
-              </Link>
-           
+
+            <Link
+              to={
+                currentUser.isAdmin
+                  ? "/dashboard?tab=posts"
+                  : "/userDashboard?tab=posts"
+              }
+            >
+              <Sidebar.Item
+                active={tab === "posts"}
+                icon={HiDocumentText}
+                labelColor="dark"
+                as="div"
+              >
+                My Posts
+              </Sidebar.Item>
+            </Link>
 
             {currentUser.isAdmin && (
               <Link to="/dashboard?tab=users">

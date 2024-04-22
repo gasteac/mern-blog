@@ -9,14 +9,16 @@ import {
   TextInput,
 } from "flowbite-react";
 import { toggleTheme } from "../redux/theme/themeSlice";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AiOutlineSearch } from "react-icons/ai";
 import { FaMoon, FaSun } from "react-icons/fa";
 import { useSelector, useDispatch } from "react-redux";
 import { logoutSuccess } from "../redux/user/userSlice";
 import axios from "axios";
 import { DarkThemeToggle } from "flowbite-react";
+
 export const Header = () => {
+  const navigate = useNavigate()
   const { currentUser } = useSelector((state) => state.user);
   const { theme } = useSelector((state) => state.theme);
   const dispatch = useDispatch();
@@ -28,6 +30,7 @@ export const Header = () => {
     try {
       axios.post("/api/user/logout");
       dispatch(logoutSuccess());
+      navigate("/signin")
     } catch (error) {
       console.log(error);
     }
@@ -71,7 +74,13 @@ export const Header = () => {
               />
             }
           >
-            <Link to={"/dashboard?tab=profile"}>
+            <Link
+              to={
+                currentUser.isAdmin
+                  ? "/dashboard?tab=profile"
+                  : "/userDashboard?tab=profile"
+              }
+            >
               <Dropdown.Item as="div">{currentUser.username}</Dropdown.Item>
             </Link>
             <Dropdown.Divider />
@@ -173,19 +182,23 @@ export const Header = () => {
               </NavbarLink>
             ) : (
               <NavbarLink
-                active={path === "/dashboard"}
+                active={path === "/userDashboard"}
                 as="div"
                 className={`
     rounded-xl w-full 
     ${
-      path === "/dashboard"
+      path === "/userDashboard"
         ? "bg-gradient-to-br from-purple-500 to-blue-500 md:text-white font-semibold"
         : "dark:text-white light:text-black"
     }
   `}
               >
                 <Link
-                  to="/dashboard?tab=profile"
+                  to={
+                    currentUser.isAdmin
+                      ? "/dashboard?tab=profile"
+                      : "/userDashboard?tab=profile"
+                  }
                   className="w-full flex md:p-2"
                 >
                   My profile

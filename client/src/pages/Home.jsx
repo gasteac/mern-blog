@@ -34,7 +34,7 @@ export const Home = () => {
       {currentUser ? (
         <span
           className="cursor-pointer text-2xl rounded-lg hiText font-semibold"
-          onClick={() => navigate("/dashboard?tab=profile")}
+          onClick={() => navigate(currentUser.isAdmin ? '/dashboard?tab=profile' : '/userDashboard?tab=profile')}
         >
           Go to profile
         </span>

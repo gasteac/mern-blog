@@ -8,7 +8,7 @@ import {
   Alert,
   Modal,
 } from "flowbite-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   deleteObject,
   getDownloadURL,
@@ -37,7 +37,7 @@ import { set } from "mongoose";
 export const DashProfile = () => {
   const storage = getStorage(app);
   const dispatch = useDispatch();
-
+const navigate = useNavigate();
   // showModal es un estado local que nos permite mostrar un modal al usuario
   const [showModal, setShowModal] = useState(false);
   // usernameErrorMsg y emailErrorMsg son estados locales que nos permiten mostrar mensajes de error personalizados.
@@ -280,6 +280,7 @@ export const DashProfile = () => {
     try {
       axios.post("/api/user/logout");
       dispatch(logoutSuccess());
+      navigate("/signin");
     } catch (error) {
       console.log(error);
     }

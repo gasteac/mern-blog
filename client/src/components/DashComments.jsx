@@ -159,7 +159,7 @@ export const DashComments = () => {
           <h1 className="text-center text-2xl font-semibold dark:text-white">
             Delete this comment ?
           </h1>
-          <p className="line-clamp-2 mb-2">{commentToDelete}</p>
+          <p className="line-clamp-2 mb-2 dark:text-white">{commentToDelete}</p>
           <div className="flex justify-between gap-5">
             <Button
               color="failure"

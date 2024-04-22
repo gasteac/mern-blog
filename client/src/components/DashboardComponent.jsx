@@ -84,8 +84,8 @@ export const DashboardComponent = () => {
 
   return (
     <div className="w-full flex flex-wrap mt-2">
-      <div className="md:mx-auto h-fit w-full md:w-auto p-3 lg:flex-1 min-w-64">
-        <div className="flex flex-col p-3 dark:bg-slate-800 gap-4  w-full rounded-2xl shadow-md">
+      <div className="md:mx-auto  h-fit w-full md:w-auto p-3 lg:flex-1 min-w-64">
+        <div className="flex flex-col bg-white p-3 dark:bg-slate-800 gap-4  w-full rounded-2xl shadow-md">
           <div className="flex justify-between ">
             <div className="">
               <h3 className="text-gray-500 text-md uppercase ">Total Users</h3>
@@ -103,8 +103,8 @@ export const DashboardComponent = () => {
         </div>
       </div>
 
-      <div className="md:mx-auto h-fit w-full md:w-auto p-3 lg:flex-1 min-w-64">
-        <div className="flex flex-col p-3 dark:bg-slate-800 gap-4  w-full rounded-2xl shadow-md">
+      <div className="md:mx-auto  h-fit w-full md:w-auto p-3 lg:flex-1 min-w-64">
+        <div className="flex flex-col bg-white p-3 dark:bg-slate-800 gap-4  w-full rounded-2xl shadow-md">
           <div className="flex justify-between ">
             <div className="">
               <h3 className="text-gray-500 text-md uppercase ">Total Posts</h3>
@@ -123,7 +123,7 @@ export const DashboardComponent = () => {
       </div>
 
       <div className="md:mx-auto h-fit w-full md:w-auto p-3 lg:flex-1 min-w-64">
-        <div className="flex flex-col p-3 dark:bg-slate-800 gap-4  w-full rounded-2xl shadow-md">
+        <div className="flex bg-white flex-col p-3 dark:bg-slate-800 gap-4  w-full rounded-2xl shadow-md">
           <div className="flex justify-between ">
             <div className="">
               <h3 className="text-gray-500 text-md uppercase ">
@@ -144,9 +144,9 @@ export const DashboardComponent = () => {
       </div>
 
       {/* TABLAS DE USUARIO COMENTARIOS Y POSTS */}
-      <div className="p-12 flex flex-wrap gap-4 py-3 mx-auto justify-center">
+      <div className="p-12  flex flex-wrap gap-4 py-3 mx-auto justify-center">
         {/* MANEJO DE USUARIOS */}
-        <div className="flex flex-col shadow-md rounded-lg dark:bg-gray-800 w-full md:flex-1">
+        <div className="flex bg-white  flex-col shadow-md rounded-lg dark:bg-gray-800 w-full md:flex-1">
           <div className="flex items-center justify-between p-3 text-sm font-semibold">
             <h1 className="text-center p-2">Recent Users</h1>
             <Button outline gradientDuoTone="purpleToPink">
@@ -179,7 +179,7 @@ export const DashboardComponent = () => {
         </div>
 
         {/* MANEJO DE COMENTARIOS */}
-        <div className="flex flex-col min-w-80 shadow-md rounded-lg dark:bg-gray-800 w-full md:flex-1">
+        <div className="flex bg-white flex-col min-w-80 shadow-md rounded-lg dark:bg-gray-800 w-full md:flex-1">
           <div className="flex items-center justify-between p-3 text-sm font-semibold">
             <h1 className="text-center p-2">Recent Comments</h1>
             <Button outline gradientDuoTone="purpleToPink">
@@ -206,7 +206,7 @@ export const DashboardComponent = () => {
         </div>
 
         {/* MANEJO DE POSTS */}
-        <div className="flex flex-col shadow-md rounded-lg dark:bg-gray-800 w-full md:flex-1">
+        <div className="flex bg-white flex-col shadow-md rounded-lg dark:bg-gray-800 w-full md:flex-1">
           <div className="flex items-center justify-between p-3 text-sm font-semibold">
             <h1 className="text-center p-2">Recent Posts</h1>
             <Button outline gradientDuoTone="purpleToPink">
