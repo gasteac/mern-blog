@@ -15,7 +15,7 @@ import { FaMoon, FaSun } from "react-icons/fa";
 import { useSelector, useDispatch } from "react-redux";
 import { logoutSuccess } from "../redux/user/userSlice";
 import axios from "axios";
-
+import { DarkThemeToggle } from "flowbite-react";
 export const Header = () => {
   const { currentUser } = useSelector((state) => state.user);
   const { theme } = useSelector((state) => state.theme);
@@ -57,15 +57,7 @@ export const Header = () => {
         <AiOutlineSearch />
       </Button> */}
       <div className="flex gap-2 md:order-2">
-        <Button
-          className="w-12 h-10 hidden sm:inline"
-          color="gray"
-          pill
-          onClick={() => dispatch(toggleTheme())}
-        >
-          {/* Si el tema es dark mostramos la luna, si no mostramos el sol */}
-          {theme === "dark" ? <FaMoon /> : <FaSun />}
-        </Button>
+        <DarkThemeToggle />
         {/* Si el usuario esta logueado mostramos un dropdown con su avatar, si no mostramos un botón para loguearse */}
         {currentUser ? (
           <Dropdown
