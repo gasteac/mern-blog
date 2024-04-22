@@ -144,9 +144,9 @@ export const DashboardComponent = () => {
       </div>
 
       {/* TABLAS DE USUARIO COMENTARIOS Y POSTS */}
-      <div className="p-12  flex flex-wrap gap-4 py-3 mx-auto justify-center">
+      <div className="p-4 flex flex-wrap gap-4 py-3 mx-auto justify-center">
         {/* MANEJO DE USUARIOS */}
-        <div className="flex bg-white  flex-col shadow-md rounded-lg dark:bg-gray-800 w-full md:flex-1">
+        <div className="flex bg-white flex-col shadow-md rounded-lg dark:bg-gray-800 w-full md:flex-1">
           <div className="flex items-center justify-between p-3 text-sm font-semibold">
             <h1 className="text-center p-2">Recent Users</h1>
             <Button outline gradientDuoTone="purpleToPink">
