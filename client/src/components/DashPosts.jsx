@@ -169,7 +169,7 @@ export const DashPosts = () => {
           {showMore && (
             <button
               onClick={handleShowMore}
-              className="w-full bg-gray-300 dark:bg-gray-600 hover:brightness-90 dark:hover:brightness-115 p-2 rounded-xl my-5 self-center font-bold "
+              className="w-full  hover:brightness-90 dark:hover:brightness-115 p-2 rounded-xl my-5 self-center font-bold "
             >
               Show more
             </button>

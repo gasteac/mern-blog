@@ -166,7 +166,7 @@ export const DashboardComponent = () => {
                       <img
                         src={user.profilePic}
                         alt={user.username}
-                        className="h-12 w-12 rounded-full object-cover bg-gray-500"
+                        className="h-16 w-24 rounded-full object-cover bg-gray-500"
                       />
                     </Table.Cell>
                     <Table.Cell className="w-36 text-center">
@@ -195,7 +195,7 @@ export const DashboardComponent = () => {
               comments.map((comment) => (
                 <Table.Body key={comment._id} className="divide-y">
                   <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
-                    <Table.Cell className="w-full line-clamp-4">
+                    <Table.Cell className="w-full line-clamp-3">
                       {comment.content}
                     </Table.Cell>
                     <Table.Cell>{comment.numberOfLikes}</Table.Cell>
