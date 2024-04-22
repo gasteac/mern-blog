@@ -475,6 +475,7 @@ export const DashProfile = () => {
         show={showModal}
         onClose={() => setShowModal(false)}
         popup
+        dismissible
         size="md"
       >
         <Modal.Header />
@@ -485,13 +486,13 @@ export const DashProfile = () => {
           </h1>
           <div className="flex justify-between gap-5">
             <Button onClick={deleteUser} color="failure">
-              yes, delete it
+              Delete
             </Button>
             <Button
               onClick={() => setShowModal(false)}
               gradientDuoTone="greenToBlue"
             >
-              cancel!
+              Cancel
             </Button>
           </div>
         </Modal.Body>

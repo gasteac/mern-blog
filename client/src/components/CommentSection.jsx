@@ -6,6 +6,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Comment } from "./Comment";
 import { HiOutlineExclamationCircle } from "react-icons/hi";
+import { set } from "mongoose";
 export const CommentSection = ({ postId }) => {
   const { currentUser } = useSelector((state) => state.user);
   const [comment, setComment] = useState("");
@@ -14,6 +15,7 @@ export const CommentSection = ({ postId }) => {
   const [commentMsgSuccess, setCommentMsgSuccess] = useState(null);
   const [showModal, setShowModal] = useState(false)
   const [commentToDelete, setCommentToDelete] = useState('')
+  const [commentContent, setCommentContent] = useState(null)
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -43,6 +45,7 @@ export const CommentSection = ({ postId }) => {
       setComments((prev) =>
         prev.filter((comment) => comment._id !== commentId)
       );
+      setCommentContent(null)
     } catch (error) {
       console.log(error);
     }
@@ -162,9 +165,10 @@ export const CommentSection = ({ postId }) => {
               comment={comment}
               onLike={handleLike}
               key={comment._id}
-              handleDeleteComment={(commentId) => {
-                setShowModal(true);
-                setCommentToDelete(commentId);
+              handleDeleteComment={(commentId, commentContent) => {
+                setShowModal(true),
+                  setCommentToDelete(commentId),
+                  setCommentContent(commentContent);
               }}
             />
           ))}
@@ -174,14 +178,16 @@ export const CommentSection = ({ postId }) => {
         show={showModal}
         onClose={() => setShowModal(false)}
         popup
+        dismissible
         size="md"
       >
         <Modal.Header />
-        <Modal.Body className="flex items-center justify-center flex-col gap-3">
+        <Modal.Body className="flex items-center justify-center flex-col gap-3 text-justify">
           <HiOutlineExclamationCircle className="text-red-500 text-6xl" />
           <h1 className="text-center text-2xl font-semibold">
             Delete this comment?
           </h1>
+          <p>{commentContent}</p>
           <div className="flex justify-between gap-5">
             <Button
               color="failure"
@@ -190,13 +196,13 @@ export const CommentSection = ({ postId }) => {
                 setShowModal(false);
               }}
             >
-              delete it
+              Delete
             </Button>
             <Button
               onClick={() => setShowModal(false)}
               gradientDuoTone="greenToBlue"
             >
-              cancel
+              Cancel
             </Button>
           </div>
         </Modal.Body>

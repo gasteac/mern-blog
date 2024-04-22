@@ -181,6 +181,7 @@ export const DashPosts = () => {
         show={showModal}
         onClose={() => setShowModal(false)}
         popup
+        dismissible
         size="md"
       >
         <Modal.Header />
@@ -197,13 +198,13 @@ export const DashPosts = () => {
                 setShowModal(false);
               }}
             >
-              delete it
+              Delete
             </Button>
             <Button
               onClick={() => setShowModal(false)}
               gradientDuoTone="greenToBlue"
             >
-              cancel
+              Cancel
             </Button>
           </div>
         </Modal.Body>

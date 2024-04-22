@@ -4,8 +4,6 @@ import { useSelector } from "react-redux";
 import axios from "axios";
 import { Button, Modal, Spinner, Table } from "flowbite-react";
 import { deleteObject, getStorage, ref } from "firebase/storage";
-import { Link } from "react-router-dom";
-import { HiOutlineExclamationCircle } from "react-icons/hi";
 import {FaCheck, FaTimes} from "react-icons/fa";
 export const DashUsers = () => {
   const { currentUser } = useSelector((state) => state.user);
@@ -170,6 +168,7 @@ if (loading) {
         show={showModal}
         onClose={() => setShowModal(false)}
         popup
+        dismissible
         size="md"
       >
         <Modal.Header />
@@ -186,13 +185,13 @@ if (loading) {
                 setShowModal(false);
               }}
             >
-              delete it
+              Delete
             </Button>
             <Button
               onClick={() => setShowModal(false)}
               gradientDuoTone="greenToBlue"
             >
-              cancel
+              Cancel
             </Button>
           </div>
         </Modal.Body>
