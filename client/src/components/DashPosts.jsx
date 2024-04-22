@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import axios from "axios";
 import { Button, Modal, Spinner, Table } from "flowbite-react";
 import { deleteObject, getStorage, ref } from "firebase/storage";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { HiOutlineExclamationCircle } from "react-icons/hi";
 export const DashPosts = () => {
   const { currentUser } = useSelector((state) => state.user);
@@ -15,6 +15,7 @@ export const DashPosts = () => {
   const [postTitletoDelete, setPostTitletoDelete] = useState("");
   const [imageToDelete, setImageToDelete] = useState(null);
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
   const storage = getStorage();
 
   const handleDelete = async () => {
@@ -43,14 +44,16 @@ export const DashPosts = () => {
   const handleShowMore = async () => {
     const numberOfPosts = userPosts.length;
     const startIndex = numberOfPosts;
-    const response = await axios.get(`api/post/getposts?userId=${currentUser._id}&startIndex=${startIndex}`);
+    const response = await axios.get(
+      `api/post/getposts?userId=${currentUser._id}&startIndex=${startIndex}`
+    );
     const data = response?.data;
     if (response.status !== 200) {
       return;
     }
     if (response.status === 200 && data.posts.length > 0) {
       setUserPosts([...userPosts, ...data.posts]);
-      if (data.posts.length < 5) {
+      if (data.posts.length < 4) {
         setShowMore(false);
       }
     }
@@ -67,7 +70,7 @@ export const DashPosts = () => {
         if (res.status === 200) {
           setUserPosts(data.posts);
           setLoading(false);
-          if (data.posts.length < 5) {
+          if (data.posts.length < 4) {
             setShowMore(false);
           }
         }
@@ -122,7 +125,7 @@ export const DashPosts = () => {
                     </Link>
                   </Table.Cell>
                   <Table.Cell>
-                    <Link className="font-medium" to={`/posts/${post.slug}`}>
+                    <Link className="font-medium" to={`/post/${post.slug}`}>
                       {post.title}
                     </Link>
                   </Table.Cell>
@@ -166,7 +169,7 @@ export const DashPosts = () => {
           {showMore && (
             <button
               onClick={handleShowMore}
-              className="w-full my-5 self-center font-bold "
+              className="w-full bg-gray-300 dark:bg-gray-600 hover:brightness-90 dark:hover:brightness-115 p-2 rounded-xl my-5 self-center font-bold "
             >
               Show more
             </button>
@@ -174,7 +177,13 @@ export const DashPosts = () => {
         </>
       ) : (
         <div className="h-screen text-center text-2xl">
-          You have no posts yet.
+          <p> You have no posts yet.</p>
+          <Button
+            className="mx-auto mt-5 p-0"
+            onClick={() => navigate("/create-post")}
+          >
+            Create a post
+          </Button>
         </div>
       )}
       <Modal

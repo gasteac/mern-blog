@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import { useEffect } from "react";
-
+import { useSelector } from "react-redux";
 import axios from "axios";
-import { Spinner, Table } from "flowbite-react";
-
-import { Link } from "react-router-dom";
+import { Button, Spinner, Table } from "flowbite-react";
+import { Link, useNavigate } from "react-router-dom";
 
 export const AllPosts = () => {
+    const { currentUser } = useSelector((state) => state.user);
+  const navigate = useNavigate();
   const [allPosts, setAllPosts] = useState([]);
   const [showMore, setShowMore] = useState(true);
   const [loading, setLoading] = useState(false);
@@ -16,12 +17,11 @@ export const AllPosts = () => {
       try {
         setLoading(true);
         const res = await axios.get(`api/post/getposts`);
-
         const { data } = res;
         if (res.status === 200) {
           setAllPosts(data.posts);
           setLoading(false);
-          if (data.posts.length < 5) {
+          if (data.posts.length < 4) {
             setShowMore(false);
           }
         }
@@ -41,7 +41,7 @@ export const AllPosts = () => {
     );
   }
 
-    const handleShowMore = async () => {
+  const handleShowMore = async () => {
     const numberOfPosts = allPosts.length;
     const startIndex = numberOfPosts;
     const response = await axios.get(
@@ -53,7 +53,7 @@ export const AllPosts = () => {
     }
     if (response.status === 200 && data.posts.length > 0) {
       setAllPosts([...allPosts, ...data.posts]);
-      if (data.posts.length < 5) {
+      if (data.posts.length < 4) {
         setShowMore(false);
       }
     }
@@ -109,15 +109,23 @@ export const AllPosts = () => {
           {showMore && (
             <button
               onClick={handleShowMore}
-              className="w-full my-5 self-center font-bold "
+              className="w-full bg-gray-300 dark:bg-gray-600 hover:brightness-90 dark:hover:brightness-115 p-2 rounded-xl my-5 self-center font-bold "
             >
               Show more
             </button>
           )}
         </>
       ) : (
-        <div className="w-full h-full text-center text-2xl">
-          There are no posts yet :(
+        <div className="h-screen text-center text-2xl">
+          <p> There are no posts yet.</p>
+          <Button
+            className="mx-auto mt-5 p-0"
+            onClick={() =>
+              navigate(`${currentUser ? "/create-post" : "/signin"}`)
+            }
+          >
+            Create a post
+          </Button>
         </div>
       )}
     </div>

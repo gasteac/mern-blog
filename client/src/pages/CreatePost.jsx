@@ -51,13 +51,6 @@ export const CreatePost = () => {
     }
   };
 
-  // Efecto para iniciar la carga de la imagen cuando el estado `imageFile` cambia
-  // useEffect(() => {
-  //   if (imageFile) {
-  //     uploadImage();
-  //   }
-  // }, [imageFile]);
-
   // Efecto para limpiar el estado `imageFileUploadProgress` cuando la carga de la imagen llega al 100%
   useEffect(() => {
     if (imageFileUploadProgress == 100) {
@@ -156,7 +149,7 @@ export const CreatePost = () => {
       title: Yup.string()
         .required("Title of the post is required!")
         .min(4, "Must be 4 characters or more")
-        .max(30, "Must be 30 characters or less"),
+        .max(40, "Must be 40 characters or less"),
       content: Yup.string()
         .required("Content of the post is required!")
         .min(4, "Must be 4 characters or more")
@@ -277,6 +270,7 @@ export const CreatePost = () => {
               >
                 <option value="unselected">Select Category</option>
                 <option value="tech-gadgets">Technology & Gadgets</option>
+                <option value="animals-nature">Animals and Nature</option>
                 <option value="travel-adventure">Travel & Adventure</option>
                 <option value="cooking-recipes">Cooking & Recipes</option>
                 <option value="books-literature">Books & Literature</option>

@@ -29,7 +29,7 @@ export const Comment = ({ comment, onLike, handleDeleteComment }) => {
     <div className="flex p-2 text-sm">
       <div className="flex-shrink-0 mr-3 justify-center ">
         <img
-          className="w-10 h-10 rounded-full bg-gray-200"
+          className="w-10 h-10 object-cover rounded-full bg-gray-200"
           src={user?.profilePic}
           alt={user?.username}
         />

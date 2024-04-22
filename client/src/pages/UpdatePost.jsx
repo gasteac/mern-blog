@@ -295,6 +295,7 @@ export const UpdatePost = () => {
           >
             <option value="unselected">Select Category</option>
             <option value="tech-gadgets">Technology & Gadgets</option>
+            <option value="animals-nature">Animals and Nature</option>
             <option value="travel-adventure">Travel & Adventure</option>
             <option value="cooking-recipes">Cooking & Recipes</option>
             <option value="books-literature">Books & Literature</option>
