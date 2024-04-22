@@ -10,22 +10,28 @@ export const PostPage = () => {
   const [post, setPost] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
-  const [recentPosts, setRecentPosts] = useState([])
+  const [recentPosts, setRecentPosts] = useState([]);
 
   useEffect(() => {
     try {
-      const getRecentPosts = async()=>{
-        const res = await axios.get("/api/post/getposts?limit=3");
-        if(res.status === 200){
-          setRecentPosts(res.data.posts)
+      const getRecentPosts = async () => {
+        const res = await axios.get("/api/post/getposts?limit=4");
+        if (res.status === 200) {
+          setRecentPosts(res.data.posts);
+          setRecentPosts((prev) =>
+            prev.filter((post) => post.slug !== postSlug)
+          );
+          if (recentPosts.length > 3) {
+            recentPosts.pop();
+          }
         }
-      }
-      getRecentPosts()
+      };
+      getRecentPosts();
     } catch (error) {
       console.log(error);
     }
-  }, [])
-  
+  }, [postSlug]);
+
   useEffect(() => {
     try {
       const getPostBySlug = async () => {
@@ -83,15 +89,19 @@ export const PostPage = () => {
         </div>
       </main>
       <div className="flex flex-col justify-center items-center mb-5">
-        <h1 className="text-2xl mt-2 mb-5 font-semibold">It may interest you</h1>
-     
-            {recentPosts && <div className="flex flex-wrap items-center justify-center">
-          {recentPosts.map((post) => (
-            <PostCard key={post._id} post={post}/>
-          ))}
-        </div>}
-   
-      
+        <h1 className="text-2xl mt-2 mb-5 font-semibold">
+          It may interest you
+        </h1>
+        <Link to={`/all-posts`}>
+          <span className="font-semibold italic text-gray-500 hover:underline">See all posts</span>
+        </Link>
+        {recentPosts && (
+          <div className="mt-5 flex flex-wrap items-center justify-center">
+            {recentPosts.map((post) => (
+              <PostCard key={post._id} post={post} />
+            ))}
+          </div>
+        )}
       </div>
     </>
   );

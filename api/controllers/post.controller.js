@@ -32,7 +32,6 @@ export const createPost = async (req, res, next) => {
 };
 
 export const getposts = async (req, res, next) => {
-
   try {
     //parseInt convierte el string en un número
     //startIndex es un numero que indica desde que post se empieza a buscar
