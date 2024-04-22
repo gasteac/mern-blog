@@ -115,24 +115,21 @@ export const CreatePost = () => {
             setImageFileUploading(false);
             setUploadImgError(null);
             const postSaved = axios
-              .post(
-                "/api/post/create",
-                {
-                  title,
-                  content,
-                  category,
-                  image: downloadURL ? downloadURL : undefined,
-                },
-              )
+              .post("/api/post/create", {
+                title,
+                content,
+                category,
+                image: downloadURL ? downloadURL : undefined,
+              })
               .then((response) => {
                 if (response.status === 201) {
                   formik.resetForm();
                   setUploadPostError(null);
-                 
+
                   setPostUploadSuccess(true);
                   setTimeout(() => {
                     setPostUploadSuccess(null);
-                     navigate("/dashboard?tab=posts");
+                    navigate("/dashboard?tab=posts");
                   }, 3000);
                   // setImageFile(null);
                   // setImageFileUrl(null);
@@ -204,10 +201,7 @@ export const CreatePost = () => {
       {!currentUser ? (
         <div className="h-full w-screen flex flex-col gap-5 items-center justify-center mt-12">
           <h1 className="text-5xl mb-2 text-center">
-           
-            
-              <span className="hiText capitalize font-bold">ERROR</span>
-            
+            <span className="hiText capitalize font-bold">ERROR</span>
           </h1>
 
           {!currentUser ? (
@@ -282,12 +276,41 @@ export const CreatePost = () => {
                 }}
               >
                 <option value="unselected">Select Category</option>
-                <option value="funny">Funny</option>
-                <option value="sad">Sad</option>
-                <option value="animals">Animals</option>
-                <option value="people">People</option>
-                <option value="TI">TI</option>
-                <option value="Other">Other</option>
+                <option value="tech-gadgets">Technology & Gadgets</option>
+                <option value="travel-adventure">Travel & Adventure</option>
+                <option value="cooking-recipes">Cooking & Recipes</option>
+                <option value="books-literature">Books & Literature</option>
+                <option value="health-wellness">Health & Wellness</option>
+                <option value="movies-tv">Movies & TV</option>
+                <option value="fashion-style">Fashion & Style</option>
+                <option value="art-design">Art & Design</option>
+                <option value="music-concerts">Music & Concerts</option>
+                <option value="history-culture">History & Culture</option>
+                <option value="photography-videography">
+                  Photography & Videography
+                </option>
+                <option value="science-discoveries">
+                  Science & Discoveries
+                </option>
+                <option value="education-learning">Education & Learning</option>
+                <option value="environment-ecology">
+                  Environment & Ecology
+                </option>
+                <option value="entrepreneurship-business">
+                  Entrepreneurship & Business
+                </option>
+                <option value="sports-fitness">Sports & Fitness</option>
+                <option value="automobiles-vehicles">
+                  Automobiles & Vehicles
+                </option>
+                <option value="relationships-family">
+                  Relationships & Family
+                </option>
+                <option value="games-videogames">Games & Videogames</option>
+                <option value="news-current-events">
+                  News & Current Events
+                </option>
+                <option value="other">Other...</option>
               </Select>
             </div>
             <div className="flex items-center gap-4 justify-between border-2 border-teal-400 border-dashed p-3">

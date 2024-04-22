@@ -57,7 +57,7 @@ export const PostPage = () => {
       <img
         src={post && post.image}
         alt={post && post.title}
-        className="mt-5 p-3 max-h-[300px] w-full object-cover self-center rounded-3xl"
+        className="mt-5 p-3 max-h-full w-full object-cover self-center rounded-3xl shadow-md dark:shadow-none"
       />
       <div className="mt-5 mb-5 w-[90%] self-center bg-gray-300 rounded-xl dark:bg-slate-800 p-6">
         <p>{post && post.content}</p>

@@ -11,11 +11,11 @@ import { PersistGate } from "redux-persist/integration/react";
 import { ThemeProvider } from "./components";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <React.StrictMode>
-    {/* PersistGate: envuelve a todo el árbol de componentes de la aplicación que
-    dependan del estado persistido. Al pasarle el persistor, PersistGate se
-    encarga de manejar la lógica relacionada con la carga del estado persistido
-    antes de que la aplicación se renderice. */}
+  
+    // {/* PersistGate: envuelve a todo el árbol de componentes de la aplicación que
+    // dependan del estado persistido. Al pasarle el persistor, PersistGate se
+    // encarga de manejar la lógica relacionada con la carga del estado persistido
+    // antes de que la aplicación se renderice. */}
     <PersistGate persistor={persistor}>
       {/* Provider: envuelve a la aplicación y le proporciona acceso a la store de Redux. */}
       <Provider store={store}>
@@ -25,5 +25,5 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         </ThemeProvider>
       </Provider>
     </PersistGate>
-  </React.StrictMode>
+ 
 );

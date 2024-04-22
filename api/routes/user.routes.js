@@ -6,6 +6,7 @@ import {
   signOut,
   getUsers,
   deleteUserAdmin,
+  getUser,
 } from "../controllers/user.controller.js";
 import { verifyToken } from "../utils/verifyUser.js";
 
@@ -28,6 +29,8 @@ router.delete("/deleteuser/:userId", verifyToken, deleteUserAdmin);
 router.post("/logout", signOut);
 
 router.get("/getusers", verifyToken, getUsers);
+
+router.get("/:userId", getUser);
 
 //lo exporto como "router" pero en el index.js donde lo llamo le doy el nombre que quiero, en estos casos userRoute o authRoute
 export default router;
