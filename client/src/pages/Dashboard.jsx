@@ -6,6 +6,7 @@ import {
   DashUsers,
   DashPosts,
   DashComments,
+  DashboardComponent,
 } from "../components";
 
 export const Dashboard = () => {
@@ -22,8 +23,13 @@ export const Dashboard = () => {
     setTab(tabFromUrl);
   }, [location.search]);
   return (
-    <div className="flex flex-col md:flex-row">
-      <DashSideBar />
+    <div className="flex relative flex-col md:flex-row w-screen">
+      <div className="md:min-w-56" />
+      <div className=" md:fixed top-[12%] left-0">
+        <DashSideBar />
+      </div>
+      {/* posts */}
+      {tab === "overview" ? <DashboardComponent /> : null}
       {/* posts */}
       {tab === "posts" ? <DashPosts /> : null}
       {/* profile */}

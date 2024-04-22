@@ -76,7 +76,7 @@ export const DashComments = () => {
 
   if (loading) {
     return (
-      <div className="flex h-screen w-full items-start justify-center mt-12">
+      <div className="flex w-full items-start justify-center mt-12">
         <Spinner size="xl" />
       </div>
     );

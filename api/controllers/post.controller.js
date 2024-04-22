@@ -68,7 +68,7 @@ export const getposts = async (req, res, next) => {
       .skip(startIndex)
       .limit(limit);
     //el método countDocuments cuenta la cantidad de posts que se encontraron
-    const totalPost = await Post.countDocuments();
+    const totalPosts = await Post.countDocuments();
     const now = new Date();
     //creamos una fecha que sea un mes antes de la fecha actual
     const oneMonthAgo = new Date(
@@ -84,7 +84,7 @@ export const getposts = async (req, res, next) => {
     res.status(200).json({
       //devolvemos los posts, la cantidad total de posts y la cantidad de posts creados en el último mes
       posts,
-      totalPost,
+      totalPosts,
       lastMonth,
     });
   } catch (error) {

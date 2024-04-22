@@ -61,7 +61,7 @@ export const PostPage = () => {
   }
   return (
     <>
-      <main className="p-3 flex  flex-col max-w-3xl mx-auto mt-5">
+      <main className="p-3 flex flex-col max-w-3xl mx-auto mt-5">
         <div className="flex flex-col gap-2 items-center align-middle justify-center">
           <h1 className="text-3xl font-bold uppercase lg:text-4xl">
             {post && post.title}

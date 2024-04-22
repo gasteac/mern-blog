@@ -6,7 +6,7 @@ export const Home = () => {
   const { currentUser } = useSelector((state) => state.user);
   const navigate = useNavigate();
   return (
-    <div className="h-full w-screen flex flex-col gap-5 items-center justify-center mt-12">
+    <div className="w-screen flex flex-col gap-5 items-center justify-center mt-12">
       <h1 className="text-5xl mb-2 text-center">
         Hello{" "}
         {currentUser ? (

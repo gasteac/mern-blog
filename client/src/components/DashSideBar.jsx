@@ -6,6 +6,7 @@ import {
   HiDocumentText,
   HiUserGroup,
   HiAnnotation,
+  HiCode,
 } from "react-icons/hi";
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
@@ -54,7 +55,7 @@ export const DashSideBar = () => {
           off: "w-64",
         },
         inner:
-          "h-full overflow-y-auto overflow-x-hidden rounded-xl px-3 py-4 bg-gray-300 dark:bg-gray-600",
+          "h-full overflow-y-auto overflow-x-hidden rounded-xl px-3 py-4 bg-gray-300 dark:bg-gray-500 dark:bg-opacity-10",
       },
       cta: {
         base: "mt-6 rounded-lg bg-gray-100 p-4 dark:bg-gray-700",
@@ -109,10 +110,24 @@ export const DashSideBar = () => {
  
   return (
     <Flowbite theme={{ theme: customTheme }}>
-      <Sidebar className=" w-full min-w-56 p-2 md:p-0 md:w-56 md:sticky top-[12%] left-4 z-40">
+      <Sidebar className=" w-screen p-2 md:p-0 md:w-56  z-40">
         <Sidebar.Items>
           <Sidebar.ItemGroup className="flex flex-col">
             {/* Si tab es igual a profile mostramos el item con el icono de HiUser y el label User */}
+
+            {currentUser.isAdmin && (
+              <Link to="/dashboard?tab=overview">
+                <Sidebar.Item
+                  active={tab === "overview"}
+                  icon={HiCode}
+                  labelColor="dark"
+                  as="div"
+                >
+                  Dashboard
+                </Sidebar.Item>
+              </Link>
+            )}
+
             <Link to="/dashboard?tab=profile">
               <Sidebar.Item
                 active={tab === "profile"}
@@ -148,7 +163,7 @@ export const DashSideBar = () => {
                 </Sidebar.Item>
               </Link>
             )}
-            
+
             {currentUser.isAdmin && (
               <Link to="/dashboard?tab=comments">
                 <Sidebar.Item

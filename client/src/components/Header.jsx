@@ -38,7 +38,7 @@ export const Header = () => {
         to="/"
         className="lowEndPhone:inline text-sm font-semibold  dark:text-white"
       >
-        <span className="hidden sm:block px-2 py-1 hiText font-bold text-2xl sm:text-3xl ">
+        <span className="hidden sm:block px-2 py-1 hiText font-bold text-2xl sm:text-2xl ">
           FaceRook
         </span>
         <span className="sm:hidden px-2 py-1 hiText font-bold text-2xl sm:text-3xl ">

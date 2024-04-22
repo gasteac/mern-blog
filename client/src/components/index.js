@@ -8,3 +8,4 @@ export * from "./ThemeProvider.jsx";
 export * from "./DashUsers.jsx";
 export * from "./DashComments.jsx";
 export * from "./DashPosts.jsx";
+export * from "./DashboardComponent.jsx";
