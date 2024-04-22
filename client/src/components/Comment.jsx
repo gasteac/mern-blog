@@ -3,7 +3,7 @@ import axios from "axios";
 import moment from "moment";
 import { FaThumbsUp } from "react-icons/fa";
 import { useSelector } from "react-redux";
-export const Comment = ({ comment, onLike }) => {
+export const Comment = ({ comment, onLike, handleDeleteComment }) => {
   const { currentUser } = useSelector((state) => state.user);
   const [user, setUser] = useState({});
   useEffect(() => {
@@ -27,7 +27,7 @@ export const Comment = ({ comment, onLike }) => {
 
   return (
     <div className="flex p-2 text-sm">
-      <div className="flex-shrink-0 mr-3">
+      <div className="flex-shrink-0 mr-3 justify-center ">
         <img
           className="w-10 h-10 rounded-full bg-gray-200"
           src={user?.profilePic}
@@ -35,14 +35,22 @@ export const Comment = ({ comment, onLike }) => {
         />
       </div>
       <div className="flex-1">
-        <div className="flex items-center mb-1">
-          <span className="mr-1 truncate ">{user.username}</span>
+        <div className="flex items-center mb-1 gap-2">
+          <span className="truncate">{user.username}</span>
           <span className="text-gray-600 dark:text-gray-400 text-xs">
             {moment(comment.createdAt).fromNow()}
           </span>
+          {currentUser && currentUser._id === comment.userId && (
+            <span
+              onClick={() => handleDeleteComment(comment._id)}
+              className="text-red-500 text-xs cursor-pointer hover:filter hover:brightness-150"
+            >
+              delete
+            </span>
+          )}
         </div>
         <p className="pb-2">{comment?.content}</p>
-        <div className="flex items-start gap-1">
+        <div className="flex items-start gap-1 h-2  mb-3">
           <button
             type="button"
             onClick={() => onLike(comment._id)}
@@ -55,11 +63,12 @@ export const Comment = ({ comment, onLike }) => {
             <FaThumbsUp />
           </button>
           <p className="text-gray-400 text-xs">
-            {
-comment.numberOfLikes > 0 && comment.numberOfLikes + " " + (comment.numberOfLikes === 1 ? "like" : "likes")
-            } 
-            </p>
-        </div> 
+            {comment.numberOfLikes > 0 &&
+              comment.numberOfLikes +
+                " " +
+                (comment.numberOfLikes === 1 ? "like" : "likes")}
+          </p>
+        </div>
       </div>
     </div>
   );

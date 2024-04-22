@@ -31,6 +31,20 @@ export const CommentSection = ({ postId }) => {
     fetchComments();
   }, [postId]);
 
+  const handleDeleteComment = async (commentId) => {
+    try {
+      const res = await axios.delete(`/api/comment/deleteComment/${commentId}`);
+      if (res.status !== 200) {
+        return;
+      }
+      setComments((prev) =>
+        prev.filter((comment) => comment._id !== commentId)
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const handleLike = async (commentId) => {
     try {
       if (!currentUser) {
@@ -141,7 +155,12 @@ export const CommentSection = ({ postId }) => {
       ) : (
         <div className="flex flex-col h-full">
           {comments?.map((comment) => (
-            <Comment comment={comment} onLike={handleLike} key={comment._id} />
+            <Comment
+              comment={comment}
+              onLike={handleLike}
+              key={comment._id}
+              handleDeleteComment={handleDeleteComment}
+            />
           ))}
         </div>
       )}
