@@ -54,7 +54,7 @@ export const likeComment = async (req, res, next) => {
 export const deleteComment = async (req, res, next) => {
   try {
     const look4comment = await Comment.findById(req.params.commentId);
-    if (req.user.id !== look4comment.userId) {
+    if (req.user.id !== look4comment.userId && !req.user.isAdmin) {
       return next(errorHandler(401, "Unauthorized"));
     }
     const comment = await Comment.findByIdAndDelete(req.params.commentId);

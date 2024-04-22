@@ -1,16 +1,19 @@
-import { Button, Textarea } from "flowbite-react";
+import { Button, Modal, Textarea } from "flowbite-react";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Comment } from "./Comment";
+import { HiOutlineExclamationCircle } from "react-icons/hi";
 export const CommentSection = ({ postId }) => {
   const { currentUser } = useSelector((state) => state.user);
   const [comment, setComment] = useState("");
   const [comments, setComments] = useState([]);
   const [commentError, setCommentError] = useState(null);
   const [commentMsgSuccess, setCommentMsgSuccess] = useState(null);
+  const [showModal, setShowModal] = useState(false)
+  const [commentToDelete, setCommentToDelete] = useState('')
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -159,11 +162,45 @@ export const CommentSection = ({ postId }) => {
               comment={comment}
               onLike={handleLike}
               key={comment._id}
-              handleDeleteComment={handleDeleteComment}
+              handleDeleteComment={(commentId) => {
+                setShowModal(true);
+                setCommentToDelete(commentId);
+              }}
             />
           ))}
         </div>
       )}
+      <Modal
+        show={showModal}
+        onClose={() => setShowModal(false)}
+        popup
+        size="md"
+      >
+        <Modal.Header />
+        <Modal.Body className="flex items-center justify-center flex-col gap-3">
+          <HiOutlineExclamationCircle className="text-red-500 text-6xl" />
+          <h1 className="text-center text-2xl font-semibold">
+            Delete this comment?
+          </h1>
+          <div className="flex justify-between gap-5">
+            <Button
+              color="failure"
+              onClick={() => {
+                handleDeleteComment(commentToDelete);
+                setShowModal(false);
+              }}
+            >
+              delete it
+            </Button>
+            <Button
+              onClick={() => setShowModal(false)}
+              gradientDuoTone="greenToBlue"
+            >
+              cancel
+            </Button>
+          </div>
+        </Modal.Body>
+      </Modal>
     </div>
   );
 };

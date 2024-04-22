@@ -42,12 +42,13 @@ export const Comment = ({ comment, onLike, handleDeleteComment }) => {
           </span>
           {currentUser && currentUser._id === comment.userId && (
             <span
-              onClick={() => handleDeleteComment(comment._id)}
-              className="text-red-500 text-xs cursor-pointer hover:filter hover:brightness-150"
-            >
-              delete
-            </span>
-          )}
+            onClick={() => handleDeleteComment(comment._id)}
+            className="text-red-500 text-xs cursor-pointer hover:filter hover:brightness-150"
+          >
+            delete
+          </span>
+          )
+          }
         </div>
         <p className="pb-2">{comment?.content}</p>
         <div className="flex items-start gap-1 h-2  mb-3">
