@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import { Comment } from "./Comment";
 export const CommentSection = ({ postId }) => {
   const { currentUser } = useSelector((state) => state.user);
@@ -10,6 +11,7 @@ export const CommentSection = ({ postId }) => {
   const [comments, setComments] = useState([]);
   const [commentError, setCommentError] = useState(null);
   const [commentMsgSuccess, setCommentMsgSuccess] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (comments.length > 0) return;
@@ -29,6 +31,30 @@ export const CommentSection = ({ postId }) => {
     fetchComments();
   }, [postId]);
 
+  const handleLike = async (commentId) => {
+    try {
+      if (!currentUser) {
+        navigate("/signin");
+        return;
+      }
+      const res = await axios.put(`/api/comment/likeComment/${commentId}`);
+      if (res.status === 200) {
+        setComments(
+          comments.map((comment) =>
+            comment._id === commentId
+              ? {
+                  ...comment,
+                  likes: res.data.likes,
+                  numberOfLikes: res.data.likes.length,
+                }
+              : comment
+          )
+        );
+        console.log(comments);
+      }
+    } catch (error) {}
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (comment.length > 369) {
@@ -45,90 +71,80 @@ export const CommentSection = ({ postId }) => {
       if (res.status === 201) {
         setComment("");
         setCommentError(null);
-        setComments([res.data, ...comments])
-        setCommentMsgSuccess("Comment posted!")
+        setComments([res.data, ...comments]);
+        setCommentMsgSuccess("Comment posted!");
         setTimeout(() => {
-          setCommentMsgSuccess(null)
+          setCommentMsgSuccess(null);
         }, 1000);
       }
     } catch (error) {
       setCommentError(error);
     }
   };
-  if (!currentUser) {
-    return (
-      <div className="flex items-center justify-center flex-col gap-4">
-        <h1 className="text-xl">You must be signed to comment</h1>
-        <Link to="/signin" className="text-xl text-blue-500">
-          Sign In
-        </Link>
-      </div>
-    );
-  }
-   return (
-     <div className="w-full mb-6 border border-gray-600 rounded-xl p-3">
-       {currentUser && (
-         <div className="flex justify-between mb-4">
-           <div className="flex gap-2 items-center">
-             <p>Signed in as:</p>
-             <Link
-               to={`/dashboard?tab=profile`}
-               className="flex items-center gap-2"
-             >
-               <img
-                 src={currentUser.profilePic}
-                 alt={currentUser.username}
-                 className="w-6 h-6 object-cover rounded-full"
-               />
-               <span className="text-blue-500 font-bold hover:underline">
-                 {currentUser.username}
-               </span>
-             </Link>
-           </div>
 
-           {commentError && (
-             <p className="text-red-500 ">{commentError}</p>
-           )}
-           {commentMsgSuccess && (
-             <p className="text-green-500 ">{commentMsgSuccess}</p>
-           )}
-         </div>
-       )}
+  return (
+    <div className="w-full mb-6 border border-gray-600 rounded-xl p-3">
+      {currentUser && (
+        <>
+          <div className="flex justify-between mb-4">
+            <div className="flex gap-2 items-center">
+              <p>Signed in as:</p>
+              <Link
+                to={`/dashboard?tab=profile`}
+                className="flex items-center gap-2"
+              >
+                <img
+                  src={currentUser.profilePic}
+                  alt={currentUser.username}
+                  className="w-6 h-6 object-cover rounded-full"
+                />
+                <span className="text-blue-500 font-bold hover:underline">
+                  {currentUser.username}
+                </span>
+              </Link>
+            </div>
 
-       <form onSubmit={handleSubmit}>
-         <Textarea
-           placeholder="Write your comment here"
-           className="w-full mb-2 resize-none"
-           rows={3}
-           maxLength={369}
-           value={comment}
-           onChange={(e) => setComment(e.target.value)}
-         />
-         <div className="flex justify-between items-center mt-4">
-           <p className="text-xs">
-             {369 - comment.length} characters remaining
-           </p>
-           <Button
-             outline
-             gradientDuoTone="purpleToBlue"
-             type="submit"
-             className="self-end"
-           >
-             Post Comment
-           </Button>
-         </div>
-       </form>
-      <hr className="m-6"/>
-       {comments?.length === 0 ? (
-         <p className="text-sm my-5">No comments yet</p>
-       ) : (
-         <div className="flex flex-col h-full">
-           {comments?.map((comment) => (
-             <Comment comment={comment} key={comment._id}/>
-           ))}
-         </div>
-       )}
-     </div>
-   );
+            {commentError && <p className="text-red-500 ">{commentError}</p>}
+            {commentMsgSuccess && (
+              <p className="text-green-500 ">{commentMsgSuccess}</p>
+            )}
+          </div>
+
+          <form onSubmit={handleSubmit}>
+            <Textarea
+              placeholder="Write your comment here"
+              className="w-full mb-2 resize-none"
+              rows={3}
+              maxLength={369}
+              value={comment}
+              onChange={(e) => setComment(e.target.value)}
+            />
+            <div className="flex justify-between items-center mt-4">
+              <p className="text-xs">
+                {369 - comment.length} characters remaining
+              </p>
+              <Button
+                outline
+                gradientDuoTone="purpleToBlue"
+                type="submit"
+                className="self-end"
+              >
+                Post Comment
+              </Button>
+            </div>
+          </form>
+          <hr className="m-6" />
+        </>
+      )}
+      {comments?.length === 0 ? (
+        <p className="text-sm my-5">No comments yet</p>
+      ) : (
+        <div className="flex flex-col h-full">
+          {comments?.map((comment) => (
+            <Comment comment={comment} onLike={handleLike} key={comment._id} />
+          ))}
+        </div>
+      )}
+    </div>
+  );
 };
-
