@@ -23,7 +23,7 @@ export const DashUsers = () => {
       const res = await axios.get(`api/user/getusers?startIndex=${startIndex}`);
       if (res.statusText === "OK") {
           setUsers([...users, ...res.data.users]);
-        if (res.data.users.length < 5) {
+        if (res.data.users.length < 4) {
           setShowMore(false);
         }
       }
@@ -65,7 +65,7 @@ export const DashUsers = () => {
         if (res.status === 200) {
           setUsers(data.users);
           setLoading(false);
-          if (data.users.length < 5) {
+          if (data.users.length < 4) {
             setShowMore(false);
           }
         }
