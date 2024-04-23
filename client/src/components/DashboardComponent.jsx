@@ -103,25 +103,6 @@ export const DashboardComponent = () => {
         </div>
       </div>
 
-      <div className="md:mx-auto  h-fit w-full md:w-auto p-3 lg:flex-1 min-w-64">
-        <div className="flex flex-col bg-white p-3 dark:bg-slate-800 gap-4  w-full rounded-2xl shadow-md">
-          <div className="flex justify-between ">
-            <div className="">
-              <h3 className="text-gray-500 text-md uppercase ">Total Posts</h3>
-              <p className="text-2xl">{totalPosts}</p>
-            </div>
-            <HiOutlineArchive className="h-10 w-10 bg-emerald-600 text-white rounded-full text-5xl p-3 shadow-lg" />
-          </div>
-          <div className="flex gap-2 text-sm">
-            <span className="text-green-500 flex items-center justify-center">
-              <HiArrowNarrowUp />
-              {lastMonthPosts}
-            </span>
-            <div className="text-gray-500">Last Month</div>
-          </div>
-        </div>
-      </div>
-
       <div className="md:mx-auto h-fit w-full md:w-auto p-3 lg:flex-1 min-w-64">
         <div className="flex bg-white flex-col p-3 dark:bg-slate-800 gap-4  w-full rounded-2xl shadow-md">
           <div className="flex justify-between ">
@@ -143,6 +124,25 @@ export const DashboardComponent = () => {
         </div>
       </div>
 
+      <div className="md:mx-auto  h-fit w-full md:w-auto p-3 lg:flex-1 min-w-64">
+        <div className="flex flex-col bg-white p-3 dark:bg-slate-800 gap-4  w-full rounded-2xl shadow-md">
+          <div className="flex justify-between ">
+            <div className="">
+              <h3 className="text-gray-500 text-md uppercase ">Total Posts</h3>
+              <p className="text-2xl">{totalPosts}</p>
+            </div>
+            <HiOutlineArchive className="h-10 w-10 bg-emerald-600 text-white rounded-full text-5xl p-3 shadow-lg" />
+          </div>
+          <div className="flex gap-2 text-sm">
+            <span className="text-green-500 flex items-center justify-center">
+              <HiArrowNarrowUp />
+              {lastMonthPosts}
+            </span>
+            <div className="text-gray-500">Last Month</div>
+          </div>
+        </div>
+      </div>
+
       {/* TABLAS DE USUARIO COMENTARIOS Y POSTS */}
       <div className="p-4 flex flex-wrap gap-4 py-3 mx-auto justify-center">
         {/* MANEJO DE USUARIOS */}
@@ -156,6 +156,7 @@ export const DashboardComponent = () => {
           <Table hoverable>
             <Table.Head>
               <Table.HeadCell>User Image</Table.HeadCell>
+              <Table.HeadCell>email</Table.HeadCell>
               <Table.HeadCell className="text-center">Username</Table.HeadCell>
             </Table.Head>
             {users &&
@@ -168,6 +169,9 @@ export const DashboardComponent = () => {
                         alt={user.username}
                         className="h-16 w-24 rounded-full object-cover bg-gray-500"
                       />
+                    </Table.Cell>
+                    <Table.Cell>
+                      {user.email}
                     </Table.Cell>
                     <Table.Cell className="w-36 text-center">
                       {user.username}
@@ -219,6 +223,9 @@ export const DashboardComponent = () => {
               <Table.HeadCell className="text-center">
                 Post Title
               </Table.HeadCell>
+              <Table.HeadCell className="text-center">
+                Description
+              </Table.HeadCell>
             </Table.Head>
             {posts &&
               posts.map((post) => (
@@ -239,6 +246,9 @@ export const DashboardComponent = () => {
                     </Table.Cell>
                     <Table.Cell className="w-64 text-center">
                       {post.title}
+                    </Table.Cell>
+                    <Table.Cell className="line-clamp-2">
+                      {post.content}
                     </Table.Cell>
                   </Table.Row>
                 </Table.Body>

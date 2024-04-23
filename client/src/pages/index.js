@@ -8,3 +8,4 @@ export * from "./CreatePost";
 export * from "./UpdatePost";
 export * from "./AllPosts";
 export * from "./PostPage";
+export * from "./Search";

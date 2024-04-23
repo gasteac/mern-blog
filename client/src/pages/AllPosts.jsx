@@ -11,12 +11,14 @@ export const AllPosts = () => {
   const [allPosts, setAllPosts] = useState([]);
   const [showMore, setShowMore] = useState(true);
   const [loading, setLoading] = useState(false);
-
+  const [totalPosts, setTotalPosts] = useState(0);
   useEffect(() => {
     const fetchPosts = async () => {
       try {
         setLoading(true);
-        const res = await axios.get(`api/post/getposts`);
+        const res = await axios.get(
+          `api/post/getposts?limit=4`
+        );
         const { data } = res;
         if (res.status === 200) {
           setAllPosts(data.posts);
@@ -33,15 +35,24 @@ export const AllPosts = () => {
 
     fetchPosts();
   }, []);
-  if (loading) {
-    return (
-      <div className="flex w-full h-screen items-start justify-center mt-12">
-        <Spinner size="xl" />
-      </div>
-    );
-  }
+
+
+  useEffect(() => {
+    const fetchTotalPosts = async () => {
+      const res1 = await axios.get(
+        `api/post/getposts`
+      );
+      const { data } = res1;
+      const { totalPosts: totalPosts2 } = data;
+      const totalPostsRest = totalPosts2 - 4;
+      setTotalPosts(totalPostsRest);
+    };
+    fetchTotalPosts();
+  }, []);
 
   const handleShowMore = async () => {
+    const totalPostsRest = totalPosts - 4; // 9 5 1
+    setTotalPosts(totalPostsRest);
     const numberOfPosts = allPosts.length;
     const startIndex = numberOfPosts;
     const response = await axios.get(
@@ -53,11 +64,19 @@ export const AllPosts = () => {
     }
     if (response.status === 200 && data.posts.length > 0) {
       setAllPosts([...allPosts, ...data.posts]);
-      if (data.posts.length < 4) {
+      if (data.posts.length < 4 || totalPostsRest === 0) {
         setShowMore(false);
       }
     }
   };
+
+    if (loading) {
+      return (
+        <div className="flex w-full h-screen items-start justify-center mt-12">
+          <Spinner size="xl" />
+        </div>
+      );
+    }
 
   return (
     <div className="py-6 px-4 md:max-w-[800px] table-auto overflow-x-scroll md:mx-auto scrollbar scrollbar-track-slate-100 scrollbar-thumb-slate-300 dark:scrollbar-track-transparent dark:scrollbar-thumb-transparent">
@@ -107,12 +126,14 @@ export const AllPosts = () => {
             ))}
           </Table>
           {showMore && (
-            <button
+            <Button
+              gradientDuoTone="purpleToBlue"
+              outline
               onClick={handleShowMore}
-              className="w-full hover:brightness-90 dark:hover:brightness-115 p-2 rounded-xl my-5 self-center font-bold "
+              className="mx-auto hover:brightness-90 dark:hover:brightness-115 p-1 my-5 self-center "
             >
               Show more
-            </button>
+            </Button>
           )}
         </>
       ) : (

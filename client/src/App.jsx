@@ -1,15 +1,14 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import {
-  About,
   AllPosts,
   CreatePost,
   Dashboard,
   Home,
   PostPage,
-  Projects,
   SignIn,
   SignUp,
   UpdatePost,
+  Search,
 } from "./pages";
 import { Header, PublicRoute, PrivateRoute } from "./components";
 import { AdminRoute } from "./components/AdminRoute";
@@ -30,6 +29,8 @@ export const App = () => {
           <Route path="/all-posts" element={<AllPosts />} />
           <Route path="/create-post" element={<CreatePost />} />
           <Route path="/post/:postSlug" element={<PostPage />} />
+          <Route path="/search" element={<Search />} />
+
           {/* Solo puedo acceder al dashboard si ESTOY autenticado (PrivateRoute) */}
           <Route element={<PrivateRoute />}>
             <Route path="/userDashboard" element={<Dashboard />} />

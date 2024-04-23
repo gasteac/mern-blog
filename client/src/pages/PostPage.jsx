@@ -5,13 +5,14 @@ import { Button, Spinner } from "flowbite-react";
 import axios from "axios";
 import { CommentSection } from "../components/CommentSection";
 import { PostCard } from "../components/PostCard";
+import Tilt from "react-parallax-tilt";
 export const PostPage = () => {
   const { postSlug } = useParams();
   const [post, setPost] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [recentPosts, setRecentPosts] = useState([]);
-  const array = [1,2,3]
+  const array = [1, 2, 3];
 
   useEffect(() => {
     try {
@@ -20,10 +21,9 @@ export const PostPage = () => {
         if (res.status === 200) {
           setRecentPosts(res.data.posts);
           setRecentPosts((prev) =>
-          prev.filter((post) => post.slug !== postSlug)
-        );
+            prev.filter((post) => post.slug !== postSlug)
+          );
         }
-        
       };
       getRecentPosts();
     } catch (error) {
@@ -61,9 +61,14 @@ export const PostPage = () => {
   return (
     <>
       <main className="p-3 flex flex-col max-w-3xl mx-auto mt-5">
-        <div className="relative w-full h-96">
+        <Tilt
+          glareEnable
+          glareBorderRadius={"1.5rem"}
+          scale="0.9"
+          perspective="2000"
+          className="relative w-full h-96"
+        >
           <div className="absolute inset-0 bg-gradient-to-t from-transparent via-transparent to-black opacity-90 rounded-3xl lg:group-hover:bg-black lg:group-hover:bg-opacity-40 " />
-
           <img
             src={post && post.image}
             alt={post && post.title}
@@ -84,7 +89,7 @@ export const PostPage = () => {
               Created: {post && new Date(post.updatedAt).toLocaleDateString()}
             </span>
           </div>
-        </div>
+        </Tilt>
 
         <div className="mt-5 mb-5 w-[90%] self-center bg-gray-300 rounded-xl dark:bg-slate-800 p-6">
           <p>{post && post.content}</p>
@@ -104,7 +109,7 @@ export const PostPage = () => {
         </Link>
         {recentPosts && (
           <div className="mt-5 flex flex-wrap items-center justify-center">
-            {recentPosts.slice(0,3).map((post) => (
+            {recentPosts.slice(0, 3).map((post) => (
               <PostCard key={post._id} post={post} />
             ))}
           </div>

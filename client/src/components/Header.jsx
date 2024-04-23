@@ -1,6 +1,5 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
-  Avatar,
   Button,
   Dropdown,
   Navbar,
@@ -8,29 +7,43 @@ import {
   NavbarToggle,
   TextInput,
 } from "flowbite-react";
-import { toggleTheme } from "../redux/theme/themeSlice";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { AiOutlineSearch } from "react-icons/ai";
-import { FaMoon, FaSun } from "react-icons/fa";
 import { useSelector, useDispatch } from "react-redux";
 import { logoutSuccess } from "../redux/user/userSlice";
 import axios from "axios";
 import { DarkThemeToggle } from "flowbite-react";
-
 export const Header = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+  const location = useLocation();
   const { currentUser } = useSelector((state) => state.user);
-  const { theme } = useSelector((state) => state.theme);
   const dispatch = useDispatch();
   //Obtenemos el path actual mediante useLocation de react-router-dom
   //useLocation nos da un objeto con información sobre la ruta actual (URL)
   //Específicamente pathname devuelve lo que viene después del dominio (google.com/loquesea -> /loquesea)
   const path = useLocation().pathname;
+  const [searchTerm, setSearchTerm] = useState("");
+
+  useEffect(() => {
+    const urlParams = new URLSearchParams(location.search);
+    const searchTermFromUrl = urlParams.get("searchTerm");
+    if (searchTermFromUrl) {
+      setSearchTerm(searchTermFromUrl);
+    }
+  }, [location.search]);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const urlParams = new URLSearchParams(location.search);
+    urlParams.set("searchTerm", searchTerm);
+    navigate(`/search?searchTerm=${searchTerm}`);
+  };
+
   const handleSignOut = () => {
     try {
       axios.post("/api/user/logout");
       dispatch(logoutSuccess());
-      navigate("/signin")
+      navigate("/signin");
     } catch (error) {
       console.log(error);
     }
@@ -48,17 +61,19 @@ export const Header = () => {
           FR
         </span>
       </Link>
-      {/* <form>
+      <form onSubmit={handleSubmit}>
         <TextInput
           type="text"
-          placeholder="Search"
+          placeholder={searchTerm ? searchTerm : "Search"}
           rightIcon={AiOutlineSearch}
           className="hidden lg:inline"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
         />
       </form>
       <Button className="w-12 h-10 lg:hidden" color="gray" pill>
         <AiOutlineSearch />
-      </Button> */}
+      </Button>
       <div className="flex gap-2 md:order-2">
         <DarkThemeToggle />
         {/* Si el usuario esta logueado mostramos un dropdown con su avatar, si no mostramos un botón para loguearse */}
@@ -94,12 +109,19 @@ export const Header = () => {
             <Dropdown.Item onClick={handleSignOut}>Sign Out</Dropdown.Item>
           </Dropdown>
         ) : (
-          // Si no esta logueado mostramos el boton para ingresar
-          <Link to="signin">
-            <Button gradientDuoTone="purpleToBlue" outline>
-              Sign In
-            </Button>
-          </Link>
+          // Si no esta logueado mostramos el boton para ingresar o registrarse
+          <>
+            <Link to="signup">
+              <Button gradientDuoTone="greenToBlue" outline>
+                Sign Up
+              </Button>
+            </Link>
+            <Link to="signin">
+              <Button gradientDuoTone="purpleToBlue" outline>
+                Sign In
+              </Button>
+            </Link>
+          </>
         )}
 
         <NavbarToggle></NavbarToggle>

@@ -13,19 +13,22 @@ export const PostCard = ({ post }) => {
         />
 
         <p
-          style={{ textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)" }}
-          className="line-clamp-1 font-bold text-white text-xl absolute bottom-8 p-4"
+          style={{ textShadow: "1px 1px 3px rgba(0, 0, 0, 1)" }}
+          className="line-clamp-1 font-bold text-white text-xl absolute bottom-10 p-4"
         >
           {post.title}
         </p>
-        <p
-          style={{ textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)" }}
-          className=" text-white text-sm absolute line-clamp-1 bottom-2 p-4"
+      
+           <p
+          style={{ textShadow: "1px 1px 3px rgba(0, 0, 0, 1)" }}
+          className=" text-white absolute line-clamp-1 line- bottom-2 p-4 h-16"
         >
           {post.content}
         </p>
+        
+       
 
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black opacity-90 rounded-3xl lg:group-hover:bg-black lg:group-hover:bg-opacity-40 " />
+        {/* <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black opacity-90 rounded-3xl lg:group-hover:bg-black lg:group-hover:bg-opacity-40 " /> */}
         <Button
           pill
           color={"gray"}

@@ -14,7 +14,7 @@ export const DashUsers = () => {
   const [usertoDelete, setUsertoDelete] = useState("");
   const [imageToDelete, setImageToDelete] = useState(null);
   const [userPic, setUserPic] = useState(null)
-      const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const storage = getStorage();
 
   const handleShowMore = async () => {
@@ -151,12 +151,14 @@ if (loading) {
             ))}
           </Table>
           {showMore && (
-            <button
+            <Button
+              gradientDuoTone="purpleToBlue"
+              outline
               onClick={handleShowMore}
-              className="w-full my-5 self-center font-bold "
+              className="mx-auto hover:brightness-90 dark:hover:brightness-115 p-1 my-5 self-center "
             >
               Show more
-            </button>
+            </Button>
           )}
         </>
       ) : (

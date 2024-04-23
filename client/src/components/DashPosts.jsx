@@ -15,8 +15,32 @@ export const DashPosts = () => {
   const [postTitletoDelete, setPostTitletoDelete] = useState("");
   const [imageToDelete, setImageToDelete] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [totalPosts, setTotalPosts] = useState(0);
   const navigate = useNavigate();
   const storage = getStorage();
+
+  useEffect(() => {
+    const fetchPosts = async () => {
+      try {
+        setLoading(true);
+        const res = await axios.get(
+          `api/post/getposts?userId=${currentUser._id}&limit=4`
+        );
+        const { data } = res;
+        if (res.status === 200) {
+          setUserPosts(data.posts);
+          setLoading(false);
+          if (data.posts.length < 4) {
+            setShowMore(false);
+          }
+        }
+      } catch (error) {
+        console.log(error);
+        setLoading(false);
+      }
+    };
+    fetchPosts();
+  }, [currentUser._id]);
 
   const handleDelete = async () => {
     try {
@@ -41,9 +65,24 @@ export const DashPosts = () => {
     }
   };
 
+  useEffect(() => {
+    const fetchTotalPosts = async () => {
+      const res1 = await axios.get(
+        `api/post/getposts?userId=${currentUser._id}`
+      );
+      const { data } = res1;
+      const { totalPosts: totalPosts2 } = data;
+      const totalPostsRest = totalPosts2 - 4;
+      setTotalPosts(totalPostsRest);
+    };
+    fetchTotalPosts();
+  }, [currentUser._id]);
+
   const handleShowMore = async () => {
-    const numberOfPosts = userPosts.length;
-    const startIndex = numberOfPosts;
+    const totalPostsRest = totalPosts - 4; // 9 5 1
+    setTotalPosts(totalPostsRest);
+    const numberOfPosts = userPosts.length; //4
+    const startIndex = numberOfPosts; // 4
     const response = await axios.get(
       `api/post/getposts?userId=${currentUser._id}&startIndex=${startIndex}`
     );
@@ -53,36 +92,11 @@ export const DashPosts = () => {
     }
     if (response.status === 200 && data.posts.length > 0) {
       setUserPosts([...userPosts, ...data.posts]);
-      if (data.posts.length < 4) {
+      if (data.posts.length < 4 || totalPostsRest < 1) {
         setShowMore(false);
       }
     }
   };
-
-  useEffect(() => {
-    const fetchPosts = async () => {
-      try {
-        setLoading(true);
-        const res = await axios.get(
-          `api/post/getposts?userId=${currentUser._id}`
-        );
-        const { data } = res;
-        if (res.status === 200) {
-          setUserPosts(data.posts);
-          setLoading(false);
-          if (data.posts.length < 4) {
-            setShowMore(false);
-          }
-        }
-      } catch (error) {
-        console.log(error);
-        setLoading(false);
-      }
-    };
-  
-      fetchPosts();
-    
-  }, [currentUser._id]);
 
   if (loading) {
     return (
@@ -167,12 +181,14 @@ export const DashPosts = () => {
             ))}
           </Table>
           {showMore && (
-            <button
+            <Button
+            gradientDuoTone="purpleToBlue"
+            outline
               onClick={handleShowMore}
-              className="w-full  hover:brightness-90 dark:hover:brightness-115 p-2 rounded-xl my-5 self-center font-bold "
+              className="hover:brightness-90 dark:hover:brightness-115 p-1 my-5 self-center mx-auto"
             >
               Show more
-            </button>
+            </Button>
           )}
         </>
       ) : (
