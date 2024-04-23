@@ -13,6 +13,8 @@ import {
 import { Header, PublicRoute, PrivateRoute } from "./components";
 import { AdminRoute } from "./components/AdminRoute";
 import { ScrollToTop } from "./components/ScrollToTop";
+import { Footer } from "flowbite-react";
+import { FooterComponent } from "./components/Footer";
 
 export const App = () => {
   return (
@@ -21,7 +23,7 @@ export const App = () => {
         {/* Componente para que si nos movemos a otra ruta, la página se muestre desde arriba (osea sube el scroll arriba) */}
         <ScrollToTop />
         {/* aca va el header, que es el único componente que se va a ver siempre */}
-        <Header />
+        <Header/>
         <Routes>
           {/* si pongo una ruta mal me redirige a home con el *   */}
           <Route path="*" element={<Navigate to="/" replace />} />
@@ -47,6 +49,7 @@ export const App = () => {
             <Route path="/signin" element={<SignIn />} />
           </Route>
         </Routes>
+        <FooterComponent/>
       </BrowserRouter>
     </>
   );

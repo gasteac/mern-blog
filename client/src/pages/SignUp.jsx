@@ -74,9 +74,8 @@ export const SignUp = () => {
   });
 
   return (
-    <div className="mt-20">
+    <div className="mt-20 min-h-screen ">
       <div className="flex p-3 max-w-lg mx-auto flex-col md:flex-row md:items-center gap-5">
-       
         {/* right side */}
         <div className="flex-1">
           <form className="flex flex-col gap-4" onSubmit={formik.handleSubmit}>

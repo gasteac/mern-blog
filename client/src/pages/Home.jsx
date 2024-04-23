@@ -43,7 +43,7 @@ export const Home = () => {
   }
 
   return (
-    <div className="w-screen flex flex-col gap-5 items-center justify-center mt-12">
+    <div className="w-screen flex flex-col gap-5 items-center justify-center mt-12 min-h-screen ">
       <h1 className="text-5xl text-center mb-5">
         Hello{" "}
         {currentUser ? (
@@ -84,7 +84,6 @@ export const Home = () => {
         </Tilt>
       )}
 
-      
       {recentPosts && (
         <div className="mt-5 flex flex-wrap items-center justify-center">
           {recentPosts.map((post) => (
@@ -92,17 +91,16 @@ export const Home = () => {
           ))}
         </div>
       )}
-      
-        <Link to={`/all-posts`}>
-          <Button
-            gradientDuoTone="purpleToBlue"
-            outline
-            className="w-full hover:brightness-90 dark:hover:brightness-115 p-1 mb-5 self-center "
-          >
-            See all posts
-          </Button>
-        </Link>
-   
+
+      <Link to={`/all-posts`}>
+        <Button
+          gradientDuoTone="purpleToBlue"
+          outline
+          className="w-full hover:brightness-90 dark:hover:brightness-115 p-1 mb-5 self-center "
+        >
+          See all posts
+        </Button>
+      </Link>
     </div>
   );
 };

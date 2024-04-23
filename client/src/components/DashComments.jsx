@@ -24,7 +24,7 @@ export const DashComments = () => {
       );
       if (res.statusText === "OK") {
         setComments([...comments, ...res.data.comments]);
-        if (res.data.comments.length < 5) {
+        if (res.data.comments.length < 8) {
           setShowMore(false);
         }
       }
@@ -60,7 +60,7 @@ export const DashComments = () => {
         if (res.status === 200) {
           setComments(data.comments);
           setLoading(false);
-          if (data.comments.length < 5) {
+          if (data.comments.length < 8) {
             setShowMore(false);
           }
         }
@@ -134,12 +134,14 @@ export const DashComments = () => {
             ))}
           </Table>
           {showMore && (
-            <button
+            <Button
+              gradientDuoTone="purpleToBlue"
+              outline
               onClick={handleShowMore}
-              className="w-full my-5 self-center font-bold "
+              className="hover:brightness-90 dark:hover:brightness-115 p-1 my-5 self-center mx-auto"
             >
               Show more
-            </button>
+            </Button>
           )}
         </>
       ) : (

@@ -244,7 +244,7 @@ export const UpdatePost = () => {
   }, [postId, formik.isSubmitting, oldImagePost]);
 
   return (
-    <div className="p-3 max-w-3xl mx-auto">
+    <div className="p-3 max-w-3xl mx-auto min-h-screen">
       <h1 className="text-center text-3xl font-semibold my-7">
         Edit{" "}
         <span className="dark:text-blue-300 text-blue-600 ">

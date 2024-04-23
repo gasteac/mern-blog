@@ -60,7 +60,7 @@ export const PostPage = () => {
   }
   return (
     <>
-      <main className="p-3 flex flex-col max-w-3xl mx-auto mt-5">
+      <main className="p-3 flex flex-col max-w-3xl mx-auto mt-5 min-h-screen ">
         <Tilt
           glareEnable
           glareBorderRadius={"1.5rem"}
