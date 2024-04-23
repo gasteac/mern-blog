@@ -29,7 +29,7 @@ export const PostCard = ({ post }) => {
         <Button
           pill
           color={"gray"}
-          className="absolute dark:bg-gray-700 shadow-2xl top-[40%] left-[50%] -translate-x-[50%] -translate-y-[50%]  lg:top-[50px] lg:left-[-100px] lg:group-hover:scale-[1.5]  border-none  lg:group-hover:-translate-x-[50%] lg:group-hover:-translate-y-[50%] lg:group-hover:top-[50%] lg:group-hover:left-[50%] lg:transition-all lg:ease-out lg:duration-150 hover:!scale-[1.33]"
+          className="absolute dark:bg-gray-700 shadow-2xl top-[40%] lg:top-[50%] left-[50%] -translate-x-[50%] -translate-y-[50%]   lg:group-hover:scale-[1.2] border-none lg:scale-0 lg:group-hover:left-[50%] lg:transition-all lg:ease-out lg:duration-300 "
         >
           See more
         </Button>

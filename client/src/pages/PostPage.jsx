@@ -11,6 +11,7 @@ export const PostPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [recentPosts, setRecentPosts] = useState([]);
+  const array = [1,2,3]
 
   useEffect(() => {
     try {
@@ -19,12 +20,10 @@ export const PostPage = () => {
         if (res.status === 200) {
           setRecentPosts(res.data.posts);
           setRecentPosts((prev) =>
-            prev.filter((post) => post.slug !== postSlug)
-          );
-          if (recentPosts.length > 3) {
-            recentPosts.pop();
-          }
+          prev.filter((post) => post.slug !== postSlug)
+        );
         }
+        
       };
       getRecentPosts();
     } catch (error) {
@@ -105,7 +104,7 @@ export const PostPage = () => {
         </Link>
         {recentPosts && (
           <div className="mt-5 flex flex-wrap items-center justify-center">
-            {recentPosts.map((post) => (
+            {recentPosts.slice(0,3).map((post) => (
               <PostCard key={post._id} post={post} />
             ))}
           </div>
