@@ -36,53 +36,57 @@ export const Home = () => {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center mt-12">
+      <div className="flex items-center justify-center mt-12 min-h-screen">
         <Spinner size="xl" />
       </div>
     );
   }
 
   return (
-    <div className="w-screen flex flex-col gap-5 items-center justify-center mt-12 min-h-screen ">
-      <h1 className="text-5xl text-center mb-5">
-        Hello{" "}
+    <div className="w-screen flex flex-col  items-center justify-center mt-12 min-h-screen ">
+      <div className="text-4xl lg:text-5xl text-center mb-5">
         {currentUser ? (
-          <span
-            onClick={() =>
-              navigate(
-                currentUser.isAdmin
-                  ? "/dashboard?tab=profile"
-                  : "/userDashboard?tab=profile"
-              )
-            }
-            className="hiText capitalize font-bold cursor-pointer hover:brightness-150 transition duration-300 ease-in-out"
-          >
-            {currentUser.username}!
-          </span>
-        ) : (
-          <span className="hiText capitalize font-bold">Visitor!</span>
-        )}
-      </h1>
-      {currentUser && (
-        <Tilt scale="1.2" perspective="2000">
-          <div
-            onClick={() =>
-              navigate(
-                currentUser.isAdmin
-                  ? "/dashboard?tab=profile"
-                  : "/userDashboard?tab=profile"
-              )
-            }
-            className="h-40 w-40 cursor-pointer rounded-full overflow-hidden shadow-black shadow-2xl hover:scale-105 transition duration-300 ease-in-out"
-          >
-            <img
-              src={currentUser.profilePic}
-              alt={currentUser.username}
-              className="object-cover w-full h-full"
-            />
+          <div className="flex items-center justify-center gap-3 flex-wrap">
+            <h1 className="capitalize">Welcome</h1>
+            <span
+              onClick={() =>
+                navigate(
+                  currentUser.isAdmin
+                    ? "/dashboard?tab=profile"
+                    : "/userDashboard?tab=profile"
+                )
+              }
+              className="hiText capitalize font-bold cursor-pointer hover:brightness-150 transition duration-300 ease-in-out"
+            >
+              {currentUser.username}!
+            </span>
+
+            <Tilt scale="1.2" perspective="2000">
+              <div
+                onClick={() =>
+                  navigate(
+                    currentUser.isAdmin
+                      ? "/dashboard?tab=profile"
+                      : "/userDashboard?tab=profile"
+                  )
+                }
+                className="h-16 w-16 lg:h-24 lg:w-24 ml-2 cursor-pointer rounded-full overflow-hidden shadow-black shadow-2xl transition duration-300 ease-in-out"
+              >
+                <img
+                  src={currentUser.profilePic}
+                  alt={currentUser.username}
+                  className="object-cover w-full h-full"
+                />
+              </div>
+            </Tilt>
           </div>
-        </Tilt>
-      )}
+        ) : (
+          <div className="flex items-center justify-center gap-3 flex-wrap">
+            <h1 className="capitalize">Welcome</h1>
+            <span className="hiText capitalize font-bold">Visitor!</span>
+          </div>
+        )}
+      </div>
 
       {recentPosts && (
         <div className="mt-5 flex flex-wrap items-center justify-center">

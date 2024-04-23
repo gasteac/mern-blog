@@ -192,7 +192,7 @@ export const CreatePost = () => {
   return (
     <>
       {!currentUser ? (
-        <div className="min-h-screen w-screen flex flex-col gap-5 items-center justify-center mt-12">
+        <div className="min-h-screen w-screen flex flex-col gap-5 items-center justify-start mt-12">
           <h1 className="text-5xl mb-2 text-center">
             <span className="hiText capitalize font-bold">ERROR</span>
           </h1>
