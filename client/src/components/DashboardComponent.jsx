@@ -29,11 +29,7 @@ export const DashboardComponent = () => {
           setUsers(usersFetch.data.users);
           setTotalUsers(usersFetch.data.totalUsers);
           setLastMonthUser(usersFetch.data.lastMonth);
-          console.log(
-            usersFetch.data.users,
-            usersFetch.data.totalUsers,
-            usersFetch.data.lastMonth
-          );
+       
         }
       } catch (error) {
         console.log(error);
@@ -46,11 +42,7 @@ export const DashboardComponent = () => {
           setPosts(postsFetch.data.posts);
           setTotalPosts(postsFetch.data.totalPosts);
           setLastMonthPosts(postsFetch.data.lastMonth);
-          console.log(
-            postsFetch.data.posts,
-            postsFetch.data.totalPosts,
-            postsFetch.data.lastMonth
-          );
+         
         }
       } catch (error) {
         console.log(error);
@@ -65,11 +57,7 @@ export const DashboardComponent = () => {
           setComments(commentsFetch.data.comments);
           setTotalComments(commentsFetch.data.totalComments);
           setLastMonthComments(commentsFetch.data.lastMonth);
-          console.log(
-            commentsFetch.data.comments,
-            commentsFetch.data.totalComments,
-            commentsFetch.data.lastMonth
-          );
+         
         }
       } catch (error) {
         console.log(error);

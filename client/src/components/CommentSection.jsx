@@ -70,7 +70,6 @@ export const CommentSection = ({ postId }) => {
               : comment
           )
         );
-        console.log(comments);
       }
     } catch (error) {}
   };

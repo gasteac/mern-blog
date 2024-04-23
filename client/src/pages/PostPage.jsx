@@ -103,9 +103,13 @@ export const PostPage = () => {
           It may interest you
         </h1>
         <Link to={`/all-posts`}>
-          <span className="font-semibold italic text-gray-500 hover:underline">
+          <Button
+            gradientDuoTone="purpleToBlue"
+            outline
+            className="w-full hover:brightness-90 dark:hover:brightness-115 p-1 mb-5 self-center "
+          >
             See all posts
-          </span>
+          </Button>
         </Link>
         {recentPosts && (
           <div className="mt-5 flex flex-wrap items-center justify-center">

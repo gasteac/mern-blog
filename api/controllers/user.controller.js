@@ -22,7 +22,6 @@ export const updateUser = async (req, res, next) => {
   }
   
   if (req.body.profilePic !== '' && !req.body.password && !req.body.username && !req.body.email) {
-    console.log('no')
     const updatedUser = await User.findByIdAndUpdate(
       req.params.userId,
       {
