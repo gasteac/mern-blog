@@ -27,7 +27,6 @@ export const Header = () => {
   useEffect(() => {
     const urlParams = new URLSearchParams(location.search);
     const searchTermFromUrl = urlParams.get("searchTerm");
-    console.log(searchTermFromUrl);
     if (searchTermFromUrl) {
       setSearchTerm(searchTermFromUrl);
     } else {
@@ -39,7 +38,7 @@ export const Header = () => {
     e.preventDefault();
     const urlParams = new URLSearchParams(location.search);
     urlParams.set("searchTerm", searchTerm);
-    navigate(`/search?searchTerm=${searchTerm}`);
+    navigate(`/search?searchTerm=${searchTerm}&order=desc&category=unselected`);
   };
 
   const handleSignOut = () => {
@@ -64,7 +63,7 @@ export const Header = () => {
           FR
         </span>
       </Link>
-      <form onSubmit={handleSubmit}>
+      {!path.includes('search') &&  <form onSubmit={handleSubmit}>
         <TextInput
           type="text"
           placeholder={searchTerm ? searchTerm : "Search"}
@@ -73,7 +72,8 @@ export const Header = () => {
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
-      </form>
+      </form>}
+     
       <Button className="w-12 h-10 lg:hidden" color="gray" pill>
         <AiOutlineSearch />
       </Button>
