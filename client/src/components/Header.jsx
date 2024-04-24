@@ -63,17 +63,19 @@ export const Header = () => {
           FR
         </span>
       </Link>
-      {!path.includes('search') &&  <form onSubmit={handleSubmit}>
-        <TextInput
-          type="text"
-          placeholder={searchTerm ? searchTerm : "Search"}
-          rightIcon={AiOutlineSearch}
-          className="hidden lg:inline"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
-      </form>}
-     
+      {!path.includes("search") && (
+        <form onSubmit={handleSubmit}>
+          <TextInput
+            type="text"
+            placeholder={searchTerm ? searchTerm : "Search"}
+            rightIcon={AiOutlineSearch}
+            className="hidden lg:inline"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        </form>
+      )}
+
       <Button className="w-12 h-10 lg:hidden" color="gray" pill>
         <AiOutlineSearch />
       </Button>
@@ -101,14 +103,15 @@ export const Header = () => {
             >
               <Dropdown.Item as="div">{currentUser.username}</Dropdown.Item>
             </Link>
-            <Dropdown.Divider />
             {currentUser.isAdmin && (
               <Link to={"/dashboard?tab=overview"}>
+                <Dropdown.Divider />
+
                 <Dropdown.Item as="div">Dashboard</Dropdown.Item>
               </Link>
             )}
-
             <Dropdown.Divider />
+
             <Dropdown.Item onClick={handleSignOut}>Sign Out</Dropdown.Item>
           </Dropdown>
         ) : (

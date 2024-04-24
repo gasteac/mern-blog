@@ -121,7 +121,11 @@ export const CreatePost = () => {
                   setPostUploadSuccess(true);
                   setTimeout(() => {
                     setPostUploadSuccess(null);
-                    navigate("/dashboard?tab=posts");
+                     navigate(
+                       currentUser.isAdmin
+                         ? "/dashboard?tab=posts"
+                         : "/userDashboard?tab=posts"
+                     );
                   }, 3000);
                   // setImageFile(null);
                   // setImageFileUrl(null);
@@ -173,7 +177,7 @@ export const CreatePost = () => {
           setImageFileUrl(null);
           setImageFileUploadProgress(null);
           setImageFileUploading(false);
-          navigate("/dashboard?tab=posts");
+          navigate(currentUser.isAdmin ? "/dashboard?tab=posts" : "/userDashboard?tab=posts");
           // setPostUploadSuccess(true);
           // setTimeout(() => {
           //   setPostUploadSuccess(null);

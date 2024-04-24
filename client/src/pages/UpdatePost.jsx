@@ -107,7 +107,11 @@ export const UpdatePost = () => {
                   handleDeleteImage();
                   setTimeout(() => {
                     setUploadPostSuccess(null);
-                    navigate("/dashboard?tab=posts");
+                     navigate(
+                       currentUser.isAdmin
+                         ? "/dashboard?tab=posts"
+                         : "/userDashboard?tab=posts"
+                     );
                   }, 2000);
 
                   // setImageFileUploadProgress(null);
