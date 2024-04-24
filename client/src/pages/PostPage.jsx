@@ -53,7 +53,7 @@ export const PostPage = () => {
   }, [postSlug]);
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center mt-12">
+      <div className="flex items-center justify-center mt-12 min-h-screen">
         <Spinner size="xl" />
       </div>
     );
