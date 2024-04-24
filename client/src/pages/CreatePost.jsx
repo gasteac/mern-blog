@@ -13,8 +13,7 @@ import {
   Textarea,
   Progress,
 } from "flowbite-react";
-import React, { useEffect, useState } from "react";
-import "react-quill/dist/quill.snow.css";
+import { useEffect, useState } from "react";
 import { app } from "../firebase";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -85,7 +84,7 @@ export const CreatePost = () => {
         //Ahora guardo el progreso de la carga de la imagen (se guarda constantemente hasta que llega a 100%)
         setImageFileUploadProgress(progress.toFixed(0));
       },
-      (error) => {
+      () => {
         //Si hay un error al subir la imagen, lo guardo en el estado para mostrarlo en el componente
         setImageFileUploadProgress(null);
         //Reseteo el estado de subida de la imagen
@@ -101,13 +100,13 @@ export const CreatePost = () => {
         //Cuando la imagen se sube correctamente, obtengo la URL de descarga de la imagen de firebase
         //Le paso la referencia de la imagen que se subió
         //Es una promesa que me devuelve la URL de la imagen en firebase
-        const downloadURL = getDownloadURL(uploadTask.snapshot.ref).then(
+        getDownloadURL(uploadTask.snapshot.ref).then(
           (downloadURL) => {
             //Reseteo los errores y la subida de la imagen
             setImageFileUploadProgress(null);
             setImageFileUploading(false);
             setUploadImgError(null);
-            const postSaved = axios
+            axios
               .post("/api/post/create", {
                 title,
                 content,
@@ -315,15 +314,7 @@ export const CreatePost = () => {
                 accept="image/*"
                 onChange={(e) => handleImageChange(e)}
               />
-              {/* <Button
-            type="button"
-            disabled={!imageFile || imageFileUploading}
-            gradientDuoTone="purpleToBlue"
-            size="sm"
-            onClick={uploadImage}
-          >
-            Upload Image
-          </Button> */}
+
             </div>
             {imageFileUploadProgress && (
               <Progress progress={imageFileUploadProgress} />

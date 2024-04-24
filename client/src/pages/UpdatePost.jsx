@@ -14,8 +14,7 @@ import {
   Textarea,
   Progress,
 } from "flowbite-react";
-import React, { useEffect, useState } from "react";
-import "react-quill/dist/quill.snow.css";
+import { useEffect, useState } from "react";
 import { app } from "../firebase";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -31,7 +30,6 @@ export const UpdatePost = () => {
   const { currentUser } = useSelector((state) => state.user);
   const postId = useParams().postId;
   const [postData, setPostData] = useState({});
-  const [postTitle, setPostTitle] = useState(""); //TODO
   const [uploadPostSuccess, setUploadPostSuccess] = useState(false);
   const [uploadImgError, setUploadImgError] = useState(null);
   const [updatePostError, setUpdatePostError] = useState(null);
@@ -41,24 +39,6 @@ export const UpdatePost = () => {
   const [imageFileUploadProgress, setImageFileUploadProgress] = useState(null);
   const [oldImagePost, setOldImagePost] = useState(null);
 
-  // useEffect(() => {
-  //   try {
-  //     const getPostById = async () => {
-  //       const res = await axios.get(`/api/post/getposts?postId=${postId}`);
-  //       if (res.status !== 200) setUpdatePostError(res.data.message);
-  //       if (res.status === 200) {
-  //         setPostData(res.data.posts[0]);
-  //         setUpdatePostError(null);
-
-  //       }
-  //     };
-  //     getPostById();
-  //   } catch (error) {
-  //     console.log(error.response.data.message);
-  //     setUpdatePostError(error.response.data.message);
-  //   }
-  // }, [postId]);
-
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -66,17 +46,6 @@ export const UpdatePost = () => {
       setUploadImgError(null);
     }
   };
-
-  // const handleDeleteImage = async () => {
-  //   console.log(oldImagePost)
-  //   const desertRef = ref(storage, oldImagePost);
-  //   try {
-  //     const imgDel = await deleteObject(desertRef);
-  //     setOldImagePost(null);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
 
   const handleDeleteImage = async () => {
     const fileRef = ref(storage, oldImagePost);
@@ -88,12 +57,6 @@ export const UpdatePost = () => {
       setOldImagePost(null);
     }
   };
-
-  // useEffect(() => {
-  //   if (imageFile) {
-  //     uploadImage();
-  //   }
-  // }, [imageFile]);
 
   useEffect(() => {
     if (imageFileUploadProgress == 100) {
@@ -117,7 +80,7 @@ export const UpdatePost = () => {
           (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
         setImageFileUploadProgress(progress.toFixed(0));
       },
-      (error) => {
+      () => {
         setImageFileUploadProgress(null);
         setImageFileUploading(false);
         setImageFile(null);
@@ -125,12 +88,12 @@ export const UpdatePost = () => {
         setUploadImgError("Image must be less than 2mb");
       },
       () => {
-        const downloadURL = getDownloadURL(uploadTask.snapshot.ref).then(
+        getDownloadURL(uploadTask.snapshot.ref).then(
           (downloadURL) => {
             setImageFileUploadProgress(null);
             setImageFileUploading(false);
             setUploadImgError(null);
-            const postSaved = axios
+            axios
               .put(`/api/post/updatepost/${postId}/${currentUser._id}`, {
                 title,
                 content,
