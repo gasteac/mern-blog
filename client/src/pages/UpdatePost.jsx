@@ -379,7 +379,7 @@ const handleDelete = async () => {
             formik.handleChange(e);
           }}
         />
-        <div className="flex mt-5 gap-5 px-4 justify-evenly align-middle items-center">
+        <div className="flex  gap-5 px-4 justify-evenly align-middle items-center">
           <Button
             className="text-nowrap hover:brightness-90 dark:hover:brightness-115 p-1 self-center "
             type="button"
