@@ -6,7 +6,7 @@ import { Button, Spinner, Table } from "flowbite-react";
 import { Link, useNavigate } from "react-router-dom";
 
 export const AllPosts = () => {
-    const { currentUser } = useSelector((state) => state.user);
+  const { currentUser } = useSelector((state) => state.user);
   const navigate = useNavigate();
   const [allPosts, setAllPosts] = useState([]);
   const [showMore, setShowMore] = useState(true);
@@ -16,9 +16,7 @@ export const AllPosts = () => {
     const fetchPosts = async () => {
       try {
         setLoading(true);
-        const res = await axios.get(
-          `api/post/getposts?limit=4`
-        );
+        const res = await axios.get(`api/post/getposts?limit=4`);
         const { data } = res;
         if (res.status === 200) {
           setAllPosts(data.posts);
@@ -36,12 +34,9 @@ export const AllPosts = () => {
     fetchPosts();
   }, []);
 
-
   useEffect(() => {
     const fetchTotalPosts = async () => {
-      const res1 = await axios.get(
-        `api/post/getposts`
-      );
+      const res1 = await axios.get(`api/post/getposts`);
       const { data } = res1;
       const { totalPosts: totalPosts2 } = data;
       const totalPostsRest = totalPosts2 - 4;
@@ -70,85 +65,116 @@ export const AllPosts = () => {
     }
   };
 
-    if (loading) {
-      return (
+  if (loading) {
+    return (
+      <div className="flex w-full h-screen items-start justify-center mt-12">
+        <Spinner size="xl" />
+      </div>
+    );
+  }
+
+  return (
+    <>
+      {loading ? (
         <div className="flex w-full h-screen items-start justify-center mt-12">
           <Spinner size="xl" />
         </div>
-      );
-    }
-
-  return (
-    <div className="py-6 min-h-screen px-4 md:max-w-[800px] table-auto overflow-x-scroll md:mx-auto scrollbar scrollbar-track-slate-100 scrollbar-thumb-slate-300 dark:scrollbar-track-transparent dark:scrollbar-thumb-transparent">
-      {allPosts.length > 0 ? (
-        <>
-          <Table hoverable className="bg-white dark:bg-slate-800 rounded-xl">
-            <Table.Head>
-              <Table.HeadCell className="text-nowrap">
-                Post Image
-              </Table.HeadCell>
-              <Table.HeadCell className="text-nowrap">
-                Post Title
-              </Table.HeadCell>
-              <Table.HeadCell className="text-nowrap">
-                Date updated
-              </Table.HeadCell>
-              <Table.HeadCell>Category</Table.HeadCell>
-            </Table.Head>
-            {allPosts?.map((post) => (
-              <Table.Body key={post._id} className="divide-y-2 ">
-                <Table.Row>
-                  <Table.Cell as="div">
-                    <Link to={`/post/${post.slug}`}>
-                      <div className="w-32 h-20 bg-transparent">
-                        <img
-                          src={post.image}
-                          alt={post.title}
-                          className="object-cover w-full h-full rounded-lg"
-                        />
-                      </div>
-                    </Link>
-                  </Table.Cell>
-                  <Table.Cell>
-                    <Link className="font-medium" to={`/posts/${post.slug}`}>
-                      {post.title}
-                    </Link>
-                  </Table.Cell>
-                  <Table.Cell className="font-medium ">
-                    {" "}
-                    {new Date(post.updatedAt).toLocaleDateString()}
-                  </Table.Cell>
-                  <Table.Cell className="font-medium">
-                    {post.category}
-                  </Table.Cell>
-                </Table.Row>
-              </Table.Body>
-            ))}
-          </Table>
-          {showMore && (
-            <Button
-              gradientDuoTone="purpleToBlue"
-              outline
-              onClick={handleShowMore}
-              className="mx-auto hover:brightness-90 dark:hover:brightness-115 p-1 my-5 self-center "
-            >
-              Show more
-            </Button>
-          )}
-        </>
       ) : (
-        <div className="h-screen text-center text-2xl">
-          <p> There are no posts yet.</p>
-          <Button
-            className="mx-auto mt-5 p-0"
-            onClick={() =>
-              navigate(`${currentUser ? "/create-post" : "/signin"}`)
-            }
-          >
-            Create a post
-          </Button>
+        <div className="py-6 min-h-screen px-4 md:max-w-[800px] table-auto overflow-x-scroll md:mx-auto scrollbar scrollbar-track-slate-100 scrollbar-thumb-slate-300 dark:scrollbar-track-transparent dark:scrollbar-thumb-transparent">
+          {allPosts.length > 0 ? (
+            <>
+              <Table
+                hoverable
+                className="bg-white dark:bg-slate-800 rounded-xl "
+              >
+                <Table.Head>
+                  <Table.HeadCell className="text-nowrap">
+                    Post Image
+                  </Table.HeadCell>
+                  <Table.HeadCell className="text-nowrap">
+                    Post Title
+                  </Table.HeadCell>
+                  <Table.HeadCell className="text-nowrap">
+                    Date updated
+                  </Table.HeadCell>
+                  <Table.HeadCell>Category</Table.HeadCell>
+                </Table.Head>
+                {allPosts?.map((post) => (
+                  <Table.Body key={post._id} className="divide-y-2">
+                    <Table.Row
+                      className="cursor-pointer"
+                      onClick={() => navigate(`/post/${post.slug}`)}
+                    >
+                      <Table.Cell as="div">
+                        <div className="w-32 h-20 bg-transparent">
+                          <img
+                            src={post.image}
+                            alt={post.title}
+                            className="object-cover w-full h-full rounded-lg"
+                          />
+                        </div>
+                      </Table.Cell>
+                      <Table.Cell>
+                        <Link
+                          className={`${
+                            currentUser._id === post.userId
+                              ? "text-emerald-500 font-bold"
+                              : "font-medium"
+                          }`}
+                          to={`/posts/${post.slug}`}
+                        >
+                          {post.title}
+                        </Link>
+                      </Table.Cell>
+                      <Table.Cell
+                        className={`${
+                          currentUser._id === post.userId
+                            ? "text-emerald-500 font-bold"
+                            : "font-medium"
+                        }`}
+                      >
+                        {" "}
+                        {new Date(post.updatedAt).toLocaleDateString()}
+                      </Table.Cell>
+                      <Table.Cell
+                        className={`${
+                          currentUser._id === post.userId
+                            ? "text-emerald-500 font-bold"
+                            : "font-medium"
+                        }`}
+                      >
+                        {post.category}
+                      </Table.Cell>
+                    </Table.Row>
+                  </Table.Body>
+                ))}
+              </Table>
+              {showMore && (
+                <Button
+                  gradientDuoTone="purpleToBlue"
+                  outline
+                  onClick={handleShowMore}
+                  className="mx-auto hover:brightness-90 dark:hover:brightness-115 p-1 my-5 self-center "
+                >
+                  Show more
+                </Button>
+              )}
+            </>
+          ) : (
+            <div className="h-screen text-center text-2xl">
+              <p> There are no posts yet.</p>
+              <Button
+                className="mx-auto mt-5 p-0"
+                onClick={() =>
+                  navigate(`${currentUser ? "/create-post" : "/signin"}`)
+                }
+              >
+                Create a post
+              </Button>
+            </div>
+          )}
         </div>
       )}
-    </div>
+    </>
   );
 };

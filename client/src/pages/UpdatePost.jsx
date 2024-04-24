@@ -13,6 +13,7 @@ import {
   TextInput,
   Textarea,
   Progress,
+  Modal,
 } from "flowbite-react";
 import { useEffect, useState } from "react";
 import { app } from "../firebase";
@@ -23,6 +24,7 @@ import axios from "axios";
 import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { HiOutlineExclamationCircle } from "react-icons/hi";
 
 export const UpdatePost = () => {
   const navigate = useNavigate();
@@ -38,6 +40,57 @@ export const UpdatePost = () => {
   const [imageFileUploading, setImageFileUploading] = useState(false);
   const [imageFileUploadProgress, setImageFileUploadProgress] = useState(null);
   const [oldImagePost, setOldImagePost] = useState(null);
+  const [postOwnerId, setPostOwnerId] = useState("");
+  const [showModal, setShowModal] = useState(false);
+  const [postIdtoDelete, setPostIdtoDelete] = useState("");
+  const [postTitletoDelete, setPostTitletoDelete] = useState("");
+  const [imageToDelete, setImageToDelete] = useState(null);
+
+const handleDelete = async () => {
+    try {
+      console.log(postIdtoDelete, currentUser._id);
+      const response = await axios.delete(
+        `/api/post/deletepost/${postIdtoDelete}/${postOwnerId}`
+      );
+      if (response.status === 200) {
+        navigate(
+          currentUser.isAdmin
+            ? "/dashboard?tab=posts"
+            : "/userDashboard?tab=posts"
+        );
+        // Crear una referencia no raíz utilizando child
+        const fileRef = ref(storage, imageToDelete);
+        if (imageToDelete === null) {
+          return;
+        } else {
+          // Eliminar el archivo utilizando la referencia no raíz
+          await deleteObject(fileRef);
+        }
+      }
+    } catch (error) {
+      console.log(error);
+      // Manejar el error de forma adecuada
+    }}
+
+  useEffect(() => {
+    try {
+      const getPostById = async () => {
+        const res = await axios.get(`/api/post/getposts?postId=${postId}`);
+        if (res.status !== 200) setUpdatePostError(res.data.message);
+        if (res.status === 200) {
+          setPostData(res.data.posts[0]);
+          setPostOwnerId(res.data.posts[0].userId);
+          setOldImagePost(res.data.posts[0].image);
+        }
+      };
+      getPostById();
+      setTimeout(() => {
+        setUpdatePostError(null);
+      }, 3000);
+    } catch (error) {
+      setUpdatePostError(error.response.data.message);
+    }
+  }, [postId]);
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -88,41 +141,39 @@ export const UpdatePost = () => {
         setUploadImgError("Image must be less than 2mb");
       },
       () => {
-        getDownloadURL(uploadTask.snapshot.ref).then(
-          (downloadURL) => {
-            setImageFileUploadProgress(null);
-            setImageFileUploading(false);
-            setUploadImgError(null);
-            axios
-              .put(`/api/post/updatepost/${postId}/${currentUser._id}`, {
-                title,
-                content,
-                category,
-                image: downloadURL ? downloadURL : undefined,
-              })
-              .then((response) => {
-                if (response.status === 200) {
-                  setUpdatePostError(null);
-                  setUploadPostSuccess(true);
-                  handleDeleteImage();
-                  setTimeout(() => {
-                    setUploadPostSuccess(null);
-                     navigate(
-                       currentUser.isAdmin
-                         ? "/dashboard?tab=posts"
-                         : "/userDashboard?tab=posts"
-                     );
-                  }, 2000);
+        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+          setImageFileUploadProgress(null);
+          setImageFileUploading(false);
+          setUploadImgError(null);
+          axios
+            .put(`/api/post/updatepost/${postId}/${postOwnerId}`, {
+              title,
+              content,
+              category,
+              image: downloadURL ? downloadURL : undefined,
+            })
+            .then((response) => {
+              if (response.status === 200) {
+                setUpdatePostError(null);
+                setUploadPostSuccess(true);
+                handleDeleteImage();
+                setTimeout(() => {
+                  setUploadPostSuccess(null);
+                  navigate(
+                    currentUser.isAdmin
+                      ? "/dashboard?tab=posts"
+                      : "/userDashboard?tab=posts"
+                  );
+                }, 2000);
 
-                  // setImageFileUploadProgress(null);
-                  // setImageFileUploading(false);
-                }
-              })
-              .catch((error) => {
-                console.log(error);
-              });
-          }
-        );
+                // setImageFileUploadProgress(null);
+                // setImageFileUploading(false);
+              }
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+        });
       }
     );
   };
@@ -163,7 +214,7 @@ export const UpdatePost = () => {
         }
 
         const postSaved = await axios.put(
-          `/api/post/updatepost/${postId}/${currentUser._id}`,
+          `/api/post/updatepost/${postId}/${postOwnerId}`,
           {
             title,
             content,
@@ -211,13 +262,7 @@ export const UpdatePost = () => {
   }, [postId, formik.isSubmitting, oldImagePost]);
 
   return (
-    <div className="p-3 max-w-3xl mx-auto min-h-screen">
-      <h1 className="text-center text-3xl font-semibold my-7">
-        Edit{" "}
-        <span className="dark:text-blue-300 text-blue-600 ">
-          {postData.title ? postData.title : "Post"}
-        </span>
-      </h1>
+    <div className="p-3 mt-10 max-w-3xl mx-auto min-h-screen">
       {updatePostError && (
         <Alert
           color="failure"
@@ -316,7 +361,7 @@ export const UpdatePost = () => {
               <img
                 src={imageFileUrl ? imageFileUrl : postData.image}
                 alt="Post"
-                className="w-32 h-32 object-cover rounded-lg shadow-lg"
+                className="w-full h-32 object-cover rounded-lg shadow-lg"
               />
             )}
         {formik.touched.content && formik.errors.content ? (
@@ -334,15 +379,70 @@ export const UpdatePost = () => {
             formik.handleChange(e);
           }}
         />
-        <Button
-          type="submit"
-          gradientDuoTone="purpleToBlue"
-          size="lg"
-          disabled={imageFileUploading}
-        >
-          Update Post
-        </Button>
+        <div className="flex mt-5 gap-5 px-4 justify-evenly align-middle items-center">
+          <Button
+            className="text-nowrap hover:brightness-90 dark:hover:brightness-115 p-1 self-center "
+            type="button"
+            gradientDuoTone="purpleToPink"
+            size="lg"
+            onClick={() => {
+              setShowModal(true);
+              setPostIdtoDelete(postData._id);
+              setPostTitletoDelete(postData.title);
+              setImageToDelete(
+                postData.image.includes(
+                  "video-tutoriales-sobre-email-marketing"
+                )
+                  ? null
+                  : postData.image
+              );
+            }}
+          >
+            Delete Post
+          </Button>
+          <Button
+            type="submit"
+            gradientDuoTone="purpleToBlue"
+            size="lg"
+            disabled={imageFileUploading}
+            className="w-full hover:brightness-90 dark:hover:brightness-115 p-1  self-center "
+          >
+            Update Post
+          </Button>
+        </div>
       </form>
+      <Modal
+        show={showModal}
+        onClose={() => setShowModal(false)}
+        popup
+        dismissible
+        size="md"
+      >
+        <Modal.Header />
+        <Modal.Body className="flex items-center justify-center flex-col gap-3">
+          <HiOutlineExclamationCircle className="text-red-500 text-6xl" />
+          <h1 className="text-center text-2xl font-semibold dark:text-white">
+            Delete "{postTitletoDelete}" ?
+          </h1>
+          <div className="flex justify-between gap-5">
+            <Button
+              color="failure"
+              onClick={() => {
+                handleDelete();
+                setShowModal(false);
+              }}
+            >
+              Delete
+            </Button>
+            <Button
+              onClick={() => setShowModal(false)}
+              gradientDuoTone="greenToBlue"
+            >
+              Cancel
+            </Button>
+          </div>
+        </Modal.Body>
+      </Modal>
     </div>
   );
 };

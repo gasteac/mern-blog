@@ -100,44 +100,31 @@ export const CreatePost = () => {
         //Cuando la imagen se sube correctamente, obtengo la URL de descarga de la imagen de firebase
         //Le paso la referencia de la imagen que se subió
         //Es una promesa que me devuelve la URL de la imagen en firebase
-        getDownloadURL(uploadTask.snapshot.ref).then(
-          (downloadURL) => {
-            //Reseteo los errores y la subida de la imagen
-            setImageFileUploadProgress(null);
-            setImageFileUploading(false);
-            setUploadImgError(null);
-            axios
-              .post("/api/post/create", {
-                title,
-                content,
-                category,
-                image: downloadURL ? downloadURL : undefined,
-              })
-              .then((response) => {
-                if (response.status === 201) {
-                  formik.resetForm();
-                  setUploadPostError(null);
-
-                  setPostUploadSuccess(true);
-                  setTimeout(() => {
-                    setPostUploadSuccess(null);
-                     navigate(
-                       currentUser.isAdmin
-                         ? "/dashboard?tab=posts"
-                         : "/userDashboard?tab=posts"
-                     );
-                  }, 3000);
-                  // setImageFile(null);
-                  // setImageFileUrl(null);
-                  // setImageFileUploadProgress(null);
-                  // setImageFileUploading(false);
-                }
-              })
-              .catch((error) => {
-                console.log(error);
-              });
-          }
-        );
+        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+          //Reseteo los errores y la subida de la imagen
+          setImageFileUploadProgress(null);
+          setImageFileUploading(false);
+          setUploadImgError(null);
+          axios
+            .post("/api/post/create", {
+              title,
+              content,
+              category,
+              image: downloadURL ? downloadURL : undefined,
+            })
+            .then((response) => {
+              if (response.status === 201) {
+                formik.resetForm();
+                setUploadPostError(null);
+                setPostUploadSuccess(null);
+                navigate(`/post/${response.data.slug}`);
+               
+              }
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+        });
       }
     );
   };
@@ -177,7 +164,11 @@ export const CreatePost = () => {
           setImageFileUrl(null);
           setImageFileUploadProgress(null);
           setImageFileUploading(false);
-          navigate(currentUser.isAdmin ? "/dashboard?tab=posts" : "/userDashboard?tab=posts");
+          navigate(
+            currentUser.isAdmin
+              ? "/dashboard?tab=posts"
+              : "/userDashboard?tab=posts"
+          );
           // setPostUploadSuccess(true);
           // setTimeout(() => {
           //   setPostUploadSuccess(null);
@@ -318,7 +309,6 @@ export const CreatePost = () => {
                 accept="image/*"
                 onChange={(e) => handleImageChange(e)}
               />
-
             </div>
             {imageFileUploadProgress && (
               <Progress progress={imageFileUploadProgress} />
