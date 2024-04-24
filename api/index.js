@@ -44,7 +44,7 @@ app.use("/api/comment", commentRoutes);
 const port = process.env.PORT || 3000;
 
 //Le decimos al server que escuche en el puerto
-app.listen(port, "0.0.0.0", () => {
+app.listen(port, () => {
   console.log("Server is running on port 3000");
 });
 
