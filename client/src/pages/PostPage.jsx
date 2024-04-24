@@ -135,8 +135,8 @@ export const PostPage = () => {
                 </span>
               </div>
             </Tilt>
-            {currentUser.isAdmin ||
-              (postOwnerId === currentUser._id && (
+            {(currentUser.isAdmin ||
+              postOwnerId === currentUser._id) && (
                 <div className="flex mt-5 gap-5 px-4 justify-evenly align-middle items-center">
                   <Link className="flex-1" to={`/update-post/${post._id}`}>
                     <Button
@@ -165,7 +165,7 @@ export const PostPage = () => {
                     Delete post
                   </Button>
                 </div>
-              ))}
+              )}
 
             <div className="mt-5 mb-5 w-[90%] self-center bg-gray-300 rounded-xl dark:bg-slate-800 p-6">
               <p>{post && post.content}</p>
