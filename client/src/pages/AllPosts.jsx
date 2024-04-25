@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import axios from "axios";
@@ -117,7 +117,7 @@ export const AllPosts = () => {
                       <Table.Cell>
                         <Link
                           className={`${
-                            currentUser._id === post.userId
+                            currentUser && currentUser._id === post.userId
                               ? "text-emerald-500 font-bold"
                               : "font-medium"
                           }`}
@@ -128,7 +128,7 @@ export const AllPosts = () => {
                       </Table.Cell>
                       <Table.Cell
                         className={`${
-                          currentUser._id === post.userId
+                          currentUser && currentUser._id === post.userId
                             ? "text-emerald-500 font-bold"
                             : "font-medium"
                         }`}
@@ -138,7 +138,7 @@ export const AllPosts = () => {
                       </Table.Cell>
                       <Table.Cell
                         className={`${
-                          currentUser._id === post.userId
+                          currentUser && currentUser._id === post.userId
                             ? "text-emerald-500 font-bold"
                             : "font-medium"
                         }`}
