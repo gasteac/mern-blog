@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
-
+// Schema es una clase de mongoose que nos permite definir la estructura de los datos que vamos a guardar en la bdd
+// Modelo o Schema de los comentarios
 const commentSchema = new mongoose.Schema(
   {
     content: {
@@ -22,9 +23,8 @@ const commentSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
-  },
-  { timestamps: true }
-);
-
+  },{timestamps: true });
 const Comment = mongoose.model("Comment", commentSchema);
 export default Comment;
+
+//Comentarios en user.model.js

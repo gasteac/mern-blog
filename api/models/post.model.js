@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
-
+// Schema es una clase de mongoose que nos permite definir la estructura de los datos que vamos a guardar en la bdd
+// Modelo o Schema de los posts
 const postSchema = new mongoose.Schema({
   userId: {
     type: String,
@@ -30,9 +31,8 @@ const postSchema = new mongoose.Schema({
         required: true,
         unique: true,
     }
-}, 
-    {timestamps: true});
-
+},{timestamps: true});
 const Post = mongoose.model("Post", postSchema);
-
 export default Post;
+
+// //Comentarios en user.model.js

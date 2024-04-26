@@ -33,8 +33,9 @@ const userSchema = new mongoose.Schema(
 
 // User es un modelo de mongoose que nos permite interactuar con la colección de usuarios en la bdd
 // Le pasamos el nombre de la colección y el schema que definimos arriba (y esto se guarda en la bdd)
+//en mongoDB se guarda con una s al final, porque es la base de datos de usuarioS no de 1 solo usuario. 
 const User = mongoose.model("User", userSchema);
 
-//exporto el modelo User. que incluye los métodos de mongoose para interactuar con la bdd 
+//exporto el modelo User. que incluye los métodos o query's de mongoose para interactuar con la bdd
 //como por ejemplo find, findOne, findById, save, update, delete, etc
 export default User;
