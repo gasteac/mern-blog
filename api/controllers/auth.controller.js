@@ -25,17 +25,41 @@ export const signup = async (req, res, next) => {
     next(errorHandler(400, "All fields are required"));
   }
 
-  //hasheo la contraseña con bcryptjs, le digo cuantas veces quiero que se mezcle o algo asi (cuanto mas mejor)
-  const hashedPassword = bcryptjs.hashSync(password, 10);
 
-  //utilizando el modelo User que creé con mongoose en user.model.js, intento crear un nuevo usuario con los datos recibidos en el body
-  const newUser = new User({
-    username,
-    email,
-    password: hashedPassword,
-  });
-  //Intento guardar el usuario en la bdd
+   
+    //hasheo la contraseña con bcryptjs, le digo cuantas veces quiero que se mezcle o algo asi (cuanto mas mejor)
+    const hashedPassword = bcryptjs.hashSync(password, 10);
+
+    //utilizando el modelo User que creé con mongoose en user.model.js, intento crear un nuevo usuario con los datos recibidos en el body
+    const newUser = new User({
+      username: username,
+      email,
+      password: hashedPassword,
+    });
+    //Intento guardar el usuario en la bdd
   try {
+    // Verificar si el usuario ya existe, ignorando mayúsculas/minúsculas
+    const existingUser = await User.findOne({
+      $or: [
+        {
+          username: {
+            $regex: username,
+            $options: "i",
+          },
+        },
+        {
+          email: {
+            $regex: email,
+            $options: "i",
+          },
+        },
+       
+      ],
+    });
+    if (existingUser) {
+      return next(errorHandler(400, "Username or Email already exists"));
+    }
+
     // Espero a que la bdd guarde el usuario y se cumpla la promesa
     await newUser.save();
     // Una vez cumplida la promesa genero un token con jwt.sign, en el que guardo el id del usuario y si es admin o no
@@ -86,7 +110,7 @@ export const signin = async (req, res, next) => {
     const validUser = await User.findOne({ email });
     //si no encuentro un usuario con ese email, devuelvo un error
     if (!validUser) {
-      return next(errorHandler(404, "User not found"));
+      return next(errorHandler(404, "Email not registered"));
     }
     //si existe el usuario, osea si se registró previamente con ese email, comparo la contraseña que me pasaron con la que tengo en la bdd
     //con bcryptjs.compareSync comparo la contraseña que me pasaron con la contraseña del usuario en la bdd
@@ -184,11 +208,8 @@ export const google = async (req, res, next) => {
       //le devuelvo al frontend el usuario que encontré en la bdd sin la contraseña, y el token
       res
         .status(200)
-        .cookie(
-          "access_token",
-           token, 
-           {httpOnly: true}
-          ).json(rest);
+        .cookie("access_token", token, { httpOnly: true })
+        .json(rest);
     }
   } catch (error) {
     next(error);

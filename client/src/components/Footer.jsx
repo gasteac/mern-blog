@@ -1,10 +1,10 @@
-import React from "react";
+
 import { Footer } from "flowbite-react";
 import { Link } from "react-router-dom";
 import {BsInstagram, BsLinkedin, BsGithub} from "react-icons/bs";
 export const FooterComponent = () => {
   return (
-    <Footer className="h-12 p-4 rounded-none text-black dark:text-white relative bottom-0 shadow-xl ">
+    <Footer className="h-12 flex justify-center p-4 rounded-none text-black dark:text-white relative bottom-0 shadow-xl ">
       <Link
         className="hover:underline hidden md:block "
         target="_blank"

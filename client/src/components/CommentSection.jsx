@@ -71,7 +71,9 @@ export const CommentSection = ({ postId }) => {
           )
         );
       }
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const handleSubmit = async (e) => {

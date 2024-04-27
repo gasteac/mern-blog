@@ -1,5 +1,5 @@
 import { Alert, Button, Label, Spinner, TextInput } from "flowbite-react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link} from "react-router-dom";
 import axios from "axios";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -8,7 +8,6 @@ import {
   signInInProcess,
   signInStart,
   signInSuccess,
-  startFromZero,
 } from "../redux/user/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { OAuth } from "../components";
@@ -22,12 +21,15 @@ export const SignIn = () => {
   const { error: credentialErrorMsg, isLoading } = useSelector(
     (state) => state.user
   );
-  // navigate es una función que nos permite redirigir al usuario a otra ruta.
+
+  //utilizamos formik para manejar el formulario
   const formik = useFormik({
+    //le damos los valores iniciales del formulario
     initialValues: {
       email: "",
       password: "",
     },
+    //Utilizamos Yup para hacer las validaciones
     validationSchema: Yup.object({
       email: Yup.string().required("Required!"),
       password: Yup.string()
@@ -38,24 +40,24 @@ export const SignIn = () => {
       try {
         // Cuando el usuario envía el formulario, se dispara la acción SignInStart, que cambia el estado isLoading a true.
         dispatch(signInStart());
-        // Hacemos una petición POST a la ruta /api/auth/signin con los datos del formulario. (trim saca los espacios en blanco al principio y al final de un string)
+        // Hacemos una petición POST a la ruta /api/auth/signin con los datos del formulario. 
         const res = await axios.post("/api/auth/signin", {
-          email,
-          password
+          email: email.toLowerCase(),
+          password,
         });
         // Si la petición es exitosa, se dispara la acción SignInSuccess, que guarda el usuario en el estado global y redirige al usuario a la página principal.
+        if (res.status !== 200) {
+          //en data estan los datos del usuario
+           dispatch(signInFailure());
+        }
         if (res.status === 200) {
           //en data estan los datos del usuario
           dispatch(signInSuccess(res.data));
-
         }
       } catch (error) {
-        dispatch(signInFailure(error.response.data.message));
         // Si hay un error en la petición, se dispara la acción SignInFailure, que guarda el mensaje de error en el estado global.
-        const message = error.response.data.message;
-        if (message.includes("Email") || message.includes("Password")) {
-          dispatch(signInFailure(message));
-        }
+        dispatch(signInFailure(error.response.data.message));
+
       }
     },
   });
@@ -66,6 +68,7 @@ export const SignIn = () => {
         {/* right side */}
         <div className="flex-1">
           <form className="flex flex-col gap-4" onSubmit={formik.handleSubmit}>
+            {/* // Si hay un error en la autenticación, se muestra un mensaje de error, traido de redux */}
             {credentialErrorMsg ? (
               <Alert className=" text-red-500 text-[0.8rem]  phone:text-[1rem] tablet:text-[1.2rem]">
                 {credentialErrorMsg}

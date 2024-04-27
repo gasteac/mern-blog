@@ -2,15 +2,15 @@ import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import { userSlice } from "./user/userSlice";
 //de aca para abajo es todo para utilizar redux persist, una especie de local storage
 //nos guarda basicamente toda la store en localStorage para que no se pierda al recargar la pagina
+//lo que tiene de diferente es que no se guarda todo, sino solo lo que le digamos que guarde
+//ademas, espera a que se cargue lo que este en el persit antes de renderizar la app
 import { persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import persistStore from "redux-persist/es/persistStore";
-import { themeSlice } from "./theme/themeSlice";
 
 //creamos un combinador de reducers para dsp pasarle a la store como 1 solo reducer
 const rootReducer = combineReducers({
   user: userSlice.reducer,
-  theme: themeSlice.reducer
 });
 
 //creamos la configuración del persist, la key seria con el nombre que se guarda en el navegador

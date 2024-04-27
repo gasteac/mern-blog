@@ -1,11 +1,13 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { Button, Spinner } from "flowbite-react";
 import axios from "axios";
 import { PostCard } from "../components/PostCard";
 import Tilt from "react-parallax-tilt";
+
 export const Home = () => {
+  // utilizamos useParams() que nos devuelve los parámetros q estan en la URL
   const { postSlug } = useParams();
   const [recentPosts, setRecentPosts] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -19,12 +21,6 @@ export const Home = () => {
         if (res.status === 200) {
           setIsLoading(false);
           setRecentPosts(res.data.posts);
-          setRecentPosts((prev) =>
-            prev.filter((post) => post.slug !== postSlug)
-          );
-          if (recentPosts.length > 3) {
-            recentPosts.pop();
-          }
         }
       };
       getRecentPosts();

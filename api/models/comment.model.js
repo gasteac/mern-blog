@@ -15,6 +15,7 @@ const commentSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    //aca guardamos los id de los usuarios q dieron like al comentario
     likes: {
       type: Array,
       default: [],
@@ -23,7 +24,9 @@ const commentSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
-  },{timestamps: true });
+  },
+  { timestamps: true }
+);
 const Comment = mongoose.model("Comment", commentSchema);
 export default Comment;
 

@@ -34,13 +34,12 @@ const __dirname = path.resolve();
 //Creamos una instancia de express que va a ser nuestro server y la guardamos con el nombre app
 const app = express();
 
-//middleware que permite parsear JSON del backend a lenguaje usable (string) y manipulable
-//con esto nos salvamos de tener que hacer JSON.parse() en cada req.body
+//middleware que permite parsear JSON del backend a lenguaje usable (string) y manipulable (objeto u string) en el frontend
+//sino, el front no podría interpretar la resp del backend porque vendría en formato JSON
 app.use(express.json());
+
 //middleware que permite parsear cookies, se usa  en el login y en el logout, para guardar el token en una cookie y para borrarla
 app.use(cookieParser());
-
-
 
 ///////////RUTAS///////////
 

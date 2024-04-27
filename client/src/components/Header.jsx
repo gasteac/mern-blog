@@ -59,9 +59,6 @@ export const Header = () => {
         <span className="hidden sm:block px-2 py-1 hiText font-bold text-2xl sm:text-2xl ">
           FaceRook
         </span>
-        <span className="sm:hidden px-2 py-1 hiText font-bold text-2xl sm:text-3xl ">
-          FR
-        </span>
       </Link>
       {!path.includes("search") && (
         <form onSubmit={handleSubmit}>
@@ -76,9 +73,6 @@ export const Header = () => {
         </form>
       )}
 
-      <Button className="w-12 h-10 lg:hidden" color="gray" pill>
-        <AiOutlineSearch />
-      </Button>
       <div className="flex gap-2 md:order-2">
         <DarkThemeToggle />
         {/* Si el usuario esta logueado mostramos un dropdown con su avatar, si no mostramos un botón para loguearse */}
@@ -183,6 +177,22 @@ export const Header = () => {
             >
               <Link to="/create-post" className="w-full flex md:p-2">
                 Create Post
+              </Link>
+            </NavbarLink>
+            <NavbarLink
+              active={path === "/search"}
+              as="div"
+              className={`
+    rounded-xl w-full md:hidden
+    ${
+      path === "/search"
+        ? "bg-gradient-to-br from-purple-500 to-blue-500 md:text-white font-semibold"
+        : "dark:text-white light:text-black"
+    }
+  `}
+            >
+              <Link to="/search" className="w-full flex md:p-2">
+                Search
               </Link>
             </NavbarLink>
           </>

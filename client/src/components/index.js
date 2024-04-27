@@ -4,7 +4,6 @@ export * from "./Header.jsx";
 export * from "./OAuth.jsx";
 export * from "./PrivateRoute.jsx";
 export * from "./PublicRoute.jsx";
-export * from "./ThemeProvider.jsx";
 export * from "./DashUsers.jsx";
 export * from "./DashComments.jsx";
 export * from "./DashPosts.jsx";

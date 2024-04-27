@@ -104,7 +104,7 @@ export const PostPage = () => {
         </div>
       ) : (
         <>
-          <main className="p-3 flex flex-col max-w-3xl mx-auto mt-5 min-h-screen ">
+          <main className="p-3 flex flex-col max-w-3xl mx-auto mt-5 h-full ">
             <Tilt
               glareEnable
               glareBorderRadius={"1.5rem"}
@@ -135,37 +135,36 @@ export const PostPage = () => {
                 </span>
               </div>
             </Tilt>
-            {(currentUser.isAdmin ||
-              postOwnerId === currentUser._id) && (
-                <div className="flex mt-5 gap-5 px-4 justify-evenly align-middle items-center">
-                  <Link className="flex-1" to={`/update-post/${post._id}`}>
-                    <Button
-                      gradientDuoTone="purpleToBlue"
-                      className="w-full hover:brightness-90 dark:hover:brightness-115 p-1  self-center "
-                    >
-                      Edit post
-                    </Button>
-                  </Link>
+            {(currentUser?.isAdmin || postOwnerId === currentUser?._id) && (
+              <div className="flex mt-5 gap-5 px-4 justify-evenly align-middle items-center">
+                <Link className="flex-1" to={`/update-post/${post._id}`}>
                   <Button
-                    onClick={() => {
-                      setShowModal(true);
-                      setPostIdtoDelete(post._id);
-                      setPostTitletoDelete(post.title);
-                      setImageToDelete(
-                        post.image.includes(
-                          "video-tutoriales-sobre-email-marketing"
-                        )
-                          ? null
-                          : post.image
-                      );
-                    }}
-                    gradientDuoTone="purpleToPink"
-                    className="flex-1 hover:brightness-90 dark:hover:brightness-115 p-1  self-center "
+                    gradientDuoTone="purpleToBlue"
+                    className="w-full hover:brightness-90 dark:hover:brightness-115 p-1  self-center "
                   >
-                    Delete post
+                    Edit post
                   </Button>
-                </div>
-              )}
+                </Link>
+                <Button
+                  onClick={() => {
+                    setShowModal(true);
+                    setPostIdtoDelete(post._id);
+                    setPostTitletoDelete(post.title);
+                    setImageToDelete(
+                      post.image.includes(
+                        "video-tutoriales-sobre-email-marketing"
+                      )
+                        ? null
+                        : post.image
+                    );
+                  }}
+                  gradientDuoTone="purpleToPink"
+                  className="flex-1 hover:brightness-90 dark:hover:brightness-115 p-1  self-center "
+                >
+                  Delete post
+                </Button>
+              </div>
+            )}
 
             <div className="mt-5 mb-5 w-[90%] self-center bg-gray-300 rounded-xl dark:bg-slate-800 p-6">
               <p>{post && post.content}</p>
@@ -175,9 +174,16 @@ export const PostPage = () => {
             </div>
           </main>
           <div className="flex flex-col justify-center items-center mb-5">
-            <h1 className="text-2xl mt-2 mb-5 font-semibold">
+            <h1 className="text-2xl mt-2 font-semibold">
               It may interest you
             </h1>
+            {recentPosts && (
+              <div className="mt-5 flex flex-wrap items-center justify-center">
+                {recentPosts.slice(0, 3).map((post) => (
+                  <PostCard key={post._id} post={post} />
+                ))}
+              </div>
+            )}
             <Link to={`/all-posts`}>
               <Button
                 gradientDuoTone="purpleToBlue"
@@ -187,13 +193,6 @@ export const PostPage = () => {
                 See all posts
               </Button>
             </Link>
-            {recentPosts && (
-              <div className="mt-5 flex flex-wrap items-center justify-center">
-                {recentPosts.slice(0, 3).map((post) => (
-                  <PostCard key={post._id} post={post} />
-                ))}
-              </div>
-            )}
             <Modal
               show={showModal}
               onClose={() => setShowModal(false)}

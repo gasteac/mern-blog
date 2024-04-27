@@ -1,5 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
+
 // Initial State de userSlice
+// currentUser: null, es el usuario actual, si no hay usuario logueado es null
+// no esta cargando nada y no hay error
 const initialState = {
   currentUser: null,
   error: null,
@@ -15,6 +18,8 @@ export const userSlice = createSlice({
   initialState,
   reducers: {
     //TODOS ESTOS SON LOS REDUCERS RECORDAR XDXD
+    //Les puedo pasar un payload, que es la data que quiero guardar en el estado
+    //o simplemente llamarlos para que cambien el estado de algo
     startFromZero: (state) => {
       state.isLoading = false;
       state.error = null;
