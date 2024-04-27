@@ -1,14 +1,18 @@
-import React, { useEffect, useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { PostCard } from "../components/PostCard";
 import { Button, Select, Spinner, TextInput } from "flowbite-react";
+
 export const Search = () => {
+  // definimos los parámetros de búsqueda predeterminados
   const [searchData, setSearchData] = useState({
     searchTerm: "",
     order: "asc",
     category: "unselected",
   });
+  // obtenemos la ubicación actual y la navegación
+  // useLocation nos permite acceder a la ubicación actual y obtener los valores de los parámetros de búsqueda
   const location = useLocation();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
@@ -16,21 +20,27 @@ export const Search = () => {
   const [showMore, setShowMore] = useState(false);
 
   useEffect(() => {
+    // obtenemos los parámetros de búsqueda de la URL
     const urlParams = new URLSearchParams(location.search);
+    // obtenemos los valores específicos de los parámetros de búsqueda
     const searchTermFromUrl = urlParams.get("searchTerm");
     const orderFromUrl = urlParams.get("order");
     const categoryFromUrl = urlParams.get("category");
+
+    // si no hay un término de búsqueda de categoría en la URL, lo eliminamos (se borra de la url tmb)
     if (searchData.category === "unselected") {
       urlParams.delete("category");
     }
+    // si el parámetro de búsqueda searchTerm esta vacio, lo eliminamos de searchData y de la url
     if (searchTermFromUrl === "" || !searchTermFromUrl) {
+      //aca lo eliminamos de la url
       urlParams.delete("searchTerm");
       setSearchData({
         ...searchData,
         searchTerm: "",
       });
     }
-
+    // si envían todos los parámetros de búsqueda en la url, los seteamos en searchData
     if (searchTermFromUrl || orderFromUrl || categoryFromUrl) {
       setSearchData({
         ...searchData,
