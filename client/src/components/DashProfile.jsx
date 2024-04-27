@@ -40,9 +40,6 @@ export const DashProfile = () => {
 const navigate = useNavigate();
   // showModal es un estado local que nos permite mostrar un modal al usuario
   const [showModal, setShowModal] = useState(false);
-  // usernameErrorMsg y emailErrorMsg son estados locales que nos permiten mostrar mensajes de error personalizados.
-  const [usernameErrorMsg, setUsernameErrorMsg] = useState(null);
-  const [emailErrorMsg, setEmailErrorMsg] = useState(null);
   // isLoading es una propiedad del estado global que nos dice si la petición de registro/login está en curso.
   const { isLoading } = useSelector((state) => state.user);
   // currentUser es una propiedad del estado global que nos da acceso a los datos del usuario autenticado.
@@ -119,7 +116,7 @@ const navigate = useNavigate();
         //Ahora guardo el progreso de la carga de la imagen (se guarda constantemente hasta que llega a 100%)
         setImageFileUploadProgress(progress.toFixed(0));
       },
-      (error) => {
+      () => {
         //Si hay un error al subir la imagen, lo guardo en el estado para mostrarlo en el componente
         setImageFileUploadProgress(null);
         //Reseteo el estado de subida de la imagen
@@ -138,15 +135,14 @@ const navigate = useNavigate();
         //Cuando la imagen se sube correctamente, obtengo la URL de descarga de la imagen de firebase
         //Le paso la referencia de la imagen que se subió
         //Es una promesa que me devuelve la URL de la imagen en firebase
-        const downloadURL = getDownloadURL(uploadTask.snapshot.ref).then(
+        getDownloadURL(uploadTask.snapshot.ref).then(
           (downloadURL) => {
             //Luego la guardo y la muestro en la imagen de perfil del usuario con imageFileUrl
             setImageFileUrl(downloadURL);
             //Reseteo el estado de subida de la imagen
             setImageFileUploading(false);
             //Elimino la imagen anterior de firebase
-            const res = axios
-              .put(`/api/user/update/${currentUser._id}`, {
+            axios.put(`/api/user/update/${currentUser._id}`, {
                 ...currentUser,
                 username: currentUser.username,
                 email: currentUser.email,
@@ -165,7 +161,7 @@ const navigate = useNavigate();
                   }, 3500);
                 }
               })
-              .catch((error) => {
+              .catch(() => {
                 setUpdateUserError("Error updating image");
                 setImageFileUrl(null);
               });
@@ -239,28 +235,14 @@ const navigate = useNavigate();
         }
       } catch (error) {
         const { message } = error.response.data;
-        // Si el mensaje de error incluye "duplicate" y "email", mostramos un mensaje de error personalizado.
-        if (message.includes("duplicate") && message.includes("email")) {
-          setEmailErrorMsg("Email already in use");
+        // Si el mensaje de error incluye "duplicate"
+        if (message.includes("duplicate")) {
+          setUpdateUserError("Email or Username already in use");
         }
-        // Si el mensaje de error incluye "duplicate" y "username", mostramos un mensaje de error personalizado.
-        if (message.includes("duplicate") && message.includes("username")) {
-          setUsernameErrorMsg("Username already in use");
-        }
+      
         // Si la petición falla, se dispara la acción SignUpFailure, que cambia el estado isLoading a false y muestra un mensaje de error al usuario.
         dispatch(modifyUserFailure());
         setUpdateUserSuccess(false);
-
-        // Si el mensaje de error incluye "duplicate" y "email", mostramos un mensaje de error personalizado.
-        // if (message.includes("duplicate") && message.includes("email")) {
-        //   setEmailErrorMsg("Email already in use");
-        // }
-        // // Si el mensaje de error incluye "duplicate" y "username", mostramos un mensaje de error personalizado.
-        // if (message.includes("duplicate") && message.includes("username")) {
-        //   setUsernameErrorMsg("Username already in use, is this your username?");
-        // }
-        // // Si la petición falla, se dispara la acción SignUpFailure, que cambia el estado isLoading a false y muestra un mensaje de error al usuario.
-        // dispatch(modifyUserFailure());
       }
     },
   });
@@ -268,7 +250,7 @@ const navigate = useNavigate();
   const deleteUser = async () => {
     setShowModal(false);
     try {
-      const res = await axios.delete(`/api/user/delete/${currentUser._id}`);
+      await axios.delete(`/api/user/delete/${currentUser._id}`);
       dispatch(deleteUserSuccess());
       localStorage.removeItem("persist:root");
     } catch (error) {
@@ -374,11 +356,7 @@ const navigate = useNavigate();
                 {formik.errors.username}
               </h6>
             ) : null}
-            {usernameErrorMsg ? (
-              <h6 className="ml-2 text-red-300 text-[0.8rem]  phone:text-[1rem] tablet:text-[1.2rem]">
-                {usernameErrorMsg}
-              </h6>
-            ) : null}
+          
           </div>
 
           <div className="group">
@@ -398,11 +376,7 @@ const navigate = useNavigate();
                 {formik.errors.email}
               </h6>
             ) : null}
-            {emailErrorMsg ? (
-              <h6 className="ml-2 text-red-300 text-[0.8rem]  phone:text-[1rem] tablet:text-[1.2rem]">
-                {emailErrorMsg}
-              </h6>
-            ) : null}
+          
           </div>
 
           <div className="group">
