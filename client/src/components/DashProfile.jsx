@@ -347,7 +347,6 @@ const navigate = useNavigate();
               name="username"
               onChange={(e) => {
                 formik.handleChange(e);
-                setUsernameErrorMsg(null);
               }}
               value={formik.values.username}
             />
@@ -367,7 +366,7 @@ const navigate = useNavigate();
               id="email"
               name="email"
               onChange={(e) => {
-                formik.handleChange(e), setEmailErrorMsg(null);
+                formik.handleChange(e);
               }}
               value={formik.values.email}
             />

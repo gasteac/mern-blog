@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import axios from "axios";
 import { PostCard } from "../components/PostCard";
 import { Button, Select, Spinner, TextInput } from "flowbite-react";
@@ -15,46 +15,30 @@ export const Search = () => {
   // useLocation nos permite acceder a la ubicación actual y obtener los valores de los parámetros de búsqueda
   const location = useLocation();
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [isLoading, setIsLoading] = useState(false);
   const [searchedPosts, setSearchedPosts] = useState([]);
   const [showMore, setShowMore] = useState(false);
 
   useEffect(() => {
-    // obtenemos los parámetros de búsqueda de la URL
-    const urlParams = new URLSearchParams(location.search);
-    // obtenemos los valores específicos de los parámetros de búsqueda
-    const searchTermFromUrl = urlParams.get("searchTerm");
-    const orderFromUrl = urlParams.get("order");
-    const categoryFromUrl = urlParams.get("category");
+    // Obtenemos valores específicos de los parámetros de búsqueda
+    const searchTerm = searchParams.get("searchTerm");
+    const order = searchParams.get("order");
+    const category = searchParams.get("category");
 
-    // si no hay un término de búsqueda de categoría en la URL, lo eliminamos (se borra de la url tmb)
-    if (searchData.category === "unselected") {
-      urlParams.delete("category");
-    }
-    // si el parámetro de búsqueda searchTerm esta vacio, lo eliminamos de searchData y de la url
-    if (searchTermFromUrl === "" || !searchTermFromUrl) {
-      //aca lo eliminamos de la url
-      urlParams.delete("searchTerm");
-      setSearchData({
-        ...searchData,
-        searchTerm: "",
-      });
-    }
-    // si envían todos los parámetros de búsqueda en la url, los seteamos en searchData
-    if (searchTermFromUrl || orderFromUrl || categoryFromUrl) {
-      setSearchData({
-        ...searchData,
-        order: orderFromUrl ? orderFromUrl : "asc",
-        category: categoryFromUrl ? categoryFromUrl : "unselected",
-        searchTerm: searchTermFromUrl ? searchTermFromUrl : "",
-      });
-    }
+    // Ajustamos `searchData` con los valores de la URL, estableciendo valores predeterminados si están vacíos
+    setSearchData({
+      searchTerm: searchTerm || "",
+      order: order || "asc",
+      category: category || "unselected",
+    });
 
     try {
       const getPosts = async () => {
         setIsLoading(true);
-        const searchQuery = urlParams.toString();
-        const res = await axios.get(`api/post/getposts?${searchQuery}`);
+        const searchQuery = searchParams.toString();
+        const res = await axios.get(`api/post/getposts?${searchQuery}&limit=6`);
+
         if (res.status !== 200) {
           setIsLoading(false);
           return;
@@ -62,7 +46,7 @@ export const Search = () => {
         if (res.status === 200) {
           setIsLoading(false);
           setSearchedPosts(res.data.posts);
-          if (res.data.posts.length === 4) {
+          if (res.data.posts.length === 6) {
             setShowMore(true);
           } else {
             setShowMore(false);
@@ -77,51 +61,34 @@ export const Search = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const urlParams = new URLSearchParams(location.search);
-    if (searchData.searchTerm !== "" || searchData.searchTerm) {
-      urlParams.set("searchTerm", searchData.searchTerm);
-    } else {
-      urlParams.delete("searchTerm");
+    const newParams = new URLSearchParams();
+    if (searchData.searchTerm) {
+      newParams.set("searchTerm", searchData.searchTerm);
     }
 
     if (searchData.order) {
-      urlParams.set("order", searchData.order);
-    } else {
-      urlParams.delete("order");
+      newParams.set("order", searchData.order);
     }
 
     if (searchData.category && searchData.category !== "unselected") {
-      urlParams.set("category", searchData.category);
-    } else {
-      urlParams.delete("category");
+      newParams.set("category", searchData.category);
     }
-    const searchQuery = urlParams.toString();
-    navigate(`/search?${searchQuery}`);
+    navigate(`/search?${newParams.toString()}`);
   };
 
   const handleChange = (e) => {
-    e.preventDefault();
-    if (e.target.id.includes("searchTerm")) {
-      setSearchData({
-        ...searchData,
-        searchTerm: e.target.value,
-      });
+    const { id, value } = e.target;
+
+    if (id === "searchTerm") {
+      setSearchData({ ...searchData, searchTerm: value });
     }
 
-    if (e.target.id.includes("order")) {
-      const order = e.target.value || "desc";
-      setSearchData({
-        ...searchData,
-        order: order,
-      });
+    if (id === "order") {
+      setSearchData({ ...searchData, order: value });
     }
 
-    if (e.target.id.includes("category")) {
-      const category = e.target.value || "unselected";
-      setSearchData({
-        ...searchData,
-        category: category,
-      });
+    if (id === "category") {
+      setSearchData({ ...searchData, category: value });
     }
   };
 
@@ -131,19 +98,17 @@ export const Search = () => {
     const urlParams = new URLSearchParams(location.search);
     urlParams.set("startIndex", startIndex);
     const searchQuery = urlParams.toString();
-    const res = await axios.get(`/api/post/getposts?${searchQuery}`);
+    const res = await axios.get(`/api/post/getposts?${searchQuery}&limit=6`);
     if (res.status !== 200) {
       return;
     }
     if (res.status === 200) {
       const { data } = res;
       setSearchedPosts([...searchedPosts, ...data.posts]);
-      console.log(data.posts)
+      console.log(data.posts);
       if (data.posts.length < 4) {
         setShowMore(false);
-      } 
-        
-      
+      }
     }
   };
 
