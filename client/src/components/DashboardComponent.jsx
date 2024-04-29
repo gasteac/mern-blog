@@ -24,7 +24,7 @@ export const DashboardComponent = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const usersFetch = await axios.get("/api/user/getUsers?limit=5");
+        const usersFetch = await axios.get("/api/user/getUsers?limit=3");
         if (usersFetch.status === 200) {
           setUsers(usersFetch.data.users);
           setTotalUsers(usersFetch.data.totalUsers);
@@ -37,7 +37,7 @@ export const DashboardComponent = () => {
     };
     const fetchPosts = async () => {
       try {
-        const postsFetch = await axios.get("/api/post/getPosts?limit=5");
+        const postsFetch = await axios.get("/api/post/getPosts?limit=3");
         if (postsFetch.status === 200) {
           setPosts(postsFetch.data.posts);
           setTotalPosts(postsFetch.data.totalPosts);
@@ -51,7 +51,7 @@ export const DashboardComponent = () => {
     const fetchComments = async () => {
       try {
         const commentsFetch = await axios.get(
-          "/api/comment/getComments?limit=5"
+          "/api/comment/getComments?limit=3"
         );
         if (commentsFetch.status === 200) {
           setComments(commentsFetch.data.comments);
@@ -71,7 +71,8 @@ export const DashboardComponent = () => {
   }, [currentUser]);
 
   return (
-    <div className="w-full flex flex-wrap mt-2">
+    <div className="w-full flex items-start flex-wrap mt-2">
+      {/* ESTADISTICAS USUARIOS */}
       <div className="md:mx-auto  h-fit w-full md:w-auto p-3 lg:flex-1 min-w-64">
         <div className="flex flex-col bg-white p-3 dark:bg-slate-800 gap-4  w-full rounded-2xl shadow-md">
           <div className="flex justify-between ">
@@ -90,7 +91,7 @@ export const DashboardComponent = () => {
           </div>
         </div>
       </div>
-
+      {/* ESTADISTICAS COMENTARIOS */}
       <div className="md:mx-auto h-fit w-full md:w-auto p-3 lg:flex-1 min-w-64">
         <div className="flex bg-white flex-col p-3 dark:bg-slate-800 gap-4  w-full rounded-2xl shadow-md">
           <div className="flex justify-between ">
@@ -111,7 +112,7 @@ export const DashboardComponent = () => {
           </div>
         </div>
       </div>
-
+      {/* ESTADISTICAS POSTS */}
       <div className="md:mx-auto  h-fit w-full md:w-auto p-3 lg:flex-1 min-w-64">
         <div className="flex flex-col bg-white p-3 dark:bg-slate-800 gap-4  w-full rounded-2xl shadow-md">
           <div className="flex justify-between ">
@@ -132,7 +133,7 @@ export const DashboardComponent = () => {
       </div>
 
       {/* TABLAS DE USUARIO COMENTARIOS Y POSTS */}
-      <div className="p-4 flex flex-wrap gap-4 py-3 mx-auto justify-center">
+      <div className="p-4 self-start flex flex-wrap gap-4  mx-auto justify-center">
         {/* MANEJO DE USUARIOS */}
         <div className="flex bg-white flex-col shadow-md rounded-lg dark:bg-gray-800 w-full md:flex-1">
           <div className="flex items-center justify-between p-3 text-sm font-semibold">
@@ -158,9 +159,7 @@ export const DashboardComponent = () => {
                         className="h-16 w-24 rounded-full object-cover bg-gray-500"
                       />
                     </Table.Cell>
-                    <Table.Cell>
-                      {user.email}
-                    </Table.Cell>
+                    <Table.Cell>{user.email}</Table.Cell>
                     <Table.Cell className="w-36 text-center">
                       {user.username}
                     </Table.Cell>
@@ -171,8 +170,8 @@ export const DashboardComponent = () => {
         </div>
 
         {/* MANEJO DE COMENTARIOS */}
-        <div className="flex bg-white flex-col min-w-80 shadow-md rounded-lg dark:bg-gray-800 w-full md:flex-1">
-          <div className="flex items-center justify-between p-3 text-sm font-semibold">
+        <div className="flex bg-white flex-col  min-w-80 shadow-md rounded-lg dark:bg-gray-800 w-full md:flex-1">
+          <div className="flex items-center justify-between p-3 text-sm font-semibold ">
             <h1 className="text-center p-2">Recent Comments</h1>
             <Button outline gradientDuoTone="purpleToPink">
               <Link to={"/dashboard?tab=comments"}>See all</Link>
@@ -198,7 +197,7 @@ export const DashboardComponent = () => {
         </div>
 
         {/* MANEJO DE POSTS */}
-        <div className="flex bg-white flex-col shadow-md rounded-lg dark:bg-gray-800 w-full md:flex-1">
+        <div className="flex bg-white flex-col shadow-md rounded-lg dark:bg-gray-800 w-full ">
           <div className="flex items-center justify-between p-3 text-sm font-semibold">
             <h1 className="text-center p-2">Recent Posts</h1>
             <Button outline gradientDuoTone="purpleToPink">
