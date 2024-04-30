@@ -26,7 +26,7 @@ Install the project dependencies for the API, then run it:
 ```
 cd api
 npm install
-rpn run dev
+npm run dev
 ```
 Next, install the dependencies for the client, then run it:
 ```
