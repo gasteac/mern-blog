@@ -8,7 +8,7 @@ export const FooterComponent = () => {
       <Link
         className="hover:underline hidden md:block "
         target="_blank"
-        to="https://gasteac.vercel.app/"
+        to="https://gasteac.com"
       >
         Gasteac
       </Link>
@@ -39,7 +39,7 @@ export const FooterComponent = () => {
         <Footer.Link
           className="text-black dark:text-white"
           target="_blank"
-          href="https://gasteac.vercel.app/"
+          href="https://gasteac.com"
         >
           Portfolio
         </Footer.Link>
